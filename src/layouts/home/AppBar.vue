@@ -8,12 +8,13 @@
       v-bind="data.bar"
       :color="color"
     >
-      <base-img
+      <base-vuetify-img
         id="app-bar-logo"
-        :src="data.bar.logo.src"
+        v-bind="data.bar.logo"
         contain
         max-width="150"
         width="100%"
+        :dark="data.bar.dark"
       />
 
       <v-spacer />

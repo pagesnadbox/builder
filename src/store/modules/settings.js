@@ -1,6 +1,9 @@
 import { set } from '@/utils/vuex'
+import Vue from 'vue'
 
 const stateFn = () => ({
+    showHighlighter: false,
+    showGallery: false,
     allowEdit: false,
     ctrlDown: false,
     id: '',
@@ -8,6 +11,7 @@ const stateFn = () => ({
     canUndo: false,
     open: false,
     componentName: '',
+    images: {},
     items: [],
     moreComponents: [],
     moreComponentsDraft: [],
@@ -19,10 +23,12 @@ export default (options) => {
         namespaced: true,
         state,
         mutations: {
+            SET_SHOW_HIGHLIGHTER: set('showHighlighter'),
             SET_CAN_REDO: set('canRedo'),
             SET_CAN_UNDO: set('canUndo'),
             SET_ALLOW_EDIT: set('allowEdit'),
             SET_CTR_DOWN: set('ctrlDown'),
+            SET_GALLERY_SHOW: set('showGallery'),
             SET_ID: set('id'),
             SET_ITEMS: set('items'),
             SET_OPEN: set('open'),
@@ -30,6 +36,9 @@ export default (options) => {
             SET_COMPONENTS: set('moreComponents'),
             ADD_COMPONENT: (state, payload) => {
                 state.moreComponentsDraft.push(payload)
+            },
+            SET_IMAGE: (state, payload) => {
+                Vue.set(state.images, payload.name, payload.value)
             },
             REMOVE_COMPONENT: (state, payload) => {
                 const index = state.moreComponentsDraft.findIndex(c => c.id === payload.id)
@@ -39,6 +48,9 @@ export default (options) => {
             },
         },
         actions: {
+            setShowHighlighter ({ commit }, payload) {
+                commit('SET_SHOW_HIGHLIGHTER', payload)
+            },
             setCanRedo ({ commit }, payload) {
                 commit('SET_CAN_REDO', payload)
             },
@@ -66,6 +78,9 @@ export default (options) => {
             addComponent ({ commit }, payload) {
                 commit('ADD_COMPONENT', payload)
             },
+            setImage ({ commit }, payload) {
+                commit('SET_IMAGE', payload)
+            },
             removeComponent ({ commit }, payload) {
                 commit('REMOVE_COMPONENT', payload)
             },
@@ -74,6 +89,9 @@ export default (options) => {
             },
             setItems ({ commit }, payload) {
                 commit('SET_ITEMS', payload)
+            },
+            setShowGallery ({ commit }, payload) {
+                commit('SET_GALLERY_SHOW', payload)
             },
         },
         getters: {

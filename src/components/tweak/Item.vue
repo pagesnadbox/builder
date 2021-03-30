@@ -27,7 +27,7 @@
           @click.stop="onToggleHiddenClick"
         >
           <v-icon
-            :color="`${item.hidden ? 'grey' : 'blue'} lighten-1`"
+            :color="`${item.hidden ? 'grey' : 'primary'} lighten-1`"
           >
             mdi-eye
           </v-icon>
@@ -37,7 +37,7 @@
           @mousedown.stop
           @click.stop="onToggleEdit"
         >
-          <v-icon :color="`${item.hidden ? 'grey' : 'blue'} lighten-1`">
+          <v-icon :color="`${item.hidden ? 'grey' : 'primary'} lighten-1`">
             {{
               edit ? "mdi-check" : "mdi-pen"
             }}

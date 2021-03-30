@@ -23,19 +23,7 @@
         v-bind="heading"
       />
 
-      <base-link v-bind="data.link" />
-
-      <div class="py-4" />
-
-      <base-btn
-        id="social-action"
-        class="font-weight-bold"
-        light
-        x-large
-        v-bind="action.data"
-      >
-        {{ action.text }}
-      </base-btn>
+      <base-actions :data="data.actions"></base-actions>
     </base-section>
   </v-theme-provider>
 </template>

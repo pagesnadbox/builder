@@ -4,6 +4,8 @@
     :close-on-content-click="false"
     :close-on-click="false"
     scrollable
+    hide-overlay
+    :persistent="selected < 2"
     offset-overflow
   >
     <v-card
@@ -35,6 +37,11 @@
           >
             mdi-chevron-down
           </v-icon>
+          <v-icon
+            @click="visible=false"
+          >
+            mdi-close
+          </v-icon>
         </v-row>
       </v-container>
 
@@ -61,6 +68,9 @@
       cardProps () {
         return {
           height: `${this.heights[this.selected]}vh`,
+          style: {
+            transition: 'height .3s'
+          }
         }
       },
     },
@@ -69,12 +79,21 @@
       onArrowUpClick () {
         this.selected++
       },
+
       onArrowDownClick () {
         this.selected--
       },
+
       onResetClick () {
         this.selected = 1
       },
+
     },
   }
 </script>
+
+<style>
+  html.overflow-y-hidden {
+    overflow-y: scroll !important;
+  }
+</style>

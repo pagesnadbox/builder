@@ -1,4 +1,5 @@
 import { mapActions, mapState } from 'vuex'
+import { EventBus, events } from "../../utils/eventBus"
 
 export default {
     inject: {
@@ -6,45 +7,70 @@ export default {
             default: () => ({ editable: true }),
         },
     },
+
     props: {
         editable: {
             type: Boolean,
             default: true,
         },
     },
+
     components: {
         HomeSettings: () => import('@/layouts/home/Settings'),
     },
-    data () {
+
+    data() {
         return {
             mouseover: false,
         }
     },
+
+    created() {
+        this.clearHighlightBind = () => {
+            if (this.isMobile) {
+                this.clearHighligh();
+            }
+        }
+    },
+
     computed: {
-        ...mapState('settings', ['allowEdit', 'open']),
-        listeners () {
+        ...mapState('settings', ['allowEdit', 'open', 'showHighlighter']),
+
+        listeners() {
             return {
                 ...this.$listeners,
                 ...this.getMixinListeners(),
             }
         },
-        attrs () {
+
+        attrs() {
             return {
                 ...this.$attrs,
                 ...this.$props,
                 class: this.mixinClasses,
             }
         },
-        mixinClasses () {
+
+        mixinClasses() {
             return [
                 ...(this.classes || []),
                 ...(this.hasHighlight ? ['hightlight'] : []),
             ]
         },
-        hasHighlight () {
+
+        hasHighlight() {
             return (this.allowEdit && this.mouseover)
         },
+
+        isDesktop() {
+            return this.$vuetify.breakpoint.mdAndUp
+        },
+
+        isMobile() {
+            return !this.isDesktop
+        },
     },
+
     methods: {
         ...mapActions('settings', [
             'setOpen',
@@ -54,10 +80,12 @@ export default {
             'setComponents',
             'setComponentId',
         ]),
+
         ...mapActions('components', [
             'setItems',
         ]),
-        getMixinListeners () {
+
+        getMixinListeners() {
             let listeners = {}
 
             if (this.editable && this.config.editable) {
@@ -70,22 +98,38 @@ export default {
 
             return listeners
         },
-        onMouseEnter (...args) {
+
+        onMouseEnter(...args) {
             if (this.$listeners.mouseenter) {
                 this.$listeners.mouseenter(...args)
             }
-            this.mouseover = true
-            this.addComponent({ name: this.$options.name, id: this.$attrs.id })
+
+            if (this.isDesktop) {
+                this.highligh()
+            }
         },
-        onMouseLeave (...args) {
+
+        onMouseLeave(...args) {
             if (this.$listeners.mouseleave) {
                 this.$listeners.mouseleave(...args)
             }
 
+            if (this.isDesktop) {
+                this.clearHighligh();
+            }
+        },
+
+        highligh() {
+            this.mouseover = true
+            this.addComponent({ name: this.$options.name, id: this.$attrs.id })
+        },
+
+        clearHighligh() {
             this.mouseover = false
             this.removeComponent({ name: this.$options.name, id: this.$attrs.id })
         },
-        onClick (...args) {
+
+        onClick(...args) {
             if (this.$listeners.click) {
                 this.$listeners.click(...args)
             }
@@ -94,6 +138,14 @@ export default {
                 const [event] = args
                 const name = this.$options.name
                 const id = this.$attrs.id
+
+                if (this.isMobile) {
+                    event.target.scrollIntoView({ behavior: "smooth" })
+
+                    EventBus.$emit(events.CLEAR_COMPONENT_HIGHLIGHT)
+                    this.highligh();
+                    EventBus.$once(events.CLEAR_COMPONENT_HIGHLIGHT, this.clearHighlightBind)
+                }
 
                 this.setItems(this.items || [])
 

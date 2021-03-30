@@ -1,6 +1,22 @@
+const divider = {
+    displayName: '',
+    type: 'divider',
+}
+
+const label = (label) => ({
+    displayName: label,
+    type: 'label',
+})
+
 const color = {
     displayName: 'Color',
     propName: 'color',
+    type: 'color',
+}
+
+const iconColor = {
+    displayName: 'Icon color',
+    propName: 'iconColor',
     type: 'color',
 }
 
@@ -22,6 +38,12 @@ const icon = {
     displayName: 'Icon',
     propName: 'icon',
     type: 'icon',
+}
+
+const iconSize = {
+    displayName: 'Icon size',
+    propName: 'size',
+    type: 'string',
 }
 
 const iconSrc = {
@@ -51,6 +73,12 @@ const space = {
 const outlined = {
     displayName: 'Outlined',
     propName: 'outlined',
+    type: 'boolean',
+}
+
+const horizontal =             {
+    displayName: 'Horizontal',
+    propName: 'horizontal',
     type: 'boolean',
 }
 
@@ -132,6 +160,12 @@ const dark = {
     type: 'boolean',
 }
 
+const hideOnScroll = {
+    displayName: 'Hide on scroll',
+    propName: 'hideOnScroll',
+    type: 'boolean',
+}
+
 const href = {
     displayName: 'URL',
     propName: 'href',
@@ -195,35 +229,69 @@ const baseList = {
     ],
 }
 
+const baseImg = {
+    displayName: 'Image',
+    props: [
+        mobileHeight,
+        height,
+        {
+            displayName: 'Light source',
+            propName: 'src',
+            type: 'file',
+        },
+        {
+            displayName: 'Dark Source',
+            propName: 'srcDark',
+            type: 'file',
+        },
+    ],
+
+};
+
 export default {
     BaseApp: {
         displayName: 'Application',
         type: 'list',
     },
+
     BaseAppBar: {
         displayName: 'Application Top Bar',
         props: [
             dark,
+            hideOnScroll,
             height,
             color,
         ],
     },
-    BaseImage: {
-        displayName: 'Image',
-        props: [
-            mobileHeight,
-            height,
-            {
-                displayName: 'Source',
-                propName: 'src',
-                type: 'file',
-            },
-        ],
 
+    BaseVuetifyImg: baseImg,
+
+    BaseActions: {
+        displayName: 'Call-To-Action',
+        props: [
+            horizontal,
+            {
+                displayName: 'Link Call-to-Action',
+                propName: 'linkAction',
+                type: 'boolean',
+            },
+            {
+                displayName: 'Main Call-to-Action',
+                propName: 'mainAction',
+                type: 'boolean',
+            },
+            {
+                displayName: 'Secondary Call-to-Action',
+                propName: 'secondaryAction',
+                type: 'boolean',
+            },
+        ]
     },
+
     BaseBtn: {
         displayName: 'Button',
         props: [
+            hidden,
             text,
             sizeDef,
             iconSrc,
@@ -250,13 +318,16 @@ export default {
 
         ],
     },
+
     BaseLink: {
         displayName: 'Link',
         props: [
+            hidden,
             openInNewTab,
             href,
         ],
     },
+
     BaseAvatar: {
         displayName: 'Avatar',
         props: [
@@ -266,30 +337,36 @@ export default {
             size,
         ],
     },
+
     BaseAvatarCard: {
         displayName: 'Avatar Card',
         props: [
             ...mixinHeading.props,
             hidden,
+            dark,
+            horizontal,
             title,
             text,
+            divider,
+            label("Image"),
+            ...baseImg.props,
+            divider,
+            label("Icon"),
             icon,
-            outlined,
-            dark,
-            {
-                displayName: 'Horizontal',
-                propName: 'horizontal',
-                type: 'boolean',
-            },
-            // space,
+            iconSize,
             color,
+            outlined,
+            // space,
         ],
     },
+
     BaseHeading: baseHeading,
+
     BaseTitle: {
         ...baseHeading,
         displayName: 'Title',
     },
+
     BaseSubtitle: {
         ...baseHeading,
         displayName: 'Sub Title',
@@ -300,6 +377,7 @@ export default {
             space,
         ],
     },
+
     BaseBody: {
         displayName: 'Body',
         props: [
@@ -314,6 +392,7 @@ export default {
             space,
         ],
     },
+
     BaseDivider: {
         displayName: 'Divider',
         props: [
@@ -322,6 +401,7 @@ export default {
             space,
         ],
     },
+
     BaseIcon: {
         displayName: 'Icon',
         props: [
@@ -330,11 +410,13 @@ export default {
             size,
         ],
     },
+
     BaseInfoCard: {
         displayName: 'Info Card',
         props: [
             ...mixinHeading.props,
             hidden,
+            dark,
             icon,
             subtitle,
             title,
@@ -342,6 +424,7 @@ export default {
             color,
         ],
     },
+
     BaseSection: {
         displayName: 'Section',
         props: [
@@ -350,20 +433,26 @@ export default {
             color,
         ],
     },
+    
     BaseSectionHeading: {
         displayName: 'Section Heading',
         props: [
             align,
-            icon,
             outlined,
             dark,
             subtitle,
             title,
             text,
-            color,
             space,
+            { ... color, displayName: "Background Color" },
+            divider,
+            label("Icon"),
+            icon,
+            iconSize,
+            { ... iconColor, displayName: "Icon Color" },
         ],
     },
+
     BaseResizeContainer: {
         displayName: 'Resize Container',
         props: [
@@ -373,7 +462,9 @@ export default {
             maxWidth,
         ],
     },
+
     BaseList: baseList,
+    
     BaseSlideList: {
         ...baseList,
         displayName: 'Slide List',

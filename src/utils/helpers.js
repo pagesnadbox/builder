@@ -11,7 +11,7 @@ const defaultHeaders = () => {
     'Content-Type': 'application/json',
     // ...(token && { Authorization: token }),
     // "Origin": "https://thawing-ravine-99061.herokuapp.com/"
-    // "Origin": "localhost:8080/"
+    "Origin": "localhost:8080/"
   }
 }
 

@@ -77,7 +77,7 @@
             elevation="16"
             class="mb-12"
           >
-            <base-img
+            <base-vuetify-img
               max-width="100%"
               src="https://cdn.vuetifyjs.com/store/themes/zero/pro.png"
             />

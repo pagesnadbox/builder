@@ -34,7 +34,7 @@
             rounded
             x-large
             depressed
-            color="blue"
+            color="primary"
             dark
             @click="onAddClick"
           >

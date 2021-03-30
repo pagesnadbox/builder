@@ -1,4 +1,11 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 module.exports = {
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: true
+    }
+  },
   devServer: {
     disableHostCheck: true,
   },

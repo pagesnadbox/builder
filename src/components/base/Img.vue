@@ -1,18 +1,13 @@
 <template>
-  <v-img
-    v-bind="attrs"
-    v-on="listeners"
-  >
-    <slot />
-  </v-img>
+  <img v-bind="attrs" :height="effectiveHeight" :src="source" v-on="listeners" />
 </template>
 
 <script>
-  import mixin from './mixin'
+import mixin from "./imgMixin";
 
-  export default {
-    name: 'BaseImage',
+export default {
+  name: "BaseVuetifyImg",
 
-    mixins: [mixin],
-  }
+  mixins: [mixin],
+};
 </script>

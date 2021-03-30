@@ -1,8 +1,5 @@
 <template>
-  <base-section
-    id="affiliates"
-    v-bind="data"
-  >
+  <base-section id="affiliates" v-bind="data">
     <v-container>
       <base-section-heading
         id="affiliates-heading"
@@ -10,22 +7,17 @@
         v-bind="heading"
       />
 
-      <base-slide-list
-        id="affiliates-list"
-        :items="data.list.items"
-      >
+      <base-slide-list id="affiliates-list" :items="data.list.items">
         <template v-slot:item="{ item, i }">
-          <v-slide-item
-            :key="i"
-            class="align-self-center"
-          >
-            <base-img
+          <v-slide-item :key="i" class="align-self-center">
+            <base-vuetify-img
               :id="`affiliates-list-items-${i}`"
-              :src="item.src"
-              color="grey"
-              contain
               height="40"
               width="128"
+              v-bind="item"
+              :dark="data.dark"
+              color="grey"
+              contain
             />
           </v-slide-item>
 
@@ -45,17 +37,17 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  export default {
-    name: 'SectionAffiliates',
-    computed: {
-      ...mapState('affiliates', ['data']),
-      heading () {
-        return {
-          ...this.data.heading,
-          color: this.data.heading.color || this.data.color,
-        }
-      },
-    },
+import { mapState } from "vuex";
+export default {
+  name: "SectionAffiliates",
+  computed: {
+    ...mapState("affiliates", ["data"]),
+    heading() {
+      return {
+        ...this.data.heading,
+        color: this.data.heading.color || this.data.color
+      };
+    }
   }
+};
 </script>

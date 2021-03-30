@@ -41,7 +41,7 @@
     <base-body
       v-if="$slots.default || text"
       :id="ids.body"
-      :dark="dark"
+      :dark="dark || textDark"
       :editable="editableProps"
       :align="align"
       max-width="700"
@@ -71,6 +71,10 @@
         default: true,
       },
       dark: {
+        type: Boolean,
+        default: false,
+      },
+      textDark: {
         type: Boolean,
         default: false,
       },

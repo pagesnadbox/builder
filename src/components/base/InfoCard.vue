@@ -35,6 +35,7 @@
             :align="align"
             :editable="editableProps"
             :title="subtitle"
+            :dark="textDark"
             space="1"
           />
 
@@ -43,6 +44,7 @@
             :align="align"
             :editable="editableProps"
             :title="title"
+            :dark="textDark"
             class="text-uppercase"
             space="1"
           />
@@ -57,6 +59,7 @@
             v-if="text || $slots.default"
             :id="ids.body"
             :align="align"
+            :dark="textDark"
             :editable="editableProps"
             :text="text"
             space="6"
@@ -92,6 +95,7 @@
     props: {
       editableProps: Boolean,
       dark: Boolean,
+      textDark: Boolean,
       callout: String,
       color: {
         type: String,

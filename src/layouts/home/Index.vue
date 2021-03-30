@@ -8,6 +8,8 @@
 
     <home-settings />
 
+    <home-gallery />
+
     <home-tools />
   </v-app>
 </template>
@@ -22,6 +24,7 @@
       HomeSettings: () => import('@/layouts/home/Settings'),
       HomeTools: () => import('@/layouts/home/Tools'),
       HomeView: () => import('@/layouts/home/View'),
+      HomeGallery: () => import('@/components/tweak/Gallery'),
     },
   }
 </script>

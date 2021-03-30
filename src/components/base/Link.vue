@@ -20,14 +20,17 @@
     mixins: [mixin],
 
     props: {
+      
       href: {
         type: String,
         default: '',
       },
+
       openInNewTab: {
         type: Boolean,
         default: true,
       },
+
     },
     computed: {
       targetFormatted () {
