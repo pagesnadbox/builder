@@ -1,42 +1,8 @@
-image: node:latest
-
-cache:
-  paths:
-    - node_modules/
-
-stages:
-  - development
-  - production
-
-staging:
-  stage: development
-  image: ruby:latest
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=landingpagebuilder-app-v1 --api-key=$HEROKU_API_KEY
-    - cp public/index.html public/404.html
-  only:
-    - dev
-
-production:
-  stage: production
-  image: ruby:latest
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=landingpagebuilder-app-v1 --api-key=$HEROKU_API_KEY
-    - cp public/index.html public/404.html
-  only:
-    - master
-
 # .gitlab-ci.yml file to be placed in the root of your repository
 
 pages: # the job must be named pages
   image: node:latest
-  stage: production
+  stage: staging
   script:
     - npm ci
     - npm run build-dev
