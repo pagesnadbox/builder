@@ -33,14 +33,6 @@
         type: Array,
         default: () => [],
       },
-      cols: {
-        type: String,
-        default: '',
-      },
-      md: {
-        type: String,
-        default: '',
-      },
     },
   }
 </script>

@@ -36,9 +36,7 @@
             v-model="allowEditModel"
             class="mr-4"
             label="Edit Mode (Hold 'E' for quick edit)"
-            :outlined="$vuetify.theme.dark"
-            @click="$vuetify.theme.dark = false"
-          />
+          ></v-switch>
 
           <base-btn
             class="mr-4"
@@ -100,7 +98,8 @@
           <base-title align="center" :title="config.displayName" space="0" />
 
           <tweak-items
-            v-if="isList"
+            v-if="items.length"
+            :listId="list.id"
             :region="region || undefined"
             :items="items"
             @item-click="onItemClick"
@@ -109,9 +108,16 @@
             @remove-click="onRemoveClick"
           />
 
-          <div v-for="(prop, i) in primitiveProps" :key="i">
-            <tweak-prop v-bind="prop" @property-change="onValueChange" />
-          </div>
+          <v-container>
+            <v-row no-gutters class="pa-2">
+              <tweak-prop
+                v-for="(prop, i) in primitiveProps"
+                :key="i"
+                v-bind="prop"
+                @property-change="onValueChange"
+              />
+            </v-row>
+          </v-container>
         </div>
       </v-card-text>
     </component>
@@ -166,8 +172,8 @@ export default {
 
   watch: {
     id() {
-      console.error(this.$refs.scrollableContainer);
-      this.$refs.scrollableContainer.scrollTo({ top: 0, behavior: "smooth" });
+      !this.isDesktop &&
+        this.$refs.scrollableContainer.scrollTo({ top: 0, behavior: "smooth" });
     }
   },
 
@@ -194,8 +200,12 @@ export default {
       return this.config.type === "list";
     },
 
+    list() {
+      return this.getData("list");
+    },
+
     items() {
-      return this.$store.getters[`${this.region}/items`] || [];
+      return this.list?.items || [];
     },
 
     settingsComponent() {
@@ -211,43 +221,8 @@ export default {
       return this.id.split("-")[0] || "app";
     },
 
-    componentKey() {
-      // first level nesting
-      return this.id.split("-")[1];
-    },
-
-    componentNextKey() {
-      // second level nesting
-      return this.id.split("-")[2];
-    },
-
-    componentIndex() {
-      // third level nesting (index -> for array like data)
-      const idParts = this.id.split("-");
-
-      return Number(idParts[idParts.length - 1]);
-    },
-
     componentData() {
-      let data = this.$store.state[this.region]?.data;
-
-      if (this.componentKey) {
-        data = data[this.componentKey];
-      }
-
-      if (Array.isArray(data) || this.componentNextKey) {
-        if (this.componentNextKey) {
-          data = data[this.componentNextKey];
-        }
-        if (
-          this.componentIndex !== undefined &&
-          !Number.isNaN(this.componentIndex)
-        ) {
-          data = data[this.componentIndex];
-        }
-      }
-
-      return data;
+      return this.getData();
     },
 
     config() {
@@ -297,18 +272,24 @@ export default {
       "setAllowEdit"
     ]),
 
-    ...mapActions("components", ["setItems"]),
+    getData(prop) {
+      let data = this.$store.state;
+      let id = this.id || "app-list";
+
+      const paths = id.split("-");
+
+      paths.splice(1, 0, "data");
+
+      for (let path of paths) {
+        data = data[path];
+        if (prop === path) break;
+      }
+
+      return data;
+    },
 
     onItemClick(index) {
       let id = `${this.items[index].id}-${index}`;
-
-      if (this.region !== "app") {
-        // TODO: for now list->items of app data are not
-        // suffixed with index, for future if there is logic to create new sections
-        // this should be changed
-        id = `${id}-${index}`;
-      }
-
       const name = this.items[index].componentName;
 
       this.setComponent({ id, name });
@@ -328,15 +309,12 @@ export default {
       this.setComponentName(name);
     },
 
-    onValueChange(payload) {
+    onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
-      // support several levels of nesting
-      // 1 level (componentKey) => 2 level (componentNextKey) => 3 level (index - applicable for array like data - "items")
       this.dispatch("setProp", {
-        componentKey: this.componentKey,
-        componentNextKey: this.componentNextKey,
-        index: this.componentIndex,
-        ...payload
+        id: `${id || this.id}${apendix}`,
+        key,
+        value
       });
     },
 

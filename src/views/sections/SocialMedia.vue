@@ -23,7 +23,7 @@
         v-bind="heading"
       />
 
-      <base-actions :data="data.actions"></base-actions>
+      <base-actions v-bind="data.actions"></base-actions>
     </base-section>
   </v-theme-provider>
 </template>

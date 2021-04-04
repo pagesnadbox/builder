@@ -13,18 +13,13 @@ export const set = (property, preState) => {
 export const toggle = property => state => (state[property] = !state[property])
 
 export const setProp = (state, payload) => {
-    let data = state.data
-    if (payload.componentKey) {
-        data = data[payload.componentKey]
-    }
-
-    if (payload.componentNextKey) {
-        data = data[payload.componentNextKey]
-    }
-
-    if (Array.isArray(data)) {
-        data = data[payload.index]
-    }
+    let data = state.data;
+    let paths = payload.id.split("-");
+    
+    paths = paths.slice(1);
+    paths.forEach(path => {
+      data = data[path];
+    });
 
     Vue.set(data, payload.key, payload.value)
 }

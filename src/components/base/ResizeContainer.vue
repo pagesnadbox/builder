@@ -6,58 +6,89 @@
     :style="styles"
     v-on="listeners"
   >
-    <v-container>
-      <v-row
-        :justify="justify"
-        class="px-4"
-      >
-        <slot />
-      </v-row>
-    </v-container>
+    <base-list v-bind="listData.data">
+      <template v-slot:item="{ cols, md }">
+        <v-col
+          v-for="(data, i) in listData.items.filter(i => !i.hidden)"
+          :cols="cols"
+          :md="md"
+          :key="i"
+        >
+          <component
+            :id="`${listData.data.id}-items-${i}`"
+            :is="data.tagName"
+            :align="data.align || align"
+            v-bind="data"
+          ></component>
+        </v-col>
+      </template>
+    </base-list>
   </v-responsive>
 </template>
 
 <script>
 // Mixins
-  import mixin from './mixin'
-  import Heading from '@/mixins/heading'
+import mixin from "./mixin";
+import Heading from "@/mixins/heading";
 
-  export default {
-    name: 'BaseResizeContainer',
+export default {
+  name: "BaseResizeContainer",
 
-    mixins: [Heading, mixin],
+  mixins: [Heading, mixin],
 
-    props: {
-      color: String,
-      space: {
-        type: [Number, String],
-        default: 6,
-      },
-      align: String,
-      maxWidth: String,
+  props: {
+    color: String,
+    space: {
+      type: [Number, String],
+      default: 6
+    },
+    align: String,
+    maxWidth: String,
+    items: {
+      type: Array,
+      default: () => []
+    },
+    cols: {
+      type: String,
+      default: "12"
+    },
+    md: {
+      type: String,
+      default: "6"
+    },
+    list: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+
+  computed: {
+    listData() {
+      const { items, ...data } = this.list;
+      return { items, data };
     },
 
-    computed: {
-      classes () {
-        return [
-          this.color,
-          this.margin,
-          `mb-${this.space}`,
-          this.dense && 'base-divider--dense',
-        ]
-      },
-      margin () {
-        switch (this.align) {
-          case 'left':
-            return 'mr-auto'
-          case 'right':
-            return 'ml-auto'
-          default:
-            return 'mx-auto'
-        }
-      },
+    classes() {
+      return [
+        this.color,
+        this.margin,
+        `mb-${this.space}`,
+        this.dense && "base-divider--dense"
+      ];
     },
+
+    margin() {
+      switch (this.align) {
+        case "left":
+          return "mr-auto";
+        case "right":
+          return "ml-auto";
+        default:
+          return "mx-auto";
+      }
+    }
   }
+};
 </script>
 
 <style lang="sass">

@@ -76,7 +76,7 @@ const outlined = {
     type: 'boolean',
 }
 
-const horizontal =             {
+const horizontal = {
     displayName: 'Horizontal',
     propName: 'horizontal',
     type: 'boolean',
@@ -136,9 +136,15 @@ const mobileHeight = {
     type: 'string',
 }
 
-const mobileSize = {
-    displayName: 'Mobile Size',
-    propName: 'mobileSize',
+const mobileWidth = {
+    displayName: 'Mobile width',
+    propName: 'mobileMinWidth',
+    type: 'string',
+}
+
+const width = {
+    displayName: 'Desktop width',
+    propName: 'minWidth',
     type: 'string',
 }
 
@@ -184,6 +190,25 @@ const textOnly = {
     type: 'boolean',
 }
 
+const items = {
+    displayName: 'Items',
+    propName: 'items',
+    type: 'array',
+}
+
+const cols = {
+    displayName: 'Items per row (Mobile)',
+    propName: 'cols',
+    type: 'enum',
+    enums: ['1', '2', '3', '4', '5', '6'],
+}
+
+const md = {
+    displayName: 'Items per row (Desktop)',
+    propName: 'md',
+    type: 'enum',
+    enums: ['1', '2', '3', '4', '5', '6'],
+}
 /// ///
 
 const baseHeading = {
@@ -191,7 +216,7 @@ const baseHeading = {
     props: [
         title,
         align,
-        dense,
+        // dense,
         size,
         space,
         // mobileSize,
@@ -209,23 +234,9 @@ const baseList = {
     type: 'list',
     props: [
         space,
-        {
-            displayName: 'Items',
-            propName: 'items',
-            type: 'array',
-        },
-        {
-            displayName: 'Items per row (Mobile)',
-            propName: 'cols',
-            type: 'enum',
-            enums: ['1', '2', '3', '4', '5', '6'],
-        }, ,
-        {
-            displayName: 'Items per row (Desktop)',
-            propName: 'md',
-            type: 'enum',
-            enums: ['1', '2', '3', '4', '5', '6'],
-        },
+        items,
+        cols,
+        md
     ],
 }
 
@@ -276,6 +287,11 @@ export default {
                 type: 'boolean',
             },
             {
+                displayName: 'Email Call-to-Action',
+                propName: 'emailAction',
+                type: 'boolean',
+            },
+            {
                 displayName: 'Main Call-to-Action',
                 propName: 'mainAction',
                 type: 'boolean',
@@ -299,6 +315,16 @@ export default {
             textOnly,
             openInNewTab,
             {
+                displayName: 'Full Width',
+                propName: 'block',
+                type: 'boolean',
+            },
+            {
+                displayName: 'Full Width on Mobile',
+                propName: 'blockOnMobile',
+                type: 'boolean',
+            },
+            {
                 displayName: 'Remove Shadow',
                 propName: 'depressed',
                 type: 'boolean',
@@ -306,6 +332,11 @@ export default {
             {
                 displayName: 'Tile',
                 propName: 'tile',
+                type: 'boolean',
+            },
+            {
+                displayName: 'Outlined',
+                propName: 'outlined',
                 type: 'boolean',
             },
             color,
@@ -344,6 +375,7 @@ export default {
             ...mixinHeading.props,
             hidden,
             dark,
+            outlined,
             horizontal,
             title,
             text,
@@ -355,7 +387,6 @@ export default {
             icon,
             iconSize,
             color,
-            outlined,
             // space,
         ],
     },
@@ -433,7 +464,7 @@ export default {
             color,
         ],
     },
-    
+
     BaseSectionHeading: {
         displayName: 'Section Heading',
         props: [
@@ -444,12 +475,12 @@ export default {
             title,
             text,
             space,
-            { ... color, displayName: "Background Color" },
+            { ...color, displayName: "Background Color" },
             divider,
             label("Icon"),
             icon,
             iconSize,
-            { ... iconColor, displayName: "Icon Color" },
+            { ...iconColor, displayName: "Icon Color" },
         ],
     },
 
@@ -464,9 +495,88 @@ export default {
     },
 
     BaseList: baseList,
-    
+
     BaseSlideList: {
-        ...baseList,
         displayName: 'Slide List',
+        props: [
+            items
+        ]
+    },
+
+    BaseInput: {
+        displayName: 'Input',
+        props: [
+            dark,
+            dense,
+            {
+                displayName: "Filled",
+                propName: "Filled",
+                type: 'boolean'
+            },
+            {
+                displayName: "Solo",
+                propName: "solo",
+                type: 'boolean'
+            },
+            {
+                displayName: "Solo inverted",
+                propName: "soloInverted",
+                type: 'boolean'
+            },
+            {
+                displayName: "Outlined",
+                propName: "outlined",
+                type: 'boolean'
+            },
+            {
+                displayName: "Filled",
+                propName: "filled",
+                type: 'boolean'
+            },
+            {
+                displayName: "Clearable",
+                propName: "clearable",
+                type: 'boolean'
+            },
+            {
+                displayName: "Shaped",
+                propName: "shaped",
+                type: 'boolean'
+            },
+            {
+                displayName: "Placeholder",
+                propName: "placeholder",
+                type: 'string'
+            },
+            {
+                displayName: "Label",
+                propName: "label",
+                type: 'string'
+            },
+            width,
+            {
+                displayName: "Color",
+                propName: "color",
+                type: 'color'
+            },
+        ]
+    },
+
+    BaseEmailForm: {
+        displayName: 'Email Form',
+        props: [
+            {
+                displayName: "Action",
+                propName: "action",
+                type: 'string'
+            },
+            {
+                displayName: "Field Name",
+                propName: "name",
+                type: 'string'
+            },
+            cols,
+            md
+        ]
     },
 }

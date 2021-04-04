@@ -39,6 +39,7 @@ export default {
       },
   
       source() {
+        debugger
         const isDark = this.dark || this.$vuetify.theme.isDark;
   
         const srcProp = isDark ? "srcDark" : "src";

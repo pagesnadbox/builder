@@ -1,8 +1,17 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - production
+
 # .gitlab-ci.yml file to be placed in the root of your repository
 
 pages: # the job must be named pages
   image: node:latest
-  stage: staging
+  stage: production
   script:
     - npm ci
     - npm run build-dev

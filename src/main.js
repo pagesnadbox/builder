@@ -24,32 +24,39 @@ let config = {
       visible: true,
     },
     list: {
+      editable: true,
+      id: "app-list",
       items: [
         {
+          id: "app-list-items",
           title: 'Hero',
           componentName: 'BaseImage',
           id: 'hero-img',
           key: 'hero',
         },
         {
+          id: "app-list-items",
           title: 'Theme Features',
           componentName: 'BaseSection',
           id: 'themeFeatures',
           key: 'theme-features',
         },
         {
+          id: "app-list-items",
           componentName: 'BaseSection',
           title: 'Features',
           id: 'features',
           key: 'features',
         },
         {
+          id: "app-list-items",
           title: 'Affiliates',
           componentName: 'BaseSection',
           id: 'affiliates',
           key: 'affiliates',
         },
         {
+          id: "app-list-items",
           componentName: 'BaseSection',
           title: 'Social Media',
           id: 'social',
@@ -74,6 +81,8 @@ let config = {
     list: {
       cols: '1',
       md: '2',
+      id: 'themeFeatures-list',
+      editable: true,
       items: [
         {
           title: `It's free`,
@@ -146,56 +155,95 @@ let config = {
   },
 
   hero: {
+    space: 0,
     img: {
       height: '',
       src: './assets/office_bg.jpg',
     },
+
     resizeContainer: {
       dark: true,
       align: 'left',
       maxWidth: '1300px',
+      list: {
+        id: "hero-resizeContainer-list",
+        cols: "1",
+        md: "1",
+        items: [
+          {
+            id: 'hero-resizeContainer-list-items',
+            componentName: "BaseTitle",
+            tagName: "base-subheading",
+            weight: 'regular',
+            title: 'LAUNCH YOUR LANDING PAGE IN A MINUTES',
+          },
+          {
+            id: 'hero-resizeContainer-list-items',
+            componentName: "BaseHeading",
+            tagName: "base-heading",
+            size: 'text-h2',
+            title: 'WELCOME TO PAGE LAUNCH',
+            weight: 'medium',
+          },
+          {
+            id: 'hero-resizeContainer-list-items',
+            componentName: "BaseBody",
+            tagName: "base-body",
+            text: `It often happens that you have many business ideas, but limited time to validate them? With Page Launch you don't waste valuable time creating a landing page. You can get it instantly`,
+          },
+          {
+            id: 'hero-resizeContainer-list-items',
+            tagName: "base-actions",
+            componentName: "BaseActions",
+            horizontal: true,
+            mainAction: false,
+            emailFormAction: true,
+            secondaryAction: false,
+            linkAction: false,
+            emailForm: {
+              id: "emailForm",
+              input: {
+                id: "input",
+                solo: true,
+                minWidth: "400",
+              },
+              submit: {
+                blockOnMobile: true,
+                id: "submit",
+                text: 'subscribe',
+                color: 'primary',
+                target: true,
+                size: 'x-large',
+              }
+            },
+            link: {
+              href: 'https://vuetifyjs.com',
+              openInNewTab: true,
+              id: 'link',
+            },
+            main: {
+              id: "main",
+              text: 'Discover More',
+              depressed: true,
+              tile: true,
+              color: 'primary',
+              target: true,
+              size: 'x-large',
+            },
+            secondary: {
+              id: "secondary",
+              tile: true,
+              color: 'primary',
+              text: 'Get Started Now',
+              textOnly: true,
+              target: true,
+              size: 'normal',
+            },
+          }
+        ]
+      }
     },
-    subheading: {
-      weight: 'regular',
-      title: 'LAUNCH YOUR LANDING PAGE IN A MINUTES',
-    },
-    heading: {
-      size: 'text-h2',
-      title: 'WELCOME TO PAGE LAUNCH',
-      weight: 'medium',
-    },
-    body: {
-      text: `It often happens that you have many business ideas, but limited time to validate them? With Page Launch you don't waste valuable time creating a landing page. You can get it instantly`,
-    },
-    actions: {
-      id: "hero-actions",
-      horizontal: true,
-      mainAction: true,
-      secondaryAction: true,
-      linkAction: false,
-      link: {
-        href: 'https://vuetifyjs.com',
-        openInNewTab: true,
-        id: 'hero-actions-link',
-      },
-      main: {
-        id: "hero-actions-main",
-        text: 'Discover More',
-        depressed: true,
-        tile: true,
-        color: 'primary',
-        target: true,
-        size: 'x-large',
-      },
-      secondary: {
-        id: "hero-actions-secondary",
-        color: 'primary',
-        text: 'Get Started Now',
-        textOnly: true,
-        target: true,
-        size: 'normal',
-      },
-    }
+
 
   },
 
@@ -221,8 +269,10 @@ let config = {
       editableProps: false,
     },
     list: {
+      id: "features-list",
       cols: '1',
       md: '4',
+      editable: true,
       items: [
         {
           componentName: 'BaseInfoCard',
@@ -273,6 +323,8 @@ let config = {
       color: '#00000000',
     },
     list: {
+      id: "affiliates-list",
+      editable: true,
       items: [
         {
           componentName: 'BaseImage',
@@ -347,7 +399,7 @@ let config = {
       },
       main: {
         color: "primary",
-        id: "social-actions-main",
+        id: "main",
         text: 'Follow Us',
         openInNewTab: true,
         iconSrc: 'mdi-open-in-new',
@@ -355,7 +407,7 @@ let config = {
         minWidth: '168',
       },
       secondary: {
-        id: "social-actions-secondary",
+        id: "secondary",
         text: 'Discover More',
         depressed: true,
         tile: true,
@@ -365,6 +417,8 @@ let config = {
     },
 
     list: {
+      editable: true,
+      id: "social-list",
       items: [
         {
           id: 'social-list-items',

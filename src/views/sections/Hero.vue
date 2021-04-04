@@ -1,5 +1,5 @@
 <template>
-  <section id="hero">
+  <base-section v-bind="data" id="hero">
     <base-vuetify-img
       id="hero-img"
       :class="{ 'white--text': data.resizeContainer.dark }"
@@ -15,27 +15,10 @@
           width="100%"
           v-bind="data.resizeContainer"
         >
-          <v-col cols="12">
-            <base-subheading id="hero-subheading" v-bind="subheading" />
-          </v-col>
-          <v-col cols="12">
-            <base-heading id="hero-heading" v-bind="heading" />
-          </v-col>
-          <v-col cols="12">
-            <base-body
-              id="hero-body"
-              v-bind="body"
-              :dark="data.resizeContainer.dark"
-            >
-              {{ data.body }}
-            </base-body>
-          </v-col>
-          
-          <base-actions :data="data.actions" :hasOr="true" :id="data.actions.id"/>
         </base-resize-container>
       </v-container>
     </base-vuetify-img>
-  </section>
+  </base-section>
 </template>
 
 <script>

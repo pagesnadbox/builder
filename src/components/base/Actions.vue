@@ -1,35 +1,36 @@
 <template>
   <div v-on="listeners" v-bind="attrs">
-
-    <base-link v-if="data.link && !data.link.hidden && data.linkAction" v-bind="data.link" />
+    <base-link v-if="!link.hidden && linkAction" v-bind="link" />
 
     <base-btn
       class="ma-2"
-      v-if="!data.main.hidden && data.mainAction"
-      v-bind="main"
+      v-if="!mainData.hidden && mainAction"
+      v-bind="mainData"
+      :id="`${$attrs.id}-${mainData.id}`"
     >
-      {{ data.main.text }}
+      {{ main.text }}
     </base-btn>
 
     <span
-      v-if="
-        hasOr &&
-          !data.secondary.hidden &&
-          data.secondaryAction &&
-          data.mainAction
-      "
+      v-if="hasOr && !secondaryData.hidden && secondaryAction && mainAction"
       class="font-weight-bold ml-6 mr-4 my-4"
       >or</span
     >
 
     <base-btn
       class="ma-2"
-      v-if="!data.secondary.hidden && data.secondaryAction"
+      v-if="!secondaryData.hidden && secondaryAction"
       :ripple="false"
-      v-bind="secondary"
+      v-bind="secondaryData"
+      :id="`${$attrs.id}-${secondaryData.id}`"
     >
-      {{ data.secondary.text }}
+      {{ secondary.text }}
     </base-btn>
+
+    <base-email-form
+      :id="`${$attrs.id}-${emailForm.id}`"
+      v-bind="emailForm"
+    ></base-email-form>
   </div>
 </template>
 
@@ -42,22 +43,62 @@ export default {
   mixins: [mixin],
 
   props: {
-    data: {
+    hasOr: {
+      type: Boolean,
+      default: false
+    },
+
+    horizontal: {
+      type: Boolean,
+      default: false
+    },
+
+    linkAction: {
+      type: Boolean,
+      default: false
+    },
+
+    emailFormActions: {
+      type: Boolean,
+      default: false
+    },
+
+    mainAction: {
+      type: Boolean,
+      default: false
+    },
+
+    secondaryAction: {
+      type: Boolean,
+      default: false
+    },
+
+    link: {
       type: Object,
       default: () => ({})
     },
 
-    hasOr: {
-      type: Boolean,
-      default: false
+    main: {
+      type: Object,
+      default: () => ({})
+    },
+
+    secondary: {
+      type: Object,
+      default: () => ({})
+    },
+
+    emailForm: {
+      type: Object,
+      default: () => ({})
     }
   },
 
   computed: {
     classes() {
-      const classes = "pa-2 d-inline-flex flex-wrap align-center".split(" ");
+      const classes = "d-inline-flex flex-wrap align-center".split(" ");
 
-      if (this.data.horizontal) {
+      if (this.horizontal) {
         classes.push("flex-row");
       } else {
         classes.push("flex-column");
@@ -66,13 +107,13 @@ export default {
       return classes;
     },
 
-    main() {
-      const { text, ...data } = this.data.main;
+    mainData() {
+      const { text, ...data } = this.main;
       return data;
     },
 
-    secondary() {
-      const { text, ...data } = this.data.secondary;
+    secondaryData() {
+      const { text, ...data } = this.secondary;
       return data;
     }
   }

@@ -17,6 +17,7 @@
               <transition-group>
                 <compnent-item
                   v-for="(item, i) in myArray"
+                  :editable="editable"
                   :key="i"
                   :item="item"
                   @click="onItemClick(i)"
@@ -28,7 +29,7 @@
             </draggable>
           </v-list-item-group>
         </v-list>
-        <div class="px-2 pt-2">
+        <div class="px-2 pt-2" v-if="editable">
           <v-btn
             block
             rounded
@@ -61,6 +62,11 @@
     },
 
     props: {
+      editable: {
+        type: Boolean,
+        default: false,
+      },
+
       items: {
         type: Array,
         default: () => [],
@@ -70,6 +76,11 @@
         type: String,
         default: 'app',
       },
+
+      listId: {
+        type: String,
+        default: '',
+      }
     },
 
     data () {
@@ -95,20 +106,11 @@
       onItemClick (i) {
         this.$emit('item-click', i)
       },
-      onToggleHiddenClick (index, value) {
-        this.$emit('property-change', {
-          componentNextKey: 'items',
-          key: 'hidden',
-          index,
-          value,
-        })
-        this.onValueChange('hidden', i)
-      },
       onValueChange (key, index, value) {
         this.$emit('property-change', {
-          componentNextKey: 'items',
+          apendix: `-items-${index}`,
+          id: this.listId,
           key,
-          index,
           value,
         })
       },

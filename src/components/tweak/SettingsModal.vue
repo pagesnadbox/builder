@@ -21,9 +21,13 @@
       >
         <v-icon>mdi-menu</v-icon>
 
-         <v-icon class="mt-1" style="right: 20px; position: absolute" @click="visible = false">
-            mdi-close
-          </v-icon>
+        <v-icon
+          class="mt-1"
+          style="right: 20px; position: absolute"
+          @click="visible = false"
+        >
+          mdi-close
+        </v-icon>
       </div>
 
       <slot />
@@ -36,8 +40,8 @@ import { EventBus } from "../../utils/eventBus";
 import SettingsMixin from "./settingsMixin";
 
 const position = {
-  x: parseInt(window.localStorage.getItem("settings_position_x")) || 0,
-  y: parseInt(window.localStorage.getItem("settings_position_y")) || 0
+  x: 0,
+  y: 0
 };
 
 export default {
@@ -100,6 +104,8 @@ export default {
         this.menuRef = document.querySelector(".menu-wrapper");
         if (this.menuRef) {
           this.menuRef.style.position = "fixed";
+          this.menuRef.style.top = "12px";
+          this.menuRef.style.left = "12px";
         }
       });
     },
@@ -117,6 +123,22 @@ export default {
     setPosition({ movementX, movementY }) {
       this.x += movementX;
       this.y += movementY;
+
+      const maxX = window.innerWidth - this.menuRef.offsetWidth - 40;
+      const maxY = window.innerHeight - this.menuRef.offsetHeight - 25;
+
+      if (maxX < this.x) {
+        this.x = maxX;
+      }
+      if (this.x < 0) {
+        this.x = 0;
+      }
+      if (maxY < this.y) {
+        this.y = maxY;
+      }
+      if (this.y < 0) {
+        this.y = 0;
+      }
 
       window.localStorage.setItem("settings_position_x", this.x);
       window.localStorage.setItem("settings_position_y", this.y);

@@ -1,86 +1,78 @@
 <template>
-  <div class="pa-2">
-    <v-checkbox
-      v-if="type === 'boolean'"
-      v-model="checkboxSwitchValue"
-      :label="displayName"
-    />
+  <v-col cols="6" v-if="type === 'boolean'">
+    <v-checkbox v-model="checkboxSwitchValue" :label="displayName" />
+  </v-col>
 
-    <div v-else-if="type === 'switch'">
-      <v-switch
-        v-model="checkboxSwitchValue"
-        :label="displayName"
-        class="mb-3"
-      />
-    </div>
+  <v-col cols="12" v-else-if="type === 'switch'">
+    <v-switch v-model="checkboxSwitchValue" :label="displayName" class="mb-3" />
+  </v-col>
 
-    <div v-else-if="type === 'label'">
-      <p>{{ displayName }}</p>
-    </div>
+  <v-col cols="12" v-else-if="type === 'label'">
+    <p>{{ displayName }}</p>
+  </v-col>
 
-    <div v-else-if="type === 'divider'">
-      <v-divider class="py-2"></v-divider>
-    </div>
+  <v-col cols="12" v-else-if="type === 'divider'">
+    <v-divider class="py-2"></v-divider>
+  </v-col>
 
-    <div v-else-if="type === 'group'">
-      <p>{{ displayName }}</p>
-      <v-btn-toggle v-model="groupValue" class="mb-3">
-        <v-btn v-for="(item, i) in enums" :key="i">
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>
-      </v-btn-toggle>
-    </div>
+  <v-col cols="12" v-else-if="type === 'group'">
+    <p>{{ displayName }}</p>
+    <v-btn-toggle v-model="groupValue" class="mb-3">
+      <v-btn v-for="(item, i) in enums" :key="i">
+        <v-icon>{{ item.icon }}</v-icon>
+      </v-btn>
+    </v-btn-toggle>
+  </v-col>
 
-    <div v-else-if="type === 'color'">
-      <p>{{ displayName }}</p>
+  <v-col cols="12" v-else-if="type === 'color'">
+    <p>{{ displayName }}</p>
 
-      <tweak-color clearable :value="value" @input="onValueChange" />
-    </div>
+    <tweak-color clearable :value="value" @input="onValueChange" />
+  </v-col>
 
-    <div v-else-if="type === 'icon'">
-      <v-text-field
-        hide-details
-        :label="displayName"
-        :value="value"
-        outlined
-        @input="onValueChange"
-      >
-        <template v-slot:append-outer>
-          <tweak-icon @value-change="onValueChange" />
-        </template>
-      </v-text-field>
-    </div>
-
-    <div v-else-if="type === 'enum'">
-      <v-select
-        :label="displayName"
-        outlined
-        :items="enums"
-        :value="value"
-        @change="onValueChange"
-      />
-    </div>
-
-    <div v-else-if="type === 'file'">
-      <p>{{ displayName }}</p>
-
-      <v-text-field outlined :value="value" @input="onValueChange">
-        <template v-slot:append-outer>
-          <v-btn x-large depressed color="primary" @click="onGalleryClick">
-            Image
-          </v-btn>
-        </template>
-      </v-text-field>
-    </div>
-
+  <v-col cols="12" v-else-if="type === 'icon'">
     <v-text-field
-      v-else
+      :label="displayName"
+      :value="value"
+      outlined
+      @input="onValueChange"
+    >
+      <template v-slot:append-outer>
+        <tweak-icon @value-change="onValueChange" />
+      </template>
+    </v-text-field>
+  </v-col>
+
+  <v-col cols="12" v-else-if="type === 'enum'">
+    <v-select
+      :label="displayName"
+      outlined
+      :items="enums"
+      :value="value"
+      @change="onValueChange"
+    />
+  </v-col>
+
+  <v-col cols="12" v-else-if="type === 'file'">
+    <p>{{ displayName }}</p>
+
+    <v-text-field outlined :value="value" @input="onValueChange">
+      <template v-slot:append-outer>
+        <v-btn x-large depressed color="primary" @click="onGalleryClick">
+          Image
+        </v-btn>
+      </template>
+    </v-text-field>
+  </v-col>
+
+  <v-col cols="12" v-else>
+    <v-text-field
       :label="displayName"
       :value="value"
       outlined
       @input="onValueChange"
     />
-  </div>
+  </v-col>
 </template>
 
 <script>

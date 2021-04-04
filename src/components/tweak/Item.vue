@@ -15,7 +15,7 @@
       />
       <v-list-item-title
         v-else
-        v-text="title"
+        v-text="title || item.id"
       />
     </v-list-item-content>
 
@@ -36,6 +36,7 @@
           icon
           @mousedown.stop
           @click.stop="onToggleEdit"
+          v-if="editable"
         >
           <v-icon :color="`${item.hidden ? 'grey' : 'primary'} lighten-1`">
             {{
@@ -47,6 +48,7 @@
           icon
           @mousedown.stop
           @click.stop="onRemoveClick"
+          v-if="editable"
         >
           <v-icon :color="`red lighten-2`">
             mdi-delete
@@ -66,6 +68,11 @@
         type: Object,
         default: () => ({}),
       },
+
+      editable: {
+        type: Boolean,
+        default: false,
+      }
     },
 
     data () {
