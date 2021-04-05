@@ -7,7 +7,6 @@
     :text="textOnly"
     class="font-weight-bold"
     v-bind="{ ...attrs, ...sizeObject }"
-    :href="href"
     :target="targetFormatted"
     :block="block || blockOnMobile"
     v-on="listeners"

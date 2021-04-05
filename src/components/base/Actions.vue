@@ -11,12 +11,6 @@
       {{ main.text }}
     </base-btn>
 
-    <span
-      v-if="hasOr && !secondaryData.hidden && secondaryAction && mainAction"
-      class="font-weight-bold ml-6 mr-4 my-4"
-      >or</span
-    >
-
     <base-btn
       class="ma-2"
       v-if="!secondaryData.hidden && secondaryAction"
@@ -28,6 +22,7 @@
     </base-btn>
 
     <base-email-form
+      v-if="!emailForm.hidden && emailAction"
       :id="`${$attrs.id}-${emailForm.id}`"
       v-bind="emailForm"
     ></base-email-form>

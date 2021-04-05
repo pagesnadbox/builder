@@ -1,11 +1,10 @@
 <template>
-  <v-form :action="action" class="pa-0">
+  <form :action="action" :method="method" class="pa-0">
     <v-container class="pa-1" v-on="listeners" v-bind="attrs" :id="attrs.id">
       <v-row>
         <v-col :cols="12 / cols" :md="12 / md">
           <base-input
             full-width
-            :name="emailName"
             v-bind="input"
             :id="`${$attrs.id}-${input.id}`"
           ></base-input>
@@ -21,7 +20,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-form>
+  </form>
 </template>
 
 <script>
@@ -37,6 +36,11 @@ export default {
     },
 
     emailName: {
+      type: String,
+      default: ""
+    },
+
+    method: {
       type: String,
       default: ""
     },

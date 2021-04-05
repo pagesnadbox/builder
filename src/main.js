@@ -16,9 +16,19 @@ let config = {
       height: '80',
       dark: false,
       logo: {
-        height: '',
-        src: './assets/omurtag-logo-light.png',
+        mobileHeight: '50',
+        height: '50',
+        maxWidth: "50",
+        src: './assets/pagesandbox_logo.png',
       },
+      heading: {
+        size: "text-h6",
+        mobileSize: "text-h6",
+        weight: "medium",
+        space: "0",
+        id: "app-bar-heading",
+        title: 'PageSandbox'
+      }
     },
     footer: {
       visible: true,
@@ -181,6 +191,7 @@ let config = {
             id: 'hero-resizeContainer-list-items',
             componentName: "BaseHeading",
             tagName: "base-heading",
+            space: "4",
             size: 'text-h2',
             title: 'WELCOME TO PAGE LAUNCH',
             weight: 'medium',
@@ -196,15 +207,16 @@ let config = {
             tagName: "base-actions",
             componentName: "BaseActions",
             horizontal: true,
-            mainAction: false,
-            emailFormAction: true,
-            secondaryAction: false,
+            mainAction: true,
+            secondaryAction: true,
+            emailFormAction: false,
             linkAction: false,
             emailForm: {
               id: "emailForm",
               input: {
                 id: "input",
                 solo: true,
+                name: "email",
                 minWidth: "400",
               },
               submit: {
@@ -252,6 +264,7 @@ let config = {
     space: '100',
     dark: true,
     heading: {
+      space: "4",
       outlined: true,
       color: '#00000000',
       title: 'How it works',
@@ -318,6 +331,7 @@ let config = {
     color: '#00000000',
     space: '50',
     heading: {
+      space: "4",
       title: "Who's using Zero?",
       editableProps: false,
       color: '#00000000',
@@ -378,6 +392,7 @@ let config = {
     space: '50',
     dark: true,
     heading: {
+      space: "4",
       editableProps: false,
       color: '#00000000',
       align: 'center',

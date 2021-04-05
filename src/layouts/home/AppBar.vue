@@ -12,10 +12,10 @@
         id="app-bar-logo"
         v-bind="data.bar.logo"
         contain
-        max-width="150"
-        width="100%"
         :dark="data.bar.dark"
       />
+
+      <base-heading class="ml-4" v-bind="data.bar.heading"></base-heading>
 
       <v-spacer />
 
@@ -41,21 +41,11 @@
         </v-tabs>
       </div>
 
-      <v-app-bar-nav-icon
-        class="hidden-md-and-up"
-        @click="drawer = !drawer"
-      />
+      <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
     </base-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      temporary
-    >
-      <v-list
-        dense
-        nav
-      >
+    <v-navigation-drawer v-model="drawer" app temporary>
+      <v-list dense nav>
         <v-list-item
           v-for="(item, index) in items"
           :key="`${item.id}-${index}`"
@@ -73,47 +63,47 @@
 </template>
 
 <script>
-  import { mapGetters, mapState } from 'vuex'
-  export default {
-    name: 'HomeAppBar',
+import { mapGetters, mapState } from "vuex";
+export default {
+  name: "HomeAppBar",
 
-    data: () => ({
-      drawer: null,
-    }),
+  data: () => ({
+    drawer: null
+  }),
 
-    computed: {
-      ...mapState('app', ['data']),
-      ...mapGetters('app', ['itemsFormatted']),
-      itemsFormattedExluded () {
-        return this.itemsFormatted.filter((i) => ['hero'].indexOf(i.key) === -1)
-      },
-      items () {
-        return [...this.defaultItems, ...this.itemsFormattedExluded]
-      },
-      defaultItems () {
-        return [
-          {
-            title: 'Home',
-            id: 'home',
-          },
-        ]
-      },
-      color () {
-        if (this.data.bar.color) {
-          return this.data.bar.color
+  computed: {
+    ...mapState("app", ["data"]),
+    ...mapGetters("app", ["itemsFormatted"]),
+    itemsFormattedExluded() {
+      return this.itemsFormatted.filter(i => ["hero"].indexOf(i.key) === -1);
+    },
+    items() {
+      return [...this.defaultItems, ...this.itemsFormattedExluded];
+    },
+    defaultItems() {
+      return [
+        {
+          title: "Home",
+          id: "home"
         }
-
-        return this.$vuetify.theme.isDark ? '#000' : '#fff'
-      },
+      ];
     },
+    color() {
+      if (this.data.bar.color) {
+        return this.data.bar.color;
+      }
 
-    methods: {
-      onItemClick (id) {
-        this.$vuetify.goTo(`#${id}`)
-        this.drawer = false
-      },
-    },
+      return this.$vuetify.theme.isDark ? "#000" : "#fff";
+    }
+  },
+
+  methods: {
+    onItemClick(id) {
+      this.$vuetify.goTo(`#${id}`);
+      this.drawer = false;
+    }
   }
+};
 </script>
 
 <style lang="sass">

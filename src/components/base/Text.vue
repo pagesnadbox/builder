@@ -1,24 +1,31 @@
+<template>
+  <p class="pa-1" v-on="listeners" v-bind="attrs">
+    {{ text }}
+  </p>
+</template>
 <script>
-  import Heading from './Heading'
+import mixin from "./mixin";
 
-  export default {
-    name: 'BaseTitle',
+export default {
+  name: "BaseText",
 
-    extends: Heading,
+  mixins: [mixin],
 
-    props: {
-      size: {
-        type: String,
-        default: 'text-h5',
-      },
-      mobileSize: {
-        type: String,
-        default: 'text-h6',
-      },
-      weight: {
-        type: String,
-        default: 'bold',
-      },
+  props: {
+    text: {
+      type: String,
+      default: ""
+    },
+
+    fontSize: {
+      type: String,
+      default: "1rem"
+    },
+
+    fontWeight: {
+      type: String,
+      default: "1rem"
     },
   }
+};
 </script>

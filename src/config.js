@@ -27,6 +27,13 @@ const size = {
     enums: ['text-h1', 'text-h2', 'text-h3', 'text-h4', 'text-h5', 'text-h6'],
 }
 
+const mobileSize = {
+    displayName: 'Size Mobile',
+    propName: 'mobileSize',
+    type: 'enum',
+    enums: ['text-h1', 'text-h2', 'text-h3', 'text-h4', 'text-h5', 'text-h6'],
+}
+
 const sizeDef = {
     displayName: 'Size',
     propName: 'size',
@@ -118,12 +125,6 @@ const align = {
     ],
 }
 
-const maxWidth = {
-    displayName: 'Max Width',
-    propName: 'maxWidth',
-    type: 'string',
-}
-
 const height = {
     displayName: 'Height (px)',
     propName: 'height',
@@ -142,7 +143,13 @@ const mobileWidth = {
     type: 'string',
 }
 
-const width = {
+const maxWidth = {
+    displayName: 'Max Width',
+    propName: 'maxWidth',
+    type: 'string',
+}
+
+const minWidth = {
     displayName: 'Desktop width',
     propName: 'minWidth',
     type: 'string',
@@ -151,7 +158,15 @@ const width = {
 const weight = {
     displayName: 'Weight',
     propName: 'weight',
-    type: 'string',
+    type: 'enum',
+    enums: [
+        "black",
+        "bold",
+        "medium",
+        "regular",
+        "light",
+        "thin",
+    ],
 }
 
 const dense = {
@@ -219,7 +234,7 @@ const baseHeading = {
         // dense,
         size,
         space,
-        // mobileSize,
+        mobileSize,
         weight,
     ],
 }
@@ -245,6 +260,7 @@ const baseImg = {
     props: [
         mobileHeight,
         height,
+        maxWidth,
         {
             displayName: 'Light source',
             propName: 'src',
@@ -396,6 +412,13 @@ export default {
     BaseTitle: {
         ...baseHeading,
         displayName: 'Title',
+    },
+
+    BaseText: {
+        displayName: "Text",
+        props: [
+            text
+        ]
     },
 
     BaseSubtitle: {
@@ -553,7 +576,12 @@ export default {
                 propName: "label",
                 type: 'string'
             },
-            width,
+            {
+                displayName: "Name",
+                propName: "name",
+                type: 'string'
+            },
+            minWidth,
             {
                 displayName: "Color",
                 propName: "color",
@@ -565,6 +593,11 @@ export default {
     BaseEmailForm: {
         displayName: 'Email Form',
         props: [
+            {
+                displayName: "Method",
+                propName: "method",
+                type: 'string'
+            },
             {
                 displayName: "Action",
                 propName: "action",
