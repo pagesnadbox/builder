@@ -5,6 +5,7 @@
       hide-details
       v-on="listeners"
       v-bind="attrs"
+      :light="!attrs.dark"
     ></v-text-field>
   </div>
 </template>

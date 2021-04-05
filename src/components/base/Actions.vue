@@ -22,7 +22,7 @@
     </base-btn>
 
     <base-email-form
-      v-if="!emailForm.hidden && emailAction"
+      v-if="!emailForm.hidden && emailFormActions"
       :id="`${$attrs.id}-${emailForm.id}`"
       v-bind="emailForm"
     ></base-email-form>

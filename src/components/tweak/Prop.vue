@@ -105,7 +105,7 @@ export default {
     },
 
     value: {
-      type: [String, Boolean],
+      type: [Number, String, Boolean],
       default() {
         if (this.type === "color") {
           return "#00000000";

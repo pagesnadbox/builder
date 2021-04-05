@@ -211,6 +211,23 @@ const items = {
     type: 'array',
 }
 
+const aggregations = {
+    ...items,
+    displayName: "Aggregations"
+}
+
+const lightSrc = {
+    displayName: 'Light source',
+    propName: 'src',
+    type: 'file',
+}
+
+const darkSrc = {
+    displayName: 'Dark Source',
+    propName: 'srcDark',
+    type: 'file',
+}
+
 const cols = {
     displayName: 'Items per row (Mobile)',
     propName: 'cols',
@@ -261,16 +278,8 @@ const baseImg = {
         mobileHeight,
         height,
         maxWidth,
-        {
-            displayName: 'Light source',
-            propName: 'src',
-            type: 'file',
-        },
-        {
-            displayName: 'Dark Source',
-            propName: 'srcDark',
-            type: 'file',
-        },
+        lightSrc,
+        darkSrc
     ],
 
 };
@@ -293,6 +302,8 @@ export default {
 
     BaseVuetifyImg: baseImg,
 
+    BaseImg: baseImg,
+
     BaseActions: {
         displayName: 'Call-To-Action',
         props: [
@@ -304,7 +315,7 @@ export default {
             },
             {
                 displayName: 'Email Call-to-Action',
-                propName: 'emailAction',
+                propName: 'emailFormActions',
                 type: 'boolean',
             },
             {
@@ -484,6 +495,7 @@ export default {
         props: [
             dark,
             space,
+            height,
             color,
         ],
     },
@@ -511,9 +523,9 @@ export default {
         displayName: 'Resize Container',
         props: [
             ...mixinHeading.props,
-            dark,
             space,
             maxWidth,
+            // aggregations
         ],
     },
 

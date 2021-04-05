@@ -92,6 +92,36 @@
           </v-list>
         </v-menu>
 
+        <br />
+
+        <v-menu v-if="aggregations.length" offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              block
+              tile
+              :outlined="!$vuetify.theme.dark"
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon left>
+                mdi-dots-vertical
+              </v-icon>
+              {{ aggregations.length }} Aggregated Components
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in aggregations"
+              :key="index"
+              @click="setComponent(item)"
+            >
+              <v-list-item-title>{{ item.componentName }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <v-divider class="my-6" />
 
         <div>
@@ -204,6 +234,16 @@ export default {
       return this.getData("list");
     },
 
+    aggregations() {
+      const aggregations = this.getData().aggregations;
+
+      if (Array.isArray(aggregations)) {
+        return aggregations.map(c => this.componentData[c]);
+      }
+
+      return [];
+    },
+
     items() {
       return this.list?.items || [];
     },
@@ -290,9 +330,9 @@ export default {
 
     onItemClick(index) {
       let id = `${this.items[index].id}-${index}`;
-      const name = this.items[index].componentName;
+      const componentName = this.items[index].componentName;
 
-      this.setComponent({ id, name });
+      this.setComponent({ id, componentName });
     },
 
     onAddClick() {
@@ -303,10 +343,10 @@ export default {
       this.dispatch("removeItem", index);
     },
 
-    setComponent({ id, name }) {
+    setComponent({ id, componentName }) {
       // set component to for editing (from list or from dropdown "N more componentns")
       this.setComponentId(id);
-      this.setComponentName(name);
+      this.setComponentName(componentName);
     },
 
     onValueChange({ key, value, apendix = "", id } = {}) {

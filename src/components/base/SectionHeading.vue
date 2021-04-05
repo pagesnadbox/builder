@@ -11,8 +11,9 @@
       :outlined="outlined"
       :align="align"
       class="mb-4"
-      color="primary"
       :dark="dark"
+      :size="size"
+      :color="iconColor"
       :editable="editableProps"
     />
 
@@ -77,6 +78,14 @@
       textDark: {
         type: Boolean,
         default: false,
+      },
+      size: {
+        type: String,
+        default: 'center',
+      },
+      iconColor: {
+        type: String,
+        default: '',
       },
       align: {
         type: String,
