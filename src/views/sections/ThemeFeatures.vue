@@ -1,5 +1,5 @@
 <template>
-  <base-section id="themeFeatures" v-bind="data" class="px-2">
+  <base-section id="themeFeatures" v-bind="data">
     <base-section-heading
       id="themeFeatures-heading"
       :text-dark="data.dark"

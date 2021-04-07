@@ -34,7 +34,7 @@ export default {
     },
 
     computed: {
-        ...mapState('settings', ['allowEdit', 'open', 'showHighlighter']),
+        ...mapState('settings', ['id', 'allowEdit', 'open', 'showHighlighter']),
 
         listeners() {
             return {
@@ -59,7 +59,7 @@ export default {
         },
 
         hasHighlight() {
-            return (this.allowEdit && this.mouseover)
+            return (this.selected || (this.allowEdit && this.mouseover))
         },
 
         isDesktop() {
@@ -69,16 +69,19 @@ export default {
         isMobile() {
             return !this.isDesktop
         },
+
+        selected() {
+            return this.$attrs.id === this.id
+        }
     },
 
     methods: {
         ...mapActions('settings', [
             'setOpen',
-            'setComponentName',
+            'setComponent',
             'addComponent',
             'removeComponent',
             'setComponents',
-            'setComponentId',
         ]),
 
         ...mapActions('components', [
@@ -152,8 +155,7 @@ export default {
                 event.preventDefault()
                 event.stopPropagation()
 
-                this.setComponentId(id)
-                this.setComponentName(name)
+                this.setComponent({ id, name })
                 this.setComponents()
 
                 if (!this.open) {

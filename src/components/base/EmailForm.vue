@@ -1,15 +1,15 @@
 <template>
   <form :action="action" :method="method" class="pa-0">
-    <v-container class="pa-1" v-on="listeners" v-bind="attrs" :id="attrs.id">
+    <v-container class="pa-0" v-on="listeners" v-bind="attrs" :id="attrs.id">
       <v-row>
-        <v-col :cols="12 / cols" :md="12 / md">
+        <v-col :cols="cols">
           <base-input
             full-width
             v-bind="input"
             :id="`${$attrs.id}-${input.id}`"
           ></base-input>
         </v-col>
-        <v-col :cols="12 / cols" :md="12 / md">
+        <v-col :cols="cols">
           <base-btn
             v-bind="submitBtnData"
             type="submit"
@@ -55,21 +55,16 @@ export default {
       default: () => ({})
     },
 
-    cols: {
-      type: String,
-      default: "1"
-    },
-
-    md: {
-      type: String,
-      default: "2"
-    }
   },
 
   computed: {
     submitBtnData() {
       const { text, ...data } = this.submit;
       return data;
+    },
+
+    cols() {
+      return this.isMobile ? '12' : undefined
     }
   }
 };

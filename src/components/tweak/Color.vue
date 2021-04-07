@@ -3,7 +3,7 @@
     <v-item-group class="d-flex justify-center">
       <v-item v-if="clearable" :value="'primary'">
         <v-icon
-          @click="onValueChange('primary')"
+          @click="onValueChange('')"
           outlined
           class="ma-2"
           size="36"

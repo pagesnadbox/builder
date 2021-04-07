@@ -23,7 +23,7 @@
     props: {
       space: {
         type: [Number, String],
-        default: 96,
+        default: 0,
       },
       color: {
         type: String,

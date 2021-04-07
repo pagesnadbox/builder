@@ -27,7 +27,7 @@
 .hightlight {
   outline: 4px dotted rgb(19, 196, 219) !important;
   outline-offset: -0.075rem !important;
-  transform: scale(1.03);
+  /* transform: scale(1.03); */
   transition: transform 1.5s !important;
 }
 </style>

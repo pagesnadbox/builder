@@ -6,23 +6,22 @@
     :style="styles"
     v-on="listeners"
   >
-    <base-list v-bind="listData.data">
-      <template v-slot:item="{ cols, md }">
+    <v-container>
+      <v-row>
         <v-col
-          v-for="(data, i) in listData.items.filter(i => !i.hidden)"
-          :cols="cols"
-          :md="md"
+          v-for="(aggregationName, i) in filteredAggregations"
+          :cols="12"
+          :md="12"
           :key="i"
         >
           <component
-            :id="`${listData.data.id}-items-${i}`"
-            :is="data.tagName"
-            :align="data.align || align"
-            v-bind="data"
+            :is="data[aggregationName].tagName"
+            :align="data[aggregationName].align || align"
+            v-bind="data[aggregationName]"
           ></component>
         </v-col>
-      </template>
-    </base-list>
+      </v-row>
+    </v-container>
   </v-responsive>
 </template>
 
@@ -32,11 +31,15 @@ import mixin from "./mixin";
 import Heading from "@/mixins/heading";
 
 export default {
-  name: "BaseResizeContainer",
+  name: "BaseHeroContainer",
 
   mixins: [Heading, mixin],
 
   props: {
+    data: {
+      type: Object,
+      default: () => ({})
+    },
     color: String,
     space: {
       type: [Number, String],
@@ -44,10 +47,6 @@ export default {
     },
     align: String,
     maxWidth: String,
-    items: {
-      type: Array,
-      default: () => []
-    },
     cols: {
       type: String,
       default: "12"
@@ -56,16 +55,15 @@ export default {
       type: String,
       default: "6"
     },
-    list: {
-      type: Object,
-      default: () => ({})
+    aggregations: {
+      type: Array,
+      default: () => []
     }
   },
 
   computed: {
-    listData() {
-      const { items, ...data } = this.list;
-      return { items, data };
+    filteredAggregations() {
+      return this.aggregations.filter(a => !this.data[a].hidden && a !== "img");
     },
 
     classes() {

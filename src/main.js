@@ -165,98 +165,109 @@ let config = {
   },
 
   hero: {
+    aggregations: [
+      "img", "heroContainer"
+    ],
     space: 0,
-    img: {
-      height: '',
-      src: './assets/office_bg.jpg',
-    },
-
-    resizeContainer: {
+    overlay: true,
+    height: '',
+    src: './assets/office_bg.jpg',
+    srcDark: './assets/office_bg.jpg',
+    color: "",
+    heroContainer: {
       dark: true,
       align: 'left',
+      componentName: "BaseHeroContainer",
       maxWidth: '1300px',
-      list: {
-        id: "hero-resizeContainer-list",
-        cols: "1",
-        md: "1",
-        items: [
-          {
-            id: 'hero-resizeContainer-list-items',
-            componentName: "BaseTitle",
-            tagName: "base-subheading",
-            weight: 'regular',
-            title: 'LAUNCH YOUR LANDING PAGE IN A MINUTES',
+      id: "hero-heroContainer",
+      cols: "1",
+      md: "1",
+      aggregations: ['img', 'subheading', 'heading', 'body', 'actions'],
+      img: {
+        id: 'hero-heroContainer-img',
+        height: '',
+        componentName: "BaseImage",
+        src: './assets/office_bg.jpg',
+      },
+      subheading: {
+        id: 'hero-heroContainer-subheading',
+        componentName: "BaseTitle",
+        tagName: "base-subheading",
+        weight: 'regular',
+        title: 'LAUNCH YOUR LANDING PAGE IN A MINUTES',
+      },
+      heading: {
+        id: 'hero-heroContainer-heading',
+        componentName: "BaseHeading",
+        tagName: "base-heading",
+        space: "4",
+        size: 'text-h2',
+        title: 'WELCOME TO PAGE LAUNCH',
+        weight: 'medium',
+      },
+      body: {
+        id: 'hero-heroContainer-body',
+        componentName: "BaseBody",
+        tagName: "base-body",
+        text: `It often happens that you have many business ideas, but limited time to validate them? With Page Launch you don't waste valuable time creating a landing page. You can get it instantly`,
+      },
+      actions: {
+        id: 'hero-heroContainer-actions',
+        tagName: "base-actions",
+        componentName: "BaseActions",
+        horizontal: true,
+        mainAction: true,
+        secondaryAction: true,
+        emailFormAction: false,
+        linkAction: false,
+        emailForm: {
+          id: "emailForm",
+          input: {
+            id: "input",
+            solo: true,
+            name: "email",
+            minWidth: "400",
           },
-          {
-            id: 'hero-resizeContainer-list-items',
-            componentName: "BaseHeading",
-            tagName: "base-heading",
-            space: "4",
-            size: 'text-h2',
-            title: 'WELCOME TO PAGE LAUNCH',
-            weight: 'medium',
-          },
-          {
-            id: 'hero-resizeContainer-list-items',
-            componentName: "BaseBody",
-            tagName: "base-body",
-            text: `It often happens that you have many business ideas, but limited time to validate them? With Page Launch you don't waste valuable time creating a landing page. You can get it instantly`,
-          },
-          {
-            id: 'hero-resizeContainer-list-items',
-            tagName: "base-actions",
-            componentName: "BaseActions",
-            horizontal: true,
-            mainAction: true,
-            secondaryAction: true,
-            emailFormAction: false,
-            linkAction: false,
-            emailForm: {
-              id: "emailForm",
-              input: {
-                id: "input",
-                solo: true,
-                name: "email",
-                minWidth: "400",
-              },
-              submit: {
-                blockOnMobile: true,
-                id: "submit",
-                text: 'subscribe',
-                color: 'primary',
-                target: true,
-                size: 'x-large',
-              }
-            },
-            link: {
-              href: 'https://vuetifyjs.com',
-              openInNewTab: true,
-              id: 'link',
-            },
-            main: {
-              id: "main",
-              text: 'Discover More',
-              depressed: true,
-              tile: true,
-              color: 'primary',
-              target: true,
-              size: 'x-large',
-            },
-            secondary: {
-              id: "secondary",
-              tile: true,
-              color: 'primary',
-              text: 'Get Started Now',
-              textOnly: true,
-              target: true,
-              size: 'normal',
-            },
+          submit: {
+            blockOnMobile: true,
+            id: "submit",
+            text: 'subscribe',
+            color: 'primary',
+            target: true,
+            size: 'x-large',
           }
-        ]
+        },
+        link: {
+          href: 'https://vuetifyjs.com',
+          openInNewTab: true,
+          id: 'link',
+        },
+        main: {
+          id: "main",
+          text: 'Discover More',
+          depressed: true,
+          tile: true,
+          color: 'primary',
+          target: true,
+          size: 'x-large',
+        },
+        secondary: {
+          id: "secondary",
+          tile: true,
+          color: 'primary',
+          text: 'Get Started Now',
+          textOnly: true,
+          target: true,
+          size: 'normal',
+        },
       }
     },
-
-
+    img: {
+      height: "400",
+      id: "hero-img",
+      componentName: "BaseImg",
+      src: "assets/logo.svg"
+    }
   },
 
   features: {

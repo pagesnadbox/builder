@@ -15,6 +15,7 @@ const stateFn = () => ({
     items: [],
     moreComponents: [],
     moreComponentsDraft: [],
+    history: []
 })
 
 export default (options) => {
@@ -46,51 +47,67 @@ export default (options) => {
                     state.moreComponentsDraft.splice(index, 1)
                 }
             },
+            ADD_TO_HISTORY: (state, payload) => {
+                if (payload.id && payload.name) {
+                    let data = payload;
+                    const index = state.history.findIndex(c => c.id === payload.id)
+                    if (index > -1) {
+                        data = state.history.splice(index, 1)[0];
+                    } else {
+                    }
+                    state.history.push(data)
+                }
+            },
         },
         actions: {
-            setShowHighlighter ({ commit }, payload) {
+            setShowHighlighter({ commit }, payload) {
                 commit('SET_SHOW_HIGHLIGHTER', payload)
             },
-            setCanRedo ({ commit }, payload) {
+            setCanRedo({ commit }, payload) {
                 commit('SET_CAN_REDO', payload)
             },
-            setCanUndo ({ commit }, payload) {
+            setCanUndo({ commit }, payload) {
                 commit('SET_CAN_UNDO', payload)
             },
-            setCtrlDown ({ commit }, payload) {
+            setCtrlDown({ commit }, payload) {
                 commit('SET_CTR_DOWN', payload)
             },
-            setAllowEdit ({ commit }, payload) {
+            setAllowEdit({ commit }, payload) {
                 commit('SET_ALLOW_EDIT', payload)
             },
-            setOpen ({ commit }, payload) {
+            setOpen({ commit }, payload) {
                 commit('SET_OPEN', payload)
             },
-            setComponentName ({ commit }, payload) {
+            setComponentName({ commit }, payload) {
                 commit('SET_COMPONENT_NAME', payload)
             },
-            setComponents ({ commit, state }) {
+            setComponent({ commit }, payload) {
+                commit('SET_COMPONENT_NAME', payload.name)
+                commit('SET_ID', payload.id)
+                commit('ADD_TO_HISTORY', payload)
+            },
+            setComponents({ commit, state }) {
                 commit('SET_COMPONENTS', [...state.moreComponentsDraft])
             },
-            resetComponents ({ commit }) {
+            resetComponents({ commit }) {
                 commit('SET_COMPONENTS', [])
             },
-            addComponent ({ commit }, payload) {
+            addComponent({ commit }, payload) {
                 commit('ADD_COMPONENT', payload)
             },
-            setImage ({ commit }, payload) {
+            setImage({ commit }, payload) {
                 commit('SET_IMAGE', payload)
             },
-            removeComponent ({ commit }, payload) {
+            removeComponent({ commit }, payload) {
                 commit('REMOVE_COMPONENT', payload)
             },
-            setComponentId ({ commit }, payload) {
+            setComponentId({ commit }, payload) {
                 commit('SET_ID', payload)
             },
-            setItems ({ commit }, payload) {
+            setItems({ commit }, payload) {
                 commit('SET_ITEMS', payload)
             },
-            setShowGallery ({ commit }, payload) {
+            setShowGallery({ commit }, payload) {
                 commit('SET_GALLERY_SHOW', payload)
             },
         },

@@ -6,7 +6,7 @@
 import mixin from "./imgMixin";
 
 export default {
-  name: "BaseVuetifyImg",
+  name: "BaseImg",
 
   mixins: [mixin],
 };

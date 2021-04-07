@@ -30,7 +30,7 @@ export default {
         styles.minWidth = `${this.minWidth}px`;
       }
 
-      // return styles;
+      return styles;
     }
   }
 };

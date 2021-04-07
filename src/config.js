@@ -212,8 +212,8 @@ const items = {
 }
 
 const aggregations = {
-    ...items,
-    displayName: "Aggregations"
+    displayName: "Aggregations",
+    type: 'array',
 }
 
 const lightSrc = {
@@ -255,6 +255,17 @@ const baseHeading = {
         weight,
     ],
 }
+
+const baseSection = {
+    displayName: 'Section',
+    props: [
+        dark,
+        space,
+        height,
+        color,
+    ],
+}
+
 const mixinHeading = {
     props: [
         align,
@@ -275,6 +286,7 @@ const baseList = {
 const baseImg = {
     displayName: 'Image',
     props: [
+        hidden,
         mobileHeight,
         height,
         maxWidth,
@@ -490,15 +502,7 @@ export default {
         ],
     },
 
-    BaseSection: {
-        displayName: 'Section',
-        props: [
-            dark,
-            space,
-            height,
-            color,
-        ],
-    },
+    BaseSection: baseSection,
 
     BaseSectionHeading: {
         displayName: 'Section Heading',
@@ -519,8 +523,32 @@ export default {
         ],
     },
 
-    BaseResizeContainer: {
-        displayName: 'Resize Container',
+    BaseHero: {
+        displayName: 'Hero',
+        props: [
+            dark,
+            space,
+            height,
+            mobileHeight,
+            aggregations,
+            label("Background"),
+            divider,
+            lightSrc,
+            {
+                displayName: "Overlay",
+                type: "boolean",
+                propName: "overlay"
+            },
+            darkSrc,
+            {
+                ...color,
+                displayName: 'Solid Color'
+            },
+        ],
+    },
+
+    BaseHeroContainer: {
+        displayName: 'Hero Container',
         props: [
             ...mixinHeading.props,
             space,
@@ -620,8 +648,6 @@ export default {
                 propName: "name",
                 type: 'string'
             },
-            cols,
-            md
         ]
     },
 }

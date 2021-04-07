@@ -64,6 +64,36 @@
           <v-divider class="my-6" />
         </div>
 
+        <v-menu v-if="history.length" offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              block
+              tile
+              :outlined="!$vuetify.theme.dark"
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon left>
+                mdi-dots-vertical
+              </v-icon>
+              {{ history.length }} Selected history
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in history"
+              :key="index"
+              @click="setComponent(item)"
+            >
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <br />
+
         <v-menu v-if="moreComponents.length" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -94,7 +124,7 @@
 
         <br />
 
-        <v-menu v-if="aggregations.length" offset-y>
+        <v-menu v-if="aggregations" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               block
@@ -108,14 +138,14 @@
               <v-icon left>
                 mdi-dots-vertical
               </v-icon>
-              {{ aggregations.length }} Aggregated Components
+              {{ Object.keys(aggregations).length }} Aggregated Components
             </v-btn>
           </template>
           <v-list>
             <v-list-item
-              v-for="(item, index) in aggregations"
+              v-for="(item, index) in Object.values(aggregations)"
               :key="index"
-              @click="setComponent(item)"
+              @click="setComponent({ ...item, name: item.componentName })"
             >
               <v-list-item-title>{{ item.componentName }}</v-list-item-title>
             </v-list-item>
@@ -178,6 +208,7 @@ export default {
 
   data() {
     return {
+      selectedComponentsBefore: [],
       colors: [this.$vuetify.theme.currentTheme.primary, "#9368e9", "#F4511E"]
     };
   },
@@ -214,6 +245,7 @@ export default {
       "id",
       "open",
       "componentName",
+      "history",
       "moreComponents"
     ]),
 
@@ -235,13 +267,14 @@ export default {
     },
 
     aggregations() {
-      const aggregations = this.getData().aggregations;
+      const data = this.getData()
+      let aggregations = data.aggregations;
 
       if (Array.isArray(aggregations)) {
-        return aggregations.map(c => this.componentData[c]);
+        aggregations = aggregations.map(a => data[a])
       }
 
-      return [];
+      return aggregations;
     },
 
     items() {
@@ -305,12 +338,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("settings", [
-      "setOpen",
-      "setComponentId",
-      "setComponentName",
-      "setAllowEdit"
-    ]),
+    ...mapActions("settings", ["setOpen", "setComponent", "setAllowEdit"]),
 
     getData(prop) {
       let data = this.$store.state;
@@ -330,9 +358,9 @@ export default {
 
     onItemClick(index) {
       let id = `${this.items[index].id}-${index}`;
-      const componentName = this.items[index].componentName;
+      const name = this.items[index].componentName;
 
-      this.setComponent({ id, componentName });
+      this.setComponent({ id, name });
     },
 
     onAddClick() {
@@ -341,12 +369,6 @@ export default {
 
     onRemoveClick(index) {
       this.dispatch("removeItem", index);
-    },
-
-    setComponent({ id, componentName }) {
-      // set component to for editing (from list or from dropdown "N more componentns")
-      this.setComponentId(id);
-      this.setComponentName(componentName);
     },
 
     onValueChange({ key, value, apendix = "", id } = {}) {
@@ -364,8 +386,7 @@ export default {
 
     onAppSettinsClick() {
       // reset all so application (BaseApp) is set for editing
-      this.setComponentId("");
-      this.setComponentName("");
+      this.setComponent({ id: "", name: "" });
     },
 
     onKeyDown(e) {

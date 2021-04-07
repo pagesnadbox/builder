@@ -15,13 +15,13 @@ export default (options) => {
         mutations: {
             ...defaultModule.mutations,
             SET_ITEMS: (state, payload) => {
-                Vue.set(state.data.resizeContainer.list, 'items', payload)
+                Vue.set(state.data.heroContainer.list, 'items', payload)
             },
             ADD_ITEM: (state, payload) => {
-                state.data.list.resizeContainer.items.push(payload)
+                state.data.list.heroContainer.items.push(payload)
             },
             REMOVE_ITEM: (state, payload) => {
-                state.data.list.resizeContainer.items.splice(payload, 1)
+                state.data.list.heroContainer.items.splice(payload, 1)
             },
         },
         actions: {
