@@ -15,7 +15,7 @@
 
       <v-item v-for="(color, i) in colors" :key="i" :value="color">
         <template v-slot="{ active, toggle }">
-          <base-avatar
+          <v-avatar
             @click="onValueChange(color)"
             :color="color"
             :outlined="active"
@@ -38,7 +38,7 @@
           offset-y
         >
           <template v-slot:activator="{ on, attrs }">
-            <base-avatar
+            <v-avatar
               v-bind="attrs"
               v-on="on"
               color="blue"

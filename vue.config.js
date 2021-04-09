@@ -1,11 +1,9 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 module.exports = {
-  pluginOptions: {
-    webpackBundleAnalyzer: {
-      openAnalyzer: true
-    }
-  },
+  // pluginOptions: {
+  //   webpackBundleAnalyzer: {
+  //     openAnalyzer: false
+  //   }
+  // },
   devServer: {
     disableHostCheck: true,
   },
@@ -13,7 +11,20 @@ module.exports = {
   transpileDependencies: [
     'vuetify',
   ],
-  publicPath: process.env.NODE_ENV === 'staging' 
-  ? '/pagesandbox/'
-  : '/',
+  publicPath: process.env.NODE_ENV === 'staging'
+    ? '/pagesandbox/'
+    : '/',
+  chainWebpack: (config) => {
+    // Disable prefetch and preload of async modules for 'app' page
+    // config.plugins.store.delete('prefetch-app');
+    // config.plugins.store.delete('preload-app');
+    // Use this syntax if not using multipage setup
+    config.optimization.delete("splitChunks");
+    config.plugins.store.delete('prefetch');
+    config.plugins.store.delete('preload');
+  },
+  filenameHashing: false,
+  css: {
+    extract: true
+  },
 }

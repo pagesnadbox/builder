@@ -1,7 +1,8 @@
 import { set } from '@/utils/vuex'
+import Vue from 'vue'
 
 const stateFn = () => ({
-    items: [],
+   config: {}
 })
 
 export default (options) => {
@@ -10,11 +11,11 @@ export default (options) => {
         namespaced: true,
         state,
         mutations: {
-            SET_ITEMS: set('items'),
+            SET_CONFIG: set('config'),
         },
         actions: {
-            setItems ({ commit }, payload) {
-                commit('SET_ITEMS', payload)
+            setConfig({ commit }, payload) {
+                commit('SET_CONFIG', payload)
             },
         },
         getters: {

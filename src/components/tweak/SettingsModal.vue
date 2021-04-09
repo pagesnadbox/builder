@@ -28,6 +28,13 @@
         >
           mdi-close
         </v-icon>
+        <v-icon
+          class="mt-1"
+          style="right: 50px; position: absolute"
+          @click="setCompact(false)"
+        >
+          mdi-border-right
+        </v-icon>
       </div>
 
       <slot />
@@ -36,6 +43,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { EventBus } from "../../utils/eventBus";
 import SettingsMixin from "./settingsMixin";
 
@@ -79,6 +87,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("settings", ["setCompact"]),
     setStaticData() {
       this.staticData && this.staticData();
 

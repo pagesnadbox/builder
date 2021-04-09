@@ -49,7 +49,6 @@
 
 <script>
   import draggable from 'vuedraggable'
-  import { mapActions } from 'vuex'
 
   import Item from './Item'
 
@@ -95,14 +94,13 @@
           return this.items
         },
         set (value) {
-          this.$store.dispatch(`${this.region}/setItems`, value)
-          this.setItems(value)
+          this.$action(`${this.region}/setItems`, value)
+          this.$action("settings/setItems", value)
         },
       },
     },
 
     methods: {
-      ...mapActions('components', ['setItems']),
       onItemClick (i) {
         this.$emit('item-click', i)
       },

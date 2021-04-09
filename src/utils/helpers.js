@@ -1,4 +1,4 @@
-import { store } from '@/main'
+// import { store } from '@/main'
 
 // import moment from 'moment-timezone'
 
@@ -79,8 +79,8 @@ export const getData = (url, query = '', token = '') => {
 }
 
 const preResult = (data) => {
-  store.dispatch('authentication/setUserLoggedIn', data.userLoggedIn)
-  store.dispatch('authentication/setUserId', data.userId)
+  // store.dispatch('authentication/setUserLoggedIn', data.userLoggedIn)
+  // store.dispatch('authentication/setUserId', data.userId)
 }
 
 export const getPropertyPayload = (data) => {
@@ -324,4 +324,13 @@ export const getCookie = (name) => {
 
   // Return null if not found
   return null
+}
+
+export const loadCss = (href, targetDom) => {
+  const element = document.createElement("link");
+  element.href = href;
+  element.rel = "stylesheet";
+  element.type = "text/css";
+
+  targetDom.appendChild(element)
 }

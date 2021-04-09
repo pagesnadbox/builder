@@ -17,6 +17,9 @@
     <v-icon class="mb-3" large @click="onResetClick">
       mdi-lock-reset
     </v-icon>
+    <v-icon class="mb-3" large @click="onToggleCompact">
+      mdi-rotate-right-variant
+    </v-icon>
     <v-icon large @click="onDownloadClick">
       mdi-download-box-outline
     </v-icon>
@@ -24,7 +27,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { undoRedoHistory } from "../../store";
 import { EventBus } from "../../utils/eventBus";
 import { getData, postData } from "../../utils/helpers";
@@ -41,6 +44,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("settings", ["toggleCompact"]),
     // download
     async uploadFiles() {
       const formData = new FormData();
@@ -50,10 +54,13 @@ export default {
       });
 
       // const response = await fetch("http://localhost:3030/v1/api/upload/images", {
-      const response = await fetch("https://landingpagebuilder-server-v1.herokuapp.com/v1/api/upload/images", {
-        method: "POST",
-        body: formData
-      });
+      const response = await fetch(
+        "https://landingpagebuilder-server-v1.herokuapp.com/v1/api/upload/images",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
 
       return response.json();
     },
@@ -62,11 +69,12 @@ export default {
 
       if (this.images && Object.keys(this.images).length !== 0) {
         const response = await this.uploadFiles();
-        imagesId = response.result.id
+        imagesId = response.result.id;
       }
 
       postData({
-        url: 'https://landingpagebuilder-server-v1.herokuapp.com/v1/api/download/zip',
+        url:
+          "https://landingpagebuilder-server-v1.herokuapp.com/v1/api/download/zip",
         // url: "http://localhost:3030/v1/api/download/zip",
         payload: {
           config: window.config,
@@ -108,6 +116,9 @@ export default {
       if (e.ctrlKey && e.keyCode === 90) {
         e.shiftKey ? this.redo() : this.undo();
       }
+    },
+    onToggleCompact() {
+      this.toggleCompact();
     }
   }
 };

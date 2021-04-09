@@ -76,8 +76,7 @@
 </template>
 
 <script>
-import { throttle } from "lodash";
-import { mapActions } from "vuex";
+import { throttle } from "../../utils/helpers";
 import { EventBus } from "../../utils/eventBus";
 
 export default {
@@ -143,12 +142,10 @@ export default {
   },
 
   methods: {
-    ...mapActions("settings", ["setShowGallery", "setImage"]),
-
     onGalleryClick() {
       EventBus.$on("on-image-click", this.onImageClick.bind(this));
 
-      this.setShowGallery(true);
+      this.$action("settings/setShowGallery", true);
     },
 
     onImageClick(payload) {
@@ -160,7 +157,7 @@ export default {
         }
       };
 
-      this.setImage(data);
+      this.$action("settings/setImage", data);
 
       this.onValueChange(data.name);
     },

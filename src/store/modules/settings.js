@@ -1,17 +1,19 @@
 import { set } from '@/utils/vuex'
 import Vue from 'vue'
+import { EventBus, events } from '../../utils/eventBus'
 
 const stateFn = () => ({
-    showHighlighter: false,
-    showGallery: false,
-    allowEdit: false,
-    ctrlDown: false,
     id: '',
+    allowEdit: false,
+    open: false,
+    showHighlighter: false,
+    images: {},
+    compact: false,
+    showGallery: false,
+    ctrlDown: false,
     canRedo: false,
     canUndo: false,
-    open: false,
     componentName: '',
-    images: {},
     items: [],
     moreComponents: [],
     moreComponentsDraft: [],
@@ -33,6 +35,7 @@ export default (options) => {
             SET_ID: set('id'),
             SET_ITEMS: set('items'),
             SET_OPEN: set('open'),
+            SET_COMPACT: set('compact'),
             SET_COMPONENT_NAME: set('componentName'),
             SET_COMPONENTS: set('moreComponents'),
             ADD_COMPONENT: (state, payload) => {
@@ -61,6 +64,8 @@ export default (options) => {
         },
         actions: {
             setShowHighlighter({ commit }, payload) {
+                Vue.$action("settings/setShowHighlighter", payload);
+
                 commit('SET_SHOW_HIGHLIGHTER', payload)
             },
             setCanRedo({ commit }, payload) {
@@ -73,15 +78,32 @@ export default (options) => {
                 commit('SET_CTR_DOWN', payload)
             },
             setAllowEdit({ commit }, payload) {
+                Vue.$action("settings/setAllowEdit", payload);
                 commit('SET_ALLOW_EDIT', payload)
             },
             setOpen({ commit }, payload) {
+                console.error(payload)
+                Vue.$action("settings/setOpen", payload);
+
                 commit('SET_OPEN', payload)
+            },
+            setCompact({ commit }, payload) {
+                // Vue.$action("settings/setCompact", payload);
+
+                commit('SET_COMPACT', payload)
+            },
+            toggleCompact({ dispatch, commit, state }) {
+                if (!state.compact) {
+                    dispatch("settings/setOpen", true, { root: true });
+                }
+                commit('SET_COMPACT', !state.compact)
             },
             setComponentName({ commit }, payload) {
                 commit('SET_COMPONENT_NAME', payload)
             },
             setComponent({ commit }, payload) {
+                Vue.$action("settings/setComponentId", payload.id);
+
                 commit('SET_COMPONENT_NAME', payload.name)
                 commit('SET_ID', payload.id)
                 commit('ADD_TO_HISTORY', payload)
@@ -96,12 +118,16 @@ export default (options) => {
                 commit('ADD_COMPONENT', payload)
             },
             setImage({ commit }, payload) {
+                Vue.$action("settings/setImage", payload);
+
                 commit('SET_IMAGE', payload)
             },
             removeComponent({ commit }, payload) {
                 commit('REMOVE_COMPONENT', payload)
             },
             setComponentId({ commit }, payload) {
+                Vue.$action("settings/setComponentId", payload);
+
                 commit('SET_ID', payload)
             },
             setItems({ commit }, payload) {
