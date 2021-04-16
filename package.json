@@ -1,5 +1,5 @@
 {
-  "name": "@pagesandbox/builder",
+  "name": "pagesandbox-builder",
   "version": "0.0.1",
   "private": false,
   "scripts": {
@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "build-dev": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
-    "postversion": "node scripts/postversion.js"
+    "postversion": "node scripts/postversion.js",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "eventemitter3": "^4.0.7",
