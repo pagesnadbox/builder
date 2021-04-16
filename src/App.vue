@@ -45,7 +45,7 @@ import SettingsContainer from "@/layouts/home/SettingsContainer";
 import TweakUI from "./layouts/home/TweakUI";
 import { mapState } from "vuex";
 import { EventBus } from './utils/eventBus';
-console.error("here")
+
 export default {
   components: {
     SettingsContainer,
