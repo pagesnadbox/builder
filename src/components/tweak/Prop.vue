@@ -76,8 +76,8 @@
 </template>
 
 <script>
-import { throttle } from "../../utils/helpers";
 import { EventBus } from "../../utils/eventBus";
+import { mapActions } from "vuex";
 
 export default {
   name: "PropTweak",
@@ -142,10 +142,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("settings", ["setShowGallery"]),
     onGalleryClick() {
       EventBus.$on("on-image-click", this.onImageClick.bind(this));
 
-      this.$action("settings/setShowGallery", true);
+      this.setShowGallery(true);
     },
 
     onImageClick(payload) {
@@ -162,7 +163,7 @@ export default {
       this.onValueChange(data.name);
     },
 
-    onValueChange: throttle(function(payload) {
+    onValueChange(payload) {
       if (payload !== undefined) {
         let value = payload;
 
@@ -172,7 +173,7 @@ export default {
 
         this.$emit("property-change", { key: this.propName, value });
       }
-    }, 400)
+    }
   }
 };
 </script>

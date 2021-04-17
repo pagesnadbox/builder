@@ -1,3 +1,5 @@
+import { mapActions } from "vuex"
+
 export default {
     props: {
         value: {
@@ -17,5 +19,9 @@ export default {
             },
         },
     },
+
+    methods: {
+    ...mapActions("settings", ["setBottom"]),
+    }
 
 }

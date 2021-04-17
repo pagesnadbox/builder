@@ -33,7 +33,14 @@
           style="right: 50px; position: absolute"
           @click="setCompact(false)"
         >
-          mdi-border-right
+          mdi-dock-right
+        </v-icon>
+        <v-icon
+          class="mt-1"
+          style="right: 80px; position: absolute"
+          @click="setBottom(true)"
+        >
+          mdi-dock-bottom
         </v-icon>
       </div>
 

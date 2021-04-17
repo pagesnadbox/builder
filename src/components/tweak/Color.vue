@@ -20,7 +20,7 @@
             :color="color"
             :outlined="active"
             class="ma-2"
-            size="38"
+            size="36"
             style="cursor: pointer"
             @click.stop="toggle"
           />
@@ -44,7 +44,7 @@
               color="blue"
               :outlined="colors.indexOf(value) === -1"
               class="ma-2 color-picker-activator"
-              size="38"
+              size="36"
               style="cursor: pointer"
             />
           </template>

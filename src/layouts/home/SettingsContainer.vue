@@ -1,143 +1,149 @@
 <template>
-  <div>
-    <v-btn color="primary" block dark @click="onAppSettinsClick">
-      <v-icon left>
-        mdi-tools
-      </v-icon>
-      Application Settings
-    </v-btn>
-
-    <v-divider class="my-6" />
-    <div v-if="!this.id">
-      <h3 align="center" title="Theme Colors" space="0" />
-
-      <tweak-color v-model="currentThemePrimary" />
+  <div style="display: flex; flex-flow: column;" class="fill-height">
+    <div style="flex: 0 1 auto;">
+      <v-btn color="primary" block dark @click="onAppSettinsClick">
+        <v-icon left>
+          mdi-tools
+        </v-icon>
+        Application Settings
+      </v-btn>
 
       <v-divider class="my-6" />
+      <div>
+        <h3 align="center" title="Theme Colors" space="0" />
 
-      <v-switch
-        v-model="allowEditModel"
-        class="mr-4"
-        label="Edit Mode (Hold 'E' for quick edit)"
-      ></v-switch>
+        <tweak-color v-model="currentThemePrimary" />
 
-      <v-btn
-        class="mr-4"
-        color="primary"
-        :outlined="$vuetify.theme.dark"
-        @click="$vuetify.theme.dark = false"
-      >
-        <v-icon left>
-          mdi-white-balance-sunny
-        </v-icon>
-        Light
-      </v-btn>
+        <v-divider class="my-6" />
 
-      <v-btn
-        color="primary"
-        :outlined="!$vuetify.theme.dark"
-        @click="$vuetify.theme.dark = true"
-      >
-        <v-icon left>
-          mdi-weather-night
-        </v-icon>
-        Dark
-      </v-btn>
+        <v-switch
+          v-model="allowEditModel"
+          class="mr-4"
+          label="Edit Mode (Hold 'E' for quick edit)"
+        ></v-switch>
+
+        <v-btn
+          class="mr-4"
+          color="primary"
+          :outlined="$vuetify.theme.dark"
+          @click="$vuetify.theme.dark = false"
+        >
+          <v-icon left>
+            mdi-white-balance-sunny
+          </v-icon>
+          Light
+        </v-btn>
+
+        <v-btn
+          color="primary"
+          :outlined="!$vuetify.theme.dark"
+          @click="$vuetify.theme.dark = true"
+        >
+          <v-icon left>
+            mdi-weather-night
+          </v-icon>
+          Dark
+        </v-btn>
+
+        <v-divider class="my-6" />
+      </div>
+
+      <v-menu v-if="history.length" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            block
+            tile
+            :outlined="!$vuetify.theme.dark"
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>
+              mdi-dots-vertical
+            </v-icon>
+            {{ history.length }} Selected history
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in history"
+            :key="index"
+            @click="setComponent(item)"
+          >
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <br />
+
+      <v-menu v-if="moreComponents.length" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            block
+            tile
+            :outlined="!$vuetify.theme.dark"
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>
+              mdi-dots-vertical
+            </v-icon>
+            {{ moreComponents.length }} Components Selected
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in moreComponents"
+            :key="index"
+            @click="setComponent(item)"
+          >
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <br />
+
+      <v-menu v-if="aggregations" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            block
+            tile
+            :outlined="!$vuetify.theme.dark"
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>
+              mdi-dots-vertical
+            </v-icon>
+            {{ Object.keys(aggregations).length }} Aggregated Components
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in Object.values(aggregations)"
+            :key="index"
+            @click="setComponent({ ...item, name: item.componentName })"
+          >
+            <v-list-item-title>{{ item.componentName }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <v-divider class="my-6" />
     </div>
 
-    <v-menu v-if="history.length" offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          block
-          tile
-          :outlined="!$vuetify.theme.dark"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon left>
-            mdi-dots-vertical
-          </v-icon>
-          {{ history.length }} Selected history
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in history"
-          :key="index"
-          @click="setComponent(item)"
-        >
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <br />
-
-    <v-menu v-if="moreComponents.length" offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          block
-          tile
-          :outlined="!$vuetify.theme.dark"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon left>
-            mdi-dots-vertical
-          </v-icon>
-          {{ moreComponents.length }} Components Selected
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in moreComponents"
-          :key="index"
-          @click="setComponent(item)"
-        >
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <br />
-
-    <v-menu v-if="aggregations" offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          block
-          tile
-          :outlined="!$vuetify.theme.dark"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon left>
-            mdi-dots-vertical
-          </v-icon>
-          {{ Object.keys(aggregations).length }} Aggregated Components
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in Object.values(aggregations)"
-          :key="index"
-          @click="setComponent({ ...item, name: item.componentName })"
-        >
-          <v-list-item-title>{{ item.componentName }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <v-divider class="my-6" />
-
-    <div>
+    <div
+      style="flex: 1 1 auto;"
+      :class="{ 'overflow-y-auto': scrollable }"
+      class="fill-height "
+    >
       <h3 align="center" :title="config.displayName" space="0" />
 
       <tweak-items
@@ -172,6 +178,13 @@ import { EventBus } from "../../utils/eventBus";
 
 export default {
   name: "HomeSettings",
+
+  props: {
+    scrollable: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   provide() {
     return {
@@ -307,6 +320,8 @@ export default {
 
     onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
+
+      console.error({ key, value, apendix, id });
       this.dispatch("setProp", {
         id: `${id || this.id}${apendix}`,
         key,
@@ -315,7 +330,8 @@ export default {
     },
 
     dispatch(actionName, payload) {
-      this.$store.dispatch(`${this.region}/${actionName}`, payload);
+      console.error(actionName, payload);
+      // this.$store.dispatch(`${this.region}/${actionName}`, payload);
       this.$action(`${this.region}/${actionName}`, payload);
     },
 

@@ -9,6 +9,7 @@ const stateFn = () => ({
     showHighlighter: false,
     images: {},
     compact: false,
+    bottom: false,
     showGallery: false,
     ctrlDown: false,
     canRedo: false,
@@ -36,6 +37,7 @@ export default (options) => {
             SET_ITEMS: set('items'),
             SET_OPEN: set('open'),
             SET_COMPACT: set('compact'),
+            SET_BOTTOM: set('bottom'),
             SET_COMPONENT_NAME: set('componentName'),
             SET_COMPONENTS: set('moreComponents'),
             ADD_COMPONENT: (state, payload) => {
@@ -82,7 +84,6 @@ export default (options) => {
                 commit('SET_ALLOW_EDIT', payload)
             },
             setOpen({ commit }, payload) {
-                console.error(payload)
                 Vue.$action("settings/setOpen", payload);
 
                 commit('SET_OPEN', payload)
@@ -91,6 +92,10 @@ export default (options) => {
                 // Vue.$action("settings/setCompact", payload);
 
                 commit('SET_COMPACT', payload)
+            },
+            setBottom({ commit }, payload) {
+
+                commit('SET_BOTTOM', payload)
             },
             toggleCompact({ dispatch, commit, state }) {
                 if (!state.compact) {
@@ -134,6 +139,8 @@ export default (options) => {
                 commit('SET_ITEMS', payload)
             },
             setShowGallery({ commit }, payload) {
+                Vue.$action("settings/setShowGallery", payload);
+
                 commit('SET_GALLERY_SHOW', payload)
             },
         },

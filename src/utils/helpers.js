@@ -5,7 +5,7 @@
 const proxy = '' // "https://sleepy-oasis-50684.herokuapp.com/";
 
 const defaultHeaders = () => {
-//   const token = store.state.authentication.token;
+  //   const token = store.state.authentication.token;
 
   return {
     'Content-Type': 'application/json',
@@ -43,15 +43,15 @@ export const postData = ({
     // referrer: 'no-referrer',
     body: formData || JSON.stringify(payload),
   })
-    // .then((data) => data.json())
-    // .then((data) => {
-    //   if (data.success === false) {
-    //     handleErrors(data);
-    //   }
-    //   preResult(data);
+  // .then((data) => data.json())
+  // .then((data) => {
+  //   if (data.success === false) {
+  //     handleErrors(data);
+  //   }
+  //   preResult(data);
 
-    //   return data;
-    // });
+  //   return data;
+  // });
 }
 
 export const getData = (url, query = '', token = '') => {
@@ -225,7 +225,7 @@ export const formatCoordinates = (coordinates) => {
   }
 }
 
-export const throttle = (func, limit) => {
+export const throttle = function (func, limit) {
   let inThrottle
   return function () {
     const args = arguments
@@ -238,7 +238,7 @@ export const throttle = (func, limit) => {
   }
 }
 
-export function debounce (fn, delay) {
+export function debounce(fn, delay) {
   var timeoutID = null
   return function () {
     clearTimeout(timeoutID)

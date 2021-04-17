@@ -6,7 +6,7 @@
       color="#0000004D"
       dark
       flat
-      style="position: fixed; top: 104px; right: -35px; z-index: 5"
+      style="position: fixed; top: 104px; right: -35px; z-index: 10"
       width="100"
       @click="menu = !menu"
     >
@@ -47,10 +47,10 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["open", "compact"]),
+    ...mapState("settings", ["open", "compact", "bottom"]),
 
     settingsComponent() {
-      return this.isDesktop ? SettingsModal : SettingsBottomSheet;
+      return !this.isDesktop || this.bottom ? SettingsBottomSheet : SettingsModal;
     },
 
     isDesktop() {

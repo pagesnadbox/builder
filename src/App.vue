@@ -12,25 +12,15 @@
           :xl="engineXl"
           class="fill-height"
         >
-          <v-sheet
-            id="scrolling-techniques-3"
-            class="overflow-y-auto"
-            height="100%"
-          >
+          <v-sheet class="overflow-y-auto" height="100%">
             <v-container fluid class="pa-0">
               <div id="engine" :class="classes"></div>
             </v-container>
           </v-sheet>
         </v-col>
         <v-col v-if="hasRightContainer" class="fill-height">
-          <v-sheet
-            id="scrolling-techniques-3"
-            class="overflow-y-auto"
-            height="100%"
-          >
-            <v-container class="px-10">
-              <SettingsContainer />
-            </v-container>
+          <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
+            <SettingsContainer :scrollable="true" />
           </v-sheet>
         </v-col>
       </v-row>
@@ -44,7 +34,7 @@
 import SettingsContainer from "@/layouts/home/SettingsContainer";
 import TweakUI from "./layouts/home/TweakUI";
 import { mapState } from "vuex";
-import { EventBus } from './utils/eventBus';
+import { EventBus } from "./utils/eventBus";
 
 export default {
   components: {
@@ -56,25 +46,22 @@ export default {
     ...mapState("settings", ["compact", "open"]),
     classes() {
       const classess = ["engine-wrapper"];
-      if (!this.hasRightContainer) {
-        // classess.push("scale-engine");
-      }
       return classess;
     },
     engineCols() {
-      return this.hasRightContainer ? "4" : "12";
-    },
-    engineMd() {
-      return this.hasRightContainer ? "6" : "12";
+      return this.hasRightContainer ? "5" : "12";
     },
     engineXs() {
-      return this.hasRightContainer ? "4" : "12";
+      return this.hasRightContainer ? "5" : "12";
+    },
+    engineMd() {
+      return this.hasRightContainer ? "7" : "12";
     },
     engineLg() {
       return this.hasRightContainer ? "8" : "12";
     },
     engineXl() {
-      return this.hasRightContainer ? "10" : "12";
+      return this.hasRightContainer ? "9" : "12";
     },
     hasRightContainer() {
       return this.open && !this.compact && this.isDesktop;

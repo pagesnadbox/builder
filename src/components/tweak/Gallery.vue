@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
   import { EventBus } from '../../utils/eventBus'
   export default {
 
@@ -116,7 +116,7 @@
           return this.showGallery
         },
         set (value) {
-          this.$action("settings/setShowGallery", value)
+          this.setShowGallery(value)
         },
       },
     },
@@ -130,7 +130,7 @@
     },
 
     methods: {
-
+      ...mapActions("settings", ["setShowGallery"]),
       onImageClick (img) {
         EventBus.$emit('on-image-click', img)
       },

@@ -5,7 +5,7 @@
     color="#0000004D"
     dark
     flat
-    style="position: fixed; top: 160px; right: -35px"
+    style="position: fixed; top: 160px; right: -35px; z-index: 10"
     width="100"
   >
     <v-icon :disabled="!canUndo" class="mb-3" large @click="onUndoClick">
@@ -53,14 +53,10 @@ export default {
         formData.append("files", this.images[key].file);
       });
 
-      // const response = await fetch("http://localhost:3030/v1/api/upload/images", {
-      const response = await fetch(
-        "https://landingpagebuilder-server-v1.herokuapp.com/v1/api/upload/images",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
+      const response = await fetch("/upload/images", {
+        method: "POST",
+        body: formData
+      });
 
       return response.json();
     },
