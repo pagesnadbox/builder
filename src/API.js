@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 // import './registerServiceWorker'
 import { Store } from './store'
+import router from './router'
 
 import vuetify from './plugins/vuetify';
 import EventEmitter from 'eventemitter3';
@@ -25,6 +26,7 @@ export default class API extends EventEmitter {
 
     this.app = new Vue({
       store,
+      router,
       vuetify,
       render: h => h(App)
     }).$mount('#app')
@@ -38,16 +40,16 @@ export default class API extends EventEmitter {
     });
   }
 
-  getEngineSlot() {
-    if (!this.engineSlot) {
-      this.engineSlot = document.getElementById("engine").attachShadow({ mode: 'open' });
+  getEngineSlot(slot = document.getElementById("engine")) {
+    if (!slot.shadowRoot) {
+      return slot.attachShadow({ mode: 'open' });
     }
 
-    return this.engineSlot;
+    return slot.shadowRoot
   }
 
-  setEngine(engine) {
-    this.getEngineSlot().appendChild(engine);
+  setEngine(slot, engine) {
+    this.getEngineSlot(slot).appendChild(engine);
   }
 
   setSetting(payload) {

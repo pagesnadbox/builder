@@ -9,7 +9,7 @@ export default {
                 mobileHeight: '50',
                 height: '50',
                 maxWidth: "50",
-                src: './assets/pagesandbox_logo.png',
+                src: '/assets/pagesandbox_logo.png',
             },
             heading: {
                 size: "text-h6",
@@ -161,8 +161,8 @@ export default {
         space: 0,
         overlay: true,
         height: '',
-        src: './assets/office_bg.jpg',
-        srcDark: './assets/office_bg.jpg',
+        src: '/assets/office_bg.jpg',
+        srcDark: '/assets/office_bg.jpg',
         color: "",
         heroContainer: {
             dark: true,
@@ -177,7 +177,7 @@ export default {
                 id: 'hero-heroContainer-img',
                 height: '',
                 componentName: "BaseImage",
-                src: './assets/office_bg.jpg',
+                src: '/assets/office_bg.jpg',
             },
             subheading: {
                 id: 'hero-heroContainer-subheading',
@@ -256,7 +256,7 @@ export default {
             height: "400",
             id: "hero-img",
             componentName: "BaseImg",
-            src: "assets/logo.svg"
+            src: "/assets/logo.svg"
         }
     },
 
@@ -344,42 +344,42 @@ export default {
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },
                 {
                     componentName: 'BaseImage',
                     id: 'affiliates-list-items',
-                    src: './assets/omurtag-logo-light.png',
+                    src: '/assets/omurtag-logo-light.png',
                     title: 'Affiliate Name',
                     icon: 'mdi-account-convert',
                 },

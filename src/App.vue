@@ -1,73 +1,52 @@
 <template>
   <v-app>
-    <!-- <v-app-bar> </v-app-bar> -->
+    <v-navigation-drawer v-if="meta.hasDrawer" app permanent>
+      <v-list dense rounded>
+        <v-list-item v-for="item in links" :key="item.title" link>
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
 
-    <v-container fluid style="height: 100vh" class="pa-0 ma-0">
-      <v-row class="fill-height pa-0 ma-0" no-gutters>
-        <v-col
-          :cols="engineCols"
-          :xs="engineXs"
-          :md="engineMd"
-          :lg="engineLg"
-          :xl="engineXl"
-          class="fill-height"
-        >
-          <v-sheet class="overflow-y-auto" height="100%">
-            <v-container fluid class="pa-0">
-              <div id="engine" :class="classes"></div>
-            </v-container>
-          </v-sheet>
-        </v-col>
-        <v-col v-if="hasRightContainer" class="fill-height">
-          <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
-            <SettingsContainer :scrollable="true" />
-          </v-sheet>
-        </v-col>
-      </v-row>
-    </v-container>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-    <TweakUI />
+    <v-app-bar app v-if="meta.hasAppBar">
+      <v-spacer></v-spacer>
+      <v-switch
+        label="Dark"
+        v-model="$vuetify.theme.dark"
+        class="mt-5"
+      ></v-switch>
+    </v-app-bar>
+
+    <v-main>
+      <router-view></router-view>
+    </v-main>
   </v-app>
 </template>
 
 <script>
-import SettingsContainer from "@/layouts/home/SettingsContainer";
-import TweakUI from "./layouts/home/TweakUI";
-import { mapState } from "vuex";
 import { EventBus } from "./utils/eventBus";
 
 export default {
-  components: {
-    SettingsContainer,
-    TweakUI
-  },
   name: "App",
+
+  data() {
+    return {
+      links: [
+        { title: "Home", icon: "mdi-view-dashboard" },
+        { title: "About", icon: "mdi-forum" }
+      ]
+    };
+  },
+
   computed: {
-    ...mapState("settings", ["compact", "open"]),
-    classes() {
-      const classess = ["engine-wrapper"];
-      return classess;
-    },
-    engineCols() {
-      return this.hasRightContainer ? "5" : "12";
-    },
-    engineXs() {
-      return this.hasRightContainer ? "5" : "12";
-    },
-    engineMd() {
-      return this.hasRightContainer ? "7" : "12";
-    },
-    engineLg() {
-      return this.hasRightContainer ? "8" : "12";
-    },
-    engineXl() {
-      return this.hasRightContainer ? "9" : "12";
-    },
-    hasRightContainer() {
-      return this.open && !this.compact && this.isDesktop;
-    },
-    isDesktop() {
-      return this.$vuetify.breakpoint.mdAndUp;
+    meta() {
+      return this.$route.meta;
     }
   },
 

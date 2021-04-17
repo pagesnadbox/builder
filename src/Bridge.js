@@ -43,7 +43,6 @@ export default class Bridge {
         await engine.init({ config: this.cfg, preventMount: true })
         engine.app.$mount();
 
-        this.app.setEngine(engine.app.$el);
         this.engineDone();
     }
 
@@ -52,7 +51,6 @@ export default class Bridge {
     }
 
     appDone() {
-        this.loadEngineCss();
         this.app.setConfig(this.cfg)
         this._attachAppEvent();
     }
@@ -82,6 +80,10 @@ export default class Bridge {
             // this.engine.setComponents(data);
             case API.events.ACTION:
                 this.engine.action(data);
+                break;
+            case API.events.ENGINE_SLOT_RENDERED:
+                this.loadEngineCss();
+                this.app.setEngine(data.slot, this.engine.app.$el);
                 break;
         }
     }

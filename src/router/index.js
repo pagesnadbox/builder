@@ -16,22 +16,16 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      component: () => import('@/layouts/home/Index.vue'),
-      children: [
-        {
-          path: '',
-          name: 'Home',
-          component: () => import('@/views/home/Index.vue'),
-        },
-        {
-          path: 'pro',
-          name: 'Pro',
-          component: () => import('@/views/pro/Index.vue'),
-          meta: { src: './assets/pro.jpg' },
-        },
-      ],
+      component: () => import('@/views/Templates.vue'),
+      meta: {
+        hasDrawer: true,
+        hasAppBar: true
+      }
     },
-
+    {
+      path: '/templates/:id',
+      component: () => import('@/views/Tweak.vue'),
+    },
   ],
 })
 
