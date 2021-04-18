@@ -6,7 +6,7 @@
           outlined
           @click="onCrateClick"
           width="400"
-          height="356"
+          min-height="356"
           class="fill-height"
         >
           <v-container class="fill-height">
@@ -24,12 +24,15 @@
       >
         <base-project-card
           width="400"
+          min-height="356"
+          class="fill-height"
           outlined
           @click="onTemplateClick(id)"
           :image="`/assets/article-${index + 1}.jpg`"
           v-bind="project"
           @remove-click="onRemoveClick(project)"
           @edit-click="onEditClick(project)"
+          :loading="loading"
         ></base-project-card>
       </v-col>
     </v-row>
@@ -39,6 +42,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      loading: false
+    };
+  },
+
   created() {
     this.fetchItems();
   },
@@ -52,6 +61,8 @@ export default {
 
     ...mapActions("editableDialog", ["setEditMode", "setVisible", "setData"]),
 
+    ...mapActions("modals", ["setModalData"]),
+
     onCrateClick() {
       this.setData(null);
       this.setEditMode(false);
@@ -59,11 +70,26 @@ export default {
     },
 
     onEditClick(project) {
-
+      this.setData(project);
+      this.setEditMode(true);
+      this.setVisible(true);
     },
 
     onRemoveClick(project) {
-      this.remove({ id: project.id });
+      this.setModalData({
+        key: "confirm",
+        value: {
+          visibility: true,
+          action: "remove this project",
+          callback: () => this.onRemoveConfirmed(project.id)
+        }
+      });
+    },
+
+    async onRemoveConfirmed(id) {
+      this.loading = true;
+      await this.remove({ id });
+      this.loading = false;
     },
 
     onTemplateClick(id) {

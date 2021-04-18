@@ -31,6 +31,9 @@
     </v-main>
 
     <base-editable-project-dialog></base-editable-project-dialog>
+    
+    <base-confirm-modal></base-confirm-modal>
+    
   </v-app>
 </template>
 

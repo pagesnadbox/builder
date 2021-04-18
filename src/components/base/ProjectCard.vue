@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   props: {
     id: {
@@ -46,27 +45,12 @@ export default {
   },
 
   methods: {
-    ...mapActions("editableDialog", [
-      "setVisible",
-      "setEditMode",
-      "setData",
-    ]),
-
     onEditClick() {
-      this.setData({
-        title: this.title,
-        description: this.description,
-        id: this.id
-      });
-
-      this.setEditMode(true);
-      this.setVisible(true);
-
-      this.$emit("edit-click")
+      this.$emit("edit-click");
     },
 
     onRemoveClick() {
-      this.$emit("remove-click")
+      this.$emit("remove-click");
     }
   }
 };

@@ -1,5 +1,4 @@
 import { set } from '@/utils/vuex'
-import Vue from 'vue'
 
 const stateFn = () => ({
    config: {}
