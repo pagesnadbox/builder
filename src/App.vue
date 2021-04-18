@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-if="meta.hasDrawer" app permanent>
+    <v-navigation-drawer v-if="meta.hasDrawer" app v-model="drawer">
       <v-list dense rounded>
         <v-list-item v-for="item in links" :key="item.title" link>
           <v-list-item-icon>
@@ -14,18 +14,23 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app v-if="meta.hasAppBar">
+    <v-app-bar color="transparent" outlined flat app v-if="meta.hasAppBar">
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-switch
         label="Dark"
         v-model="$vuetify.theme.dark"
-        class="mt-5"
+        class="mt-5 mr-10"
       ></v-switch>
     </v-app-bar>
 
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <base-editable-project-dialog></base-editable-project-dialog>
   </v-app>
 </template>
 
@@ -37,6 +42,7 @@ export default {
 
   data() {
     return {
+      drawer: true,
       links: [
         { title: "Home", icon: "mdi-view-dashboard" },
         { title: "About", icon: "mdi-forum" }

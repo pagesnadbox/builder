@@ -16,14 +16,15 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      component: () => import('@/views/Templates.vue'),
+      component: () => import('@/views/Projects.vue'),
       meta: {
         hasDrawer: true,
-        hasAppBar: true
+        hasAppBar: true,
+        appTitle: "Projects"
       }
     },
     {
-      path: '/templates/:id',
+      path: '/projects/:id',
       component: () => import('@/views/Tweak.vue'),
     },
   ],
