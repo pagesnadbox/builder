@@ -27,9 +27,9 @@
           min-height="356"
           class="fill-height"
           outlined
-          @click="onTemplateClick(id)"
           :image="`/assets/article-${index + 1}.jpg`"
           v-bind="project"
+          @click="onTemplateClick(project)"
           @remove-click="onRemoveClick(project)"
           @edit-click="onEditClick(project)"
           :loading="loading"
@@ -41,6 +41,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { EventBus, events } from '../utils/eventBus';
 export default {
   data() {
     return {
@@ -57,7 +58,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("projects", ["fetchItems", "remove"]),
+    ...mapActions("projects", ["fetchItems", "remove", "setCurrent"]),
 
     ...mapActions("editableDialog", ["setEditMode", "setVisible", "setData"]),
 
@@ -92,8 +93,10 @@ export default {
       this.loading = false;
     },
 
-    onTemplateClick(id) {
-      this.$router.push({ path: `/projects/${id}` });
+    onTemplateClick(project) {
+      this.setCurrent(project);
+
+      this.$router.push({ path: `/projects/${project.id}` });
     }
   }
 };

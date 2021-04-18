@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 import SettingsContainer from "@/layouts/home/SettingsContainer";
 import TweakUI from "@/layouts/home/TweakUI";
@@ -79,9 +79,15 @@ export default {
   },
 
   mounted() {
+    this.setCurrent({ id: this.$route.params.id })
+
     EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
       slot: this.$refs.engineSlot
     });
+  },
+
+  methods: {
+    ...mapActions("projects", ["setCurrent"])
   }
 };
 </script>

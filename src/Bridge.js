@@ -2,6 +2,8 @@ import API from "./API";
 import { loadCss } from "./utils/helpers";
 import appConfig from "./appConfig";
 
+import ConfigService from "./ConfigService"
+
 const Engine = window.API.Engine;
 
 let config = appConfig;
@@ -78,8 +80,20 @@ export default class Bridge {
                 break;
             case API.events.CONFIG_CHANGE:
             // this.engine.setComponents(data);
+            case API.events.PROJECT_SELECTED:
+                ConfigService.fetch({ id: data.id }).then((response) => {
+                    this.cfg = response.config;
+
+                    this.app.setConfig(this.cfg)
+                    this.engine.setConfig(this.cfg);
+                })
+                break
             case API.events.ACTION:
                 this.engine.action(data);
+                ConfigService.save({
+                    config: this.cfg,
+                    id: this.app.currentProjectId
+                })
                 break;
             case API.events.ENGINE_SLOT_RENDERED:
                 this.loadEngineCss();

@@ -20,6 +20,14 @@ export default class API extends EventEmitter {
     return events;
   }
 
+  get currentProjectConfig() {
+    return store.state.projects.current.config;
+  }
+
+  get currentProjectId() {
+    return store.state.projects.current.id;
+  }
+
   init() {
     Vue.$action = Vue.prototype.$action = (action, value) => EventBus.$emit(events.ACTION, { key: action, value });
     Vue.$isDesktop = Vue.prototype.$isDesktop = () => vuetify.breakpoint.mdAndUp;

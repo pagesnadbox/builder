@@ -1,10 +1,12 @@
 import { set } from '@/utils/vuex'
+import { EventBus, events } from '@/utils/eventBus'
 
 import config from "@/appConfig"
 import Vue from 'vue'
 
 const stateFn = () => ({
     items: {},
+    current: {}
 })
 
 export default (options) => {
@@ -14,6 +16,7 @@ export default (options) => {
         state,
         mutations: {
             SET_ITEMS: set('items'),
+            SET_CURRENT: set('current'),
             SET_ITEM: (state, payload) => {
                 Vue.set(state.items, payload.id, payload);
             },
@@ -24,6 +27,10 @@ export default (options) => {
         actions: {
             setItems({ commit }, payload) {
                 commit('SET_ITEMS', payload)
+            },
+            setCurrent({ commit }, payload) {
+                commit('SET_CURRENT', payload)
+                EventBus.$emit(events.PROJECT_SELECTED, payload);
             },
             async fetchItems({ commit }) {
 
