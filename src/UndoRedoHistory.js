@@ -93,8 +93,8 @@ export default class UndoRedoHistory {
             this.undoCount = 1
         }
 
-        // this.store.dispatch('settings/setCanRedo', this.redoCount > 0)
-        // this.store.dispatch('settings/setCanUndo', this.undoCount > 0)
+        this.store.dispatch('settings/setCanRedo', this.redoCount > 0)
+        this.store.dispatch('settings/setCanUndo', this.undoCount > 0)
     }
 
     _preState(state) {

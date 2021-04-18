@@ -81,7 +81,7 @@ export default class Bridge {
             case API.events.CONFIG_CHANGE:
             // this.engine.setComponents(data);
             case API.events.PROJECT_SELECTED:
-                ConfigService.fetch({ id: data.id }).then((response) => {
+                ConfigService.fetchConfig({ id: data.id }).then((response) => {
                     this.cfg = response.config;
 
                     this.app.setConfig(this.cfg)
@@ -90,7 +90,7 @@ export default class Bridge {
                 break
             case API.events.ACTION:
                 this.engine.action(data);
-                ConfigService.save({
+                ConfigService.saveConfig({
                     config: this.cfg,
                     id: this.app.currentProjectId
                 })

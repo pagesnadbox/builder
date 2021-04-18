@@ -1,13 +1,14 @@
 import { set } from '@/utils/vuex'
 import { EventBus, events } from '@/utils/eventBus'
 
-import config from "@/appConfig"
 import Vue from 'vue'
+import ConfigService from '../../ConfigService'
 
 const stateFn = () => ({
     items: {},
     current: {}
 })
+
 
 export default (options) => {
     const state = stateFn()
@@ -35,9 +36,7 @@ export default (options) => {
             async fetchItems({ commit }) {
 
                 try {
-                    const response = await fetch('/pagesandbox/api/v1/projects/list');
-
-                    const { success, ...data } = await response.json();
+                    const { success, ...data } = await ConfigService.fetchProjects();
 
                     if (!success) return // TODO show message
 
@@ -68,12 +67,7 @@ export default (options) => {
                 try {
                     const data = rootState.editableDialog.data;
 
-                    let response = await fetch(`/pagesandbox/api/v1/projects/create/`, {
-                        method: "POST",
-                        body: JSON.stringify(data)
-                    });
-
-                    const { success, ...project } = await response.json();
+                    const { success, ...project } = await ConfigService.createProject(data);
 
                     if (!success) return // TODO show message
 
@@ -88,12 +82,7 @@ export default (options) => {
                 try {
                     const data = rootState.editableDialog.data;
 
-                    let response = await fetch(`/pagesandbox/api/v1/projects/edit/${data.id}`, {
-                        method: "POST",
-                        body: JSON.stringify(data)
-                    });
-
-                    const { success, ...project } = await response.json();
+                    const { success, ...project } = await ConfigService.editProject(data);
 
                     if (!success) return // TODO show message
 
@@ -105,12 +94,7 @@ export default (options) => {
 
             async remove({ commit }, payload) {
                 try {
-                    let response = await fetch(`/pagesandbox/api/v1/projects/remove/${payload.id}`, {
-                        method: "POST",
-                        body: JSON.stringify({ id: payload.id })
-                    });
-
-                    const { success, ...project } = await response.json();
+                    const { success, ...project } = await ConfigService.removeProject(payload);
 
                     if (!success) return // TODO show message
 
