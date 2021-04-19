@@ -4,11 +4,18 @@ import appConfig from "./appConfig";
 
 import ConfigService from "./ConfigService"
 
+import History from "./History";
+
 const Engine = window.API.Engine;
 
 let config = appConfig;
 
 export default class Bridge {
+
+    get skipSaveActions() {
+        return ["settings"]
+    }
+
     init() {
         this.config().then(cfg => {
             this.cfg = cfg
@@ -37,24 +44,39 @@ export default class Bridge {
         this.app.init()
         window.com.app = this.app;
 
-        this.appDone();
+        this.app.setConfig(this.cfg)
+        this._attachAppEvent();
+    }
+
+    createHistory() {
+        this.history = new History({
+            interests: ['app', 'hero', 'themeFeatures', 'features', 'affiliates', 'social']
+        });
+
+        this._attachHistoryEvents();
+
+        return this.history;
     }
 
     async createEngine() {
+        this.createHistory();
+
+        const plugins = {
+            undoRedoPlugin: this.history.plugin.bind(this.history)
+        }
+
         const engine = this.engine = new Engine();
-        await engine.init({ config: this.cfg, preventMount: true })
+        await engine.init({ config: this.cfg, plugins, preventMount: true })
         engine.app.$mount();
 
-        this.engineDone();
-    }
-
-    engineDone() {
         this._attachEngineEvent();
     }
 
-    appDone() {
-        this.app.setConfig(this.cfg)
-        this._attachAppEvent();
+    _attachHistoryEvents() {
+        Object.keys(History.events).forEach(key => {
+            const event = History.events[key]
+            this.history.on(event, (data) => this._onHistoryEvent(event, data));
+        });
     }
 
     _attachEngineEvent() {
@@ -71,33 +93,60 @@ export default class Bridge {
         });
     }
 
+    _onHistoryEvent(event, data) {
+        console.log(`History Event: ${event}`, data);
+
+        switch (event) {
+            case History.events.CAN_REDO:
+                this.app.undoRedoManager.setCanRedo(data)
+                break;
+            case History.events.CAN_UNDO:
+                this.app.undoRedoManager.setCanUndo(data)
+                break;
+        }
+    }
+
     _onAppEvent(event, data) {
         console.log(`App Event: ${event}`, data);
 
         switch (event) {
-            case API.events.COMPONENT_CHANGE:
-                // this.engine.setComponents(data);
-                break;
-            case API.events.CONFIG_CHANGE:
-            // this.engine.setComponents(data);
             case API.events.PROJECT_SELECTED:
                 ConfigService.fetchConfig({ id: data.id }).then((response) => {
                     this.cfg = response.config;
 
                     this.app.setConfig(this.cfg)
                     this.engine.setConfig(this.cfg);
-                })
-                break
-            case API.events.ACTION:
-                this.engine.action(data);
-                ConfigService.saveConfig({
-                    config: this.cfg,
-                    id: this.app.currentProjectId
+
+                    // this.history.setCurrentStateAsReset();
+                    this.history.updateManager({ reset: true, hard: true });
                 })
                 break;
+
+            case API.events.ACTION:
+                this.engine.action(data);
+                if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
+                    ConfigService.saveConfig({
+                        config: this.cfg,
+                        id: this.app.currentProjectId
+                    })
+                }
+                break;
+
             case API.events.ENGINE_SLOT_RENDERED:
                 this.loadEngineCss();
                 this.app.setEngine(data.slot, this.engine.app.$el);
+                break;
+
+            case API.events.HISTORY_RESET:
+                this.history.reset();
+                break;
+
+            case API.events.HISTORY_UNDO:
+                this.history.undo();
+                break;
+
+            case API.events.HISTORY_REDO:
+                this.history.redo();
                 break;
         }
     }

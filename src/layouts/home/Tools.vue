@@ -28,9 +28,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { undoRedoHistory } from "../../store";
-import { EventBus } from "../../utils/eventBus";
-import { getData, postData } from "../../utils/helpers";
+import { EventBus, events } from "../../utils/eventBus";
+import { postData } from "../../utils/helpers";
 
 export default {
   name: "HomeTools",
@@ -96,16 +95,16 @@ export default {
       this.redo();
     },
     onResetClick() {
-      undoRedoHistory.reset();
+      EventBus.$emit(events.HISTORY_RESET);
     },
     undo() {
       if (this.canUndo) {
-        undoRedoHistory.undo();
+        EventBus.$emit(events.HISTORY_UNDO);
       }
     },
     redo() {
       if (this.canRedo) {
-        undoRedoHistory.redo();
+        EventBus.$emit(events.HISTORY_REDO);
       }
     },
     onKeyDown(e) {

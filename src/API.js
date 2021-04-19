@@ -28,6 +28,13 @@ export default class API extends EventEmitter {
     return store.state.projects.current.id;
   }
 
+  get undoRedoManager() {
+    return {
+      setCanRedo: (value) => store.dispatch('settings/setCanRedo', value),
+      setCanUndo: (value) => store.dispatch('settings/setCanUndo', value),
+    }
+  }
+
   init() {
     Vue.$action = Vue.prototype.$action = (action, value) => EventBus.$emit(events.ACTION, { key: action, value });
     Vue.$isDesktop = Vue.prototype.$isDesktop = () => vuetify.breakpoint.mdAndUp;

@@ -1,44 +1,82 @@
+import EventEmitter from 'eventemitter3';
 import cloneDeep from 'lodash/cloneDeep'
 
-export default class UndoRedoHistory {
+export default class History extends EventEmitter {
     store;
     history = [];
     redoCount = 0;
     undoCount = -1;
     currentIndex = -1;
-    firstState;
+    resetState;
     resetPending = false;
+    subscribed = true
 
-    constructor(interests) {
-        this.interests = interests
+    static get events() {
+        return {
+            CAN_UNDO: "CAN_UNDO",
+            CAN_REDO: "CAN_REDO",
+        }
+    }
+
+    get resetState() {
+        return this._resetState;
+    }
+
+    set resetState(value) {
+        this._resetState = cloneDeep(value);
+    }
+
+    setCurrentStateAsReset() {
+        this.resetState = this.store.state
+    }
+
+    constructor({ interests }) {
+        super();
+        this.interests = interests;
+    }
+
+    subscribe() {
+        this.subscribed = true;
+
+        if (this.initialized) {
+            this.resetState = this.store.state
+        }
+    }
+
+    unsubscribe() {
+        this.subscribed = false;
     }
 
     init(store) {
+        this.initialized = true;
+
         this.store = store
+
+        if (this.subscribed) {
+            this.resetState = store.state
+        }
     }
 
     plugin(store) {
         // initialize and save the starting stage
         this.init(store)
-        const firstState = cloneDeep(store.state)
-        this.addState(firstState)
+
+        if (this.subscribed) {
+            this.addState(cloneDeep(store.state))
+        }
 
         store.subscribe((mutation, state) => {
             const module = mutation.type.split('/')[0]
 
             // is called AFTER every mutation
 
-            if (this.interests.indexOf(module) > -1) {
+            if (this.subscribed && this.interests.indexOf(module) > -1) {
                 this.addState(cloneDeep(state))
             }
         })
     }
 
     addState(state) {
-        if (!this.firstState) {
-            this.firstState = cloneDeep(state)
-        }
-
         // may be we have to remove redo steps
         if (this.currentIndex + 1 < this.history.length) {
             this.history.splice(this.currentIndex + 1)
@@ -47,7 +85,7 @@ export default class UndoRedoHistory {
         this.currentIndex++
         this.undoCount++
 
-        this._updateState(this.resetPending)
+        this.updateManager({ reset: this.resetPending })
         this.resetPending = false
     }
 
@@ -63,7 +101,7 @@ export default class UndoRedoHistory {
         this.undoCount--
 
         this.resetPending = true
-        this._updateState()
+        this.updateManager()
     }
 
     redo() {
@@ -74,27 +112,28 @@ export default class UndoRedoHistory {
         this.undoCount++
 
         this.resetPending = true
-        this._updateState()
+        this.updateManager()
     }
 
     reset() {
-        const state = cloneDeep(this.firstState)
+        const state = cloneDeep(this.resetState)
 
         this.addState(state)
         this.store.replaceState(state)
 
         this.redoCount = 0
-        this._updateState()
+        this.updateManager()
     }
 
-    _updateState(reset = false) {
+    updateManager({ reset = false, hard = false } = {}) {
         if (reset) {
             this.redoCount = 0
-            this.undoCount = 1
+            this.undoCount = hard ? 0 : 1
         }
 
-        this.store.dispatch('settings/setCanRedo', this.redoCount > 0)
-        this.store.dispatch('settings/setCanUndo', this.undoCount > 0)
+        this.emit(History.events.CAN_REDO, this.redoCount > 0)
+        this.emit(History.events.CAN_UNDO, this.undoCount > 0)
+
     }
 
     _preState(state) {
