@@ -1,7 +1,13 @@
-import { set } from '@/utils/vuex'
+import Vue from 'vue'
 
 const stateFn = () => ({
-   config: {}
+    config: {},
+    vuetify: {
+        theme: {
+            dark: true,
+            primary: ""
+        }
+    }
 })
 
 export default (options) => {
@@ -10,7 +16,9 @@ export default (options) => {
         namespaced: true,
         state,
         mutations: {
-            SET_CONFIG: set('config'),
+            SET_CONFIG: (state, payload) => {
+                Vue.set(state.config, payload.key, { data: payload.value })
+            },
         },
         actions: {
             setConfig({ commit }, payload) {

@@ -72,7 +72,35 @@ export default class API extends EventEmitter {
   }
 
   setConfig(config) {
-    store.dispatch("engine/setConfig", config);
+    [
+      "app",
+      "hero",
+      "themeFeatures",
+      "features",
+      "affiliates",
+      "social",
+      "footer"
+    ].forEach((key) => {
+      store.dispatch(`engine/setConfig`, { key, value: config[key].data || config[key] });
+    })
   }
 
+  replaceConfig(state) {
+    store.replaceState({
+      ...store.state,
+      engine: {
+        config: {
+          ...state
+        }
+      }
+    })
+  }
+
+  setSnackbar(message) {
+    store.dispatch("snackbar/setState", {
+      snackbar: true,
+      message,
+      color: "red",
+    });
+  }
 }

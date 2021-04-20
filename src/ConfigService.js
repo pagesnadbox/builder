@@ -10,105 +10,69 @@ export default class ConfigService {
         }
     }
 
-    static fetch(url, { body = {}, method = "GET" } = {}) {
-        const options = {
-            method,
-            headers: ConfigService.headers
-        };
-
-        if (method !== "GET") {
-            options.body = body;
-        }
-
-        return fetch(url, options);
-    }
-
-    static async saveConfig({ config = {}, id = "" } = {}) {
+    static async fetch(url, { body = {}, method = "GET" } = {}, onError) {
         try {
-            let response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/config/save/`, {
-                method: "POST",
-                body: JSON.stringify({
-                    config,
-                    id
-                })
-            });
+            const options = {
+                method,
+                headers: ConfigService.headers
+            };
 
-            return response.json();
+            if (method !== "GET") {
+                options.body = body;
+            }
 
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    static async fetchConfig({ id = "" } = {}) {
-        try {
-            let response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/config/fetch/${id}`);
+            const response = await fetch(url, options);
 
             return response.json();
         } catch (error) {
-            console.error(error)
+            onError && onError({ message: error })
         }
     }
 
-    static async fetchProjects() {
-        try {
-            const response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/list`);
-
-            return response.json();
-        } catch (error) {
-            console.error(error)
-        }
+    static saveConfig({ config = {}, id = "" } = {}, onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/config/save/`, {
+            method: "POST",
+            body: JSON.stringify({
+                config,
+                id
+            }, onError)
+        });
     }
 
-    static async createProject(data) {
-        try {
-            const response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/create`, {
-                method: "POST",
-                body: JSON.stringify(data)
-            });
-
-            return response.json();
-        } catch (error) {
-            console.error(error)
-        }
+    static fetchConfig({ id = "" } = {}, onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/config/fetch/${id}`, onError);
     }
 
-    static async editProject(data) {
-        try {
-            const response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
-                method: "POST",
-                body: JSON.stringify(data)
-            });
-
-            return response.json();
-        } catch (error) {
-            console.error(error)
-        }
+    static fetchProjects(onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/list`, onError);
     }
 
-    static async editProject(data) {
-        try {
-            const response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
-                method: "POST",
-                body: JSON.stringify(data)
-            });
-
-            return response.json();
-        } catch (error) {
-            console.error(error)
-        }
+    static createProject(data, onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/create`, {
+            method: "POST",
+            body: JSON.stringify(data)
+        }, onError);
     }
 
-    static async removeProject(data) {
-        try {
-            const response = await ConfigService.fetch(`${ConfigService.API_URL}/projects/remove`, {
-                method: "POST",
-                body: JSON.stringify(data)
-            });
+    static editProject(data, onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
+            method: "POST",
+            body: JSON.stringify(data)
+        }, onError);
+    }
 
-            return response.json();
-        } catch (error) {
-            console.error(error)
-        }
+    static editProject(data, onError) {
+
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
+            method: "POST",
+            body: JSON.stringify(data)
+        }, onError);
+    }
+
+    static removeProject(data, onError) {
+        return ConfigService.fetch(`${ConfigService.API_URL}/projects/remove`, {
+            method: "POST",
+            body: JSON.stringify(data)
+        }, onError);
     }
 }

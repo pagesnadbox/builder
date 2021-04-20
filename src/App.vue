@@ -31,9 +31,10 @@
     </v-main>
 
     <base-editable-project-dialog></base-editable-project-dialog>
-    
+
     <base-confirm-modal></base-confirm-modal>
-    
+
+    <base-custom-snackbar></base-custom-snackbar>
   </v-app>
 </template>
 
@@ -59,7 +60,22 @@ export default {
     }
   },
 
+  watch: {
+    "$vuetify.theme.dark": "onThemeChange"
+  },
+
+  methods: {
+    onThemeChange(value) {
+      localStorage.setItem("pagesandbox_theme_dark", value);
+    }
+  },
+
   created() {
+    const isDark = localStorage.getItem("pagesandbox_theme_dark") !== "false";
+    this.$nextTick(() => {
+      this.$vuetify.theme.dark = isDark;
+    });
+
     window.addEventListener("wheel", e => e.stopPropagation());
 
     window.addEventListener("keydown", e => EventBus.$emit("on-keydown", e));

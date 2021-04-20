@@ -25,8 +25,8 @@
         <v-btn
           class="mr-4"
           color="primary"
-          :outlined="$vuetify.theme.dark"
-          @click="$vuetify.theme.dark = false"
+          :outlined="engineDark"
+          @click="engineDark = false"
         >
           <v-icon left>
             mdi-white-balance-sunny
@@ -36,8 +36,8 @@
 
         <v-btn
           color="primary"
-          :outlined="!$vuetify.theme.dark"
-          @click="$vuetify.theme.dark = true"
+          :outlined="!engineDark"
+          @click="engineDark = true"
         >
           <v-icon left>
             mdi-weather-night
@@ -50,15 +50,7 @@
 
       <v-menu v-if="history.length" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            block
-            tile
-            :outlined="!$vuetify.theme.dark"
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -80,15 +72,7 @@
 
       <v-menu v-if="moreComponents.length" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            block
-            tile
-            :outlined="!$vuetify.theme.dark"
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -110,15 +94,7 @@
 
       <v-menu v-if="aggregations" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            block
-            tile
-            :outlined="!$vuetify.theme.dark"
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -174,7 +150,7 @@
 <script>
 import config from "../../config";
 import { mapState, mapActions } from "vuex";
-import { EventBus } from "../../utils/eventBus";
+import { EventBus, events } from "../../utils/eventBus";
 
 export default {
   name: "HomeSettings",
@@ -213,6 +189,8 @@ export default {
       "history",
       "moreComponents"
     ]),
+
+    ...mapState("engine", ["vuetify"]),
 
     allowEditModel: {
       get() {
@@ -273,14 +251,23 @@ export default {
       return this.props.filter(prop => prop.type !== "array");
     },
 
+    engineDark: {
+      get() {
+        return this.vuetify.theme.dark;
+      },
+      set(value) {
+        EventBus.$emit(events.THEME_PROP_CHANGE, { key: "dark", value });
+      }
+    },
+
     currentThemePrimary: {
       get() {
-        return this.$vuetify.theme.currentTheme.primary;
+        return this.vuetify.theme.primary;
       },
-      set(val) {
-        const target = this.$vuetify.theme.isDark ? "dark" : "light";
+      set(value) {
+        // const target = this.$vuetify.theme.isDark ? "dark" : "light";
 
-        this.$vuetify.theme.themes[target].primary = val;
+        EventBus.$emit(events.THEME_COLOR_CHANGE, { key: "primary", value });
       }
     }
   },
@@ -293,6 +280,8 @@ export default {
       let id = this.id || "app-list";
 
       const paths = id.split("-");
+
+      paths.splice(1, 0, "data");
 
       for (let path of paths) {
         data = data[path];
@@ -321,7 +310,6 @@ export default {
     onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
 
-      console.error({ key, value, apendix, id });
       this.dispatch("setProp", {
         id: `${id || this.id}${apendix}`,
         key,
@@ -330,7 +318,6 @@ export default {
     },
 
     dispatch(actionName, payload) {
-      console.error(actionName, payload);
       // this.$store.dispatch(`${this.region}/${actionName}`, payload);
       this.$action(`${this.region}/${actionName}`, payload);
     },
