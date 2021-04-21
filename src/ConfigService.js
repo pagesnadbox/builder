@@ -35,8 +35,8 @@ export default class ConfigService {
             body: JSON.stringify({
                 config,
                 id
-            }, onError)
-        });
+            })
+        }, onError);
     }
 
     static fetchConfig({ id = "" } = {}, onError) {

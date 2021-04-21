@@ -333,4 +333,6 @@ export const loadCss = (href, targetDom) => {
   element.type = "text/css";
 
   targetDom.appendChild(element)
+
+  return element;
 }

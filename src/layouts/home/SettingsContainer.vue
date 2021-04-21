@@ -50,7 +50,15 @@
 
       <v-menu v-if="history.length" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
+          <v-btn
+            outlined
+            block
+            tile
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -72,7 +80,15 @@
 
       <v-menu v-if="moreComponents.length" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
+          <v-btn
+            outlined
+            block
+            tile
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -94,7 +110,15 @@
 
       <v-menu v-if="aggregations" offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn block tile color="primary" dark v-bind="attrs" v-on="on">
+          <v-btn
+            outlined
+            block
+            tile
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon left>
               mdi-dots-vertical
             </v-icon>
@@ -253,27 +277,36 @@ export default {
 
     engineDark: {
       get() {
-        return this.vuetify.theme.dark;
+        return this.$store.state.engine.config.app.data.dark;
       },
       set(value) {
-        EventBus.$emit(events.THEME_PROP_CHANGE, { key: "dark", value });
+        this.dispatch("setProp", {
+          region: "app",
+          id: "app",
+          key: "dark",
+          value
+        });
       }
     },
 
     currentThemePrimary: {
       get() {
-        return this.vuetify.theme.primary;
+        return this.$store.state.engine.config.app.data.primary;
       },
       set(value) {
-        // const target = this.$vuetify.theme.isDark ? "dark" : "light";
-
-        EventBus.$emit(events.THEME_COLOR_CHANGE, { key: "primary", value });
+        this.dispatch("setProp", {
+          region: "app",
+          id: "app",
+          key: "primary",
+          value
+        });
       }
     }
   },
 
   methods: {
     ...mapActions("settings", ["setComponent", "setAllowEdit"]),
+    ...mapActions("engine", ["setEngineDark", "setEngineColor"]),
 
     getData(prop) {
       let data = this.$store.state.engine.config;
@@ -317,9 +350,9 @@ export default {
       });
     },
 
-    dispatch(actionName, payload) {
+    dispatch(actionName, { region = this.region, ...payload } = {}) {
       // this.$store.dispatch(`${this.region}/${actionName}`, payload);
-      this.$action(`${this.region}/${actionName}`, payload);
+      this.$action(`${region}/${actionName}`, payload);
     },
 
     onAppSettinsClick() {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-item-group class="d-flex justify-center">
-      <v-item v-if="clearable" :value="'primary'">
+      <v-item v-if="clearable" :value="'primary_pagesandbox'">
         <v-icon
           @click="onValueChange('')"
           outlined
@@ -14,11 +14,11 @@
       </v-item>
 
       <v-item v-for="(color, i) in colors" :key="i" :value="color">
-        <template v-slot="{ active, toggle }">
-          <v-avatar
+        <template v-slot="{ toggle }">
+          <base-avatar
             @click="onValueChange(color)"
             :color="color"
-            :outlined="active"
+            :outlined="color === value"
             class="ma-2"
             size="36"
             style="cursor: pointer"
@@ -38,7 +38,7 @@
           offset-y
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-avatar
+            <base-avatar
               v-bind="attrs"
               v-on="on"
               color="blue"
@@ -54,9 +54,32 @@
                 class="ma-2"
                 show-swatches
                 :value="value"
-                @input="onValueChange"
+                @input="onValueChange($event, true)"
               />
             </v-card-text>
+            <v-divider v-if="recentColors.length"></v-divider>
+
+            <v-card-actions>
+              <v-item-group class="d-flex align-center justify-center">
+                <v-item
+                  v-for="(color, i) in recentColors.slice(0, 7)"
+                  :key="i"
+                  :value="color"
+                >
+                  <template v-slot="{ toggle }">
+                    <base-avatar
+                      @click="onValueChange(color)"
+                      :color="color"
+                      :outlined="color === value"
+                      class="ma-2"
+                      size="32"
+                      style="cursor: pointer"
+                      @click.stop="toggle"
+                    />
+                  </template>
+                </v-item>
+              </v-item-group>
+            </v-card-actions>
           </v-card>
         </v-menu>
       </v-item>
@@ -81,6 +104,7 @@ export default {
   data() {
     return {
       menu: false,
+      recentColors: []
     };
   },
 
@@ -91,12 +115,15 @@ export default {
         "#009688",
         "#9368e9",
         "#F4511E"
-      ]
+      ];
     }
   },
 
   methods: {
-    onValueChange(value) {
+    onValueChange(value, addToRecent) {
+      if (addToRecent && this.recentColors[0] !== value) {
+        this.recentColors.unshift(value);
+      }
       this.$emit("input", value);
     }
   }

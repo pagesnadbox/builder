@@ -1,4 +1,4 @@
-import { loadCss } from "./utils/helpers";
+import { loadCss, debounce } from "./utils/helpers";
 import appConfig from "./appConfig";
 
 import API from "./API";
@@ -10,6 +10,11 @@ const Engine = window.API.Engine;
 let config = appConfig;
 
 export default class Bridge {
+
+    constructor() {
+        this.styles = []
+        this._debouncedSaveConfigFn = debounce(this._saveConfig.bind(this), 300)
+    }
 
     get skipSaveActions() {
         return ["settings"]
@@ -91,35 +96,18 @@ export default class Bridge {
 
         switch (event) {
             case API.events.PROJECT_SELECTED:
-                ConfigService.fetchConfig({
-                    id: data.id
-                }, this._onError.bind(this))
-                    .then((response) => {
-                        this.history.initialized && this.history.unsubscribe();
-
-                        this.cfg = response.config;
-
-                        this.app.setConfig(this.cfg)
-                        this.engine.setConfig(this.cfg);
-
-                        this.history.setApp(data.id, this.engine.store);
-                        // this.history.updateManager({ reset: true, hard: true });
-                        this.history.subscribe();
-                    })
+                this._fetchConfig(data);
                 break;
 
             case API.events.ACTION:
                 this.engine.action(data);
                 if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
-                    ConfigService.saveConfig({
-                        config: this.cfg,
-                        id: this.app.currentProjectId
-                    }, this._onError.bind(this))
+                    this._debouncedSaveConfigFn(data);
                 }
                 break;
 
             case API.events.ENGINE_SLOT_RENDERED:
-                this.loadEngineCss();
+                this.styles = this.reloadEngineCss();
                 this.app.setEngine(data.slot, this.engine.app.$el);
                 break;
 
@@ -134,15 +122,33 @@ export default class Bridge {
             case API.events.HISTORY_REDO:
                 this.history.redo();
                 break;
-
-            case API.events.THEME_PROP_CHANGE:
-                this.engine.setThemeProp(data);
-                break;
-
-            case API.events.THEME_COLOR_CHANGE:
-                this.engine.setThemeColor(data);
-                break;
         }
+    }
+
+    async _saveConfig(data) {
+        ConfigService.saveConfig({
+            config: this.cfg,
+            id: this.app.currentProjectId
+        }, this._onError.bind(this))
+
+        this.app.setConfig(this.cfg)
+        this.engine.setConfig(this.cfg);
+    }
+
+    async _fetchConfig(data) {
+        const response = await ConfigService.fetchConfig({
+            id: data.id
+        }, this._onError.bind(this));
+
+        this.history.initialized && this.history.unsubscribe();
+
+        this.cfg = response.config;
+
+        this.app.setConfig(this.cfg)
+        this.engine.setConfig(this.cfg);
+
+        this.history.setApp(data.id, this.engine.store);
+        this.history.subscribe();
     }
 
     _onEngineEvent(event, data) {
@@ -151,6 +157,12 @@ export default class Bridge {
         switch (event) {
             case Engine.events.SETTINGS_ACTION:
                 this.app.setSetting(data);
+                break;
+            case Engine.events.THEME_COLOR_CHANGE:
+                // this.engine.setThemeColor(data);
+                requestAnimationFrame(() => {
+                    this.reloadEngineCss();
+                })
                 break;
         }
     }
@@ -179,19 +191,31 @@ export default class Bridge {
     loadEngineCss() {
         const engineShadow = this.app.getEngineSlot();
 
-        [
+        const styles = [
             "http://localhost:8080/css/app.css",
             "http://localhost:8080/css/chunk-vendors.css",
             "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
             "https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css",
             "https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700:100,300,400,500,700,900&display=swap"
-        ].forEach(href => {
-            loadCss(href, engineShadow);
+        ].map(href => {
+            return loadCss(href, engineShadow);
         });
 
         const themeStyles = document.getElementById("vuetify-theme-stylesheet");
 
         engineShadow.appendChild(themeStyles.cloneNode(true));
+
+        return styles
+    }
+
+    reloadEngineCss() {
+        const newStyles = this.loadEngineCss();
+
+        if (this.styles) {
+            this.styles.forEach(element => element.remove())
+        }
+
+        this.styles = newStyles;
     }
 
     _onError(error) {

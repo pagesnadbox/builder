@@ -1,9 +1,9 @@
 module.exports = {
-  // pluginOptions: {
-  //   webpackBundleAnalyzer: {
-  //     openAnalyzer: false
-  //   }
-  // },
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: false
+    }
+  },
   devServer: {
     disableHostCheck: true,
   },
@@ -22,6 +22,10 @@ module.exports = {
     config.optimization.delete("splitChunks");
     config.plugins.store.delete('prefetch');
     config.plugins.store.delete('preload');
+    config.plugins.delete('prefetch');
+    config.plugins.delete('preload');
+    // config.plugins.store.delete('prefetch');
+    // config.plugins.store.delete('preload');
   },
   filenameHashing: false,
   css: {
