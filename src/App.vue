@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :class="{ dark: $vuetify.theme.dark }">
     <v-navigation-drawer v-if="meta.hasDrawer" app v-model="drawer">
       <v-list dense rounded>
         <v-list-item v-for="item in links" :key="item.title" link>
@@ -118,4 +118,28 @@ export default {
   @media screen and (max-width: 959px)
     padding-top: 48px !important
     padding-bottom: 48px !important
+
+*
+  --thumbBG: #c4c8cd
+
+.dark *
+  --thumbBG: #3f4143
+
+
+*::-webkit-scrollbar, *::-webkit-scrollbar
+  width: 4px
+
+*
+  scrollbar-width: thin
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG)
+
+
+*::-webkit-scrollbar-track, *::-webkit-scrollbar-track
+  background: var(--scrollbarBG)
+
+
+*::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb
+  background-color: var(--thumbBG)
+  border-radius: 6px
+  border: 3px solid var(--scrollbarBG)
 </style>

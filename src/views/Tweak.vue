@@ -18,7 +18,17 @@
         </v-col>
         <v-col v-if="hasRightContainer" class="fill-height">
           <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
-            <SettingsContainer :scrollable="true" />
+            <v-row no-gutters class="fill-height">
+              <v-col cols="4" class="pr-3">
+                <Tree />
+              </v-col>
+              <v-divider vertical></v-divider>
+              <v-col cols="8" class="px-1 fill-height">
+                <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
+                  <SettingsContainer :scrollable="true" />
+                </v-sheet>
+              </v-col>
+            </v-row>
           </v-sheet>
         </v-col>
       </v-row>
@@ -32,12 +42,16 @@
 import { mapActions, mapState } from "vuex";
 
 import SettingsContainer from "@/layouts/home/SettingsContainer";
+
+import Tree from "@/layouts/home/Tree";
+
 import TweakUI from "@/layouts/home/TweakUI";
 import { EventBus, events } from "../utils/eventBus";
 
 export default {
   components: {
     SettingsContainer,
+    Tree,
     TweakUI
   },
 
@@ -50,23 +64,23 @@ export default {
     },
 
     engineCols() {
-      return this.hasRightContainer ? "5" : "12";
+      return this.hasRightContainer ? "4" : "12";
     },
 
     engineXs() {
-      return this.hasRightContainer ? "5" : "12";
+      return this.hasRightContainer ? "4" : "12";
     },
 
     engineMd() {
-      return this.hasRightContainer ? "7" : "12";
+      return this.hasRightContainer ? "6" : "12";
     },
 
     engineLg() {
-      return this.hasRightContainer ? "8" : "12";
+      return this.hasRightContainer ? "7" : "12";
     },
 
     engineXl() {
-      return this.hasRightContainer ? "9" : "12";
+      return this.hasRightContainer ? "8" : "12";
     },
 
     hasRightContainer() {
@@ -79,7 +93,7 @@ export default {
   },
 
   mounted() {
-    this.setCurrent({ id: this.$route.params.id })
+    this.setCurrent({ id: this.$route.params.id });
 
     EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
       slot: this.$refs.engineSlot

@@ -131,8 +131,8 @@ export default class Bridge {
             id: this.app.currentProjectId
         }, this._onError.bind(this))
 
-        this.app.setConfig(this.cfg)
-        this.engine.setConfig(this.cfg);
+        // this.app.setConfig(this.cfg)
+        // this.engine.setConfig(this.cfg);
     }
 
     async _fetchConfig(data) {

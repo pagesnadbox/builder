@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; flex-flow: column;" class="fill-height">
-    <div style="flex: 0 1 auto;">
+    <div class="px-2" style="flex: 0 1 auto;">
       <v-btn color="primary" block dark @click="onAppSettinsClick">
         <v-icon left>
           mdi-tools
@@ -142,7 +142,7 @@
     <div
       style="flex: 1 1 auto;"
       :class="{ 'overflow-y-auto': scrollable }"
-      class="fill-height "
+      class="fill-height px-2"
     >
       <h3 align="center" :title="config.displayName" space="0" />
 
@@ -157,8 +157,8 @@
         @remove-click="onRemoveClick"
       />
 
-      <v-container>
-        <v-row no-gutters class="pa-2">
+      <v-container class="pa-0">
+        <v-row no-gutters>
           <tweak-prop
             v-for="(prop, i) in primitiveProps"
             :key="i"
