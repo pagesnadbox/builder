@@ -35,7 +35,8 @@ export default {
     ...mapActions("settings", ["setComponent"]),
 
     onItemSelected(event) {
-      console.error(event);
+      this.$emit("item-selected", event);
+      
       this.setComponent({
         id: event[0].id,
         name: event[0].componentName

@@ -114,7 +114,6 @@ export default {
         this.$vuetify.theme.isDark ? "#50778D" : "#42A5F6",
         "#009688",
         "#9368e9",
-        "#F4511E"
       ];
     }
   },

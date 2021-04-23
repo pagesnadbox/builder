@@ -3,6 +3,7 @@ import appConfig from "./appConfig";
 
 import API from "./API";
 import History from "./History";
+import GalleryService from "./GalleryService"
 import ConfigService from "./ConfigService"
 
 const Engine = window.API.Engine;
@@ -106,6 +107,13 @@ export default class Bridge {
                 }
                 break;
 
+            case API.events.GALLERY_IMAGES_LOADED:
+                this._uploadImages({
+                    id: this.app.currentProjectId,
+                    files: data.files
+                })
+                break;
+
             case API.events.ENGINE_SLOT_RENDERED:
                 this.styles = this.reloadEngineCss();
                 this.app.setEngine(data.slot, this.engine.app.$el);
@@ -123,6 +131,15 @@ export default class Bridge {
                 this.history.redo();
                 break;
         }
+    }
+
+    async _uploadImages(data) {
+        const response = GalleryService.upload({
+            id: data.id,
+            files: data.files
+        }, this._onError.bind(this));
+
+        console.error(response)
     }
 
     async _saveConfig(data) {

@@ -19,11 +19,11 @@
         <v-col v-if="hasRightContainer" class="fill-height">
           <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
             <v-row no-gutters class="fill-height">
-              <v-col cols="4" class="pr-3">
+              <v-col cols="5" class="pr-3">
                 <Tree />
               </v-col>
               <v-divider vertical></v-divider>
-              <v-col cols="8" class="px-1 fill-height">
+              <v-col cols="7" class="px-1 fill-height">
                 <v-sheet height="100%" class="fill-height pa-2 overflow-hidden">
                   <SettingsContainer :scrollable="true" />
                 </v-sheet>

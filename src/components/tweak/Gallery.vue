@@ -4,19 +4,17 @@
     max-width="1200"
   >
     <v-card
-      color="grey lighten-4"
       flat
       tile
     >
       <v-toolbar
         flat
-        outlined
       >
         <v-toolbar-title>Gallery</v-toolbar-title>
 
         <v-spacer />
 
-        <v-btn @click="onUploadClick">
+        <v-btn outlined text @click="onUploadClick">
           upload
           <v-icon right>
             mdi-upload
@@ -31,9 +29,25 @@
           @change="onFilesChange"
         ></input>
 
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn          
+            class="ml-3" 
+            v-bind="attrs"
+            v-on="on" icon>
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>Clear</v-list-item-title>
+        </v-list-item>
+      </v-list>
+
+      </v-menu>
+
       </v-toolbar>
 
       <v-card-text>
@@ -61,6 +75,8 @@
                   <v-card
                     :elevation="hover ? 6 : 0"
                     class="mx-auto"
+                    outlined
+                    flat
                     @click="onImageClick(file)"
                   >
                     <v-card-title class="text-truncate">
@@ -141,23 +157,32 @@
 
       onFilesChange (event) {
         const files = event.target.files
+        const loaded = {};
 
-        files.forEach(file => {
+        files.forEach((file, index) => {
           if (!this.files[file.name]) {
             const fr = new FileReader()
 
             fr.addEventListener('load', () => {
               this.empty = false
-              this.$set(this.files, file.name, {
+              const loadedFile = {
                 name: file.name,
                 file,
                 url: fr.result,
-              })
+              }
+
+              loaded[file.name] = loadedFile;
+              this.$set(this.files, file.name, loadedFile)
+
+              if (index === files.length - 1) {
+                this.$emit("files-loaded", loaded)
+              }
             })
 
             fr.readAsDataURL(file)
           }
-        })
+        });
+
       },
     },
   }
