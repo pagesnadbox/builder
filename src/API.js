@@ -20,12 +20,16 @@ export default class API extends EventEmitter {
     return events;
   }
 
+  get currentProject() {
+    return store.state.projects.current
+  }
+
   get currentProjectConfig() {
-    return store.state.projects.current.config;
+    return this.currentProject.config;
   }
 
   get currentProjectId() {
-    return store.state.projects.current.id;
+    return this.currentProject.id;
   }
 
   get undoRedoManager() {
@@ -69,6 +73,10 @@ export default class API extends EventEmitter {
 
   setSetting(payload) {
     store.dispatch(`settings/${payload.key}`, payload.value);
+  }
+
+  setImages(payload) {
+    store.dispatch(`gallery/setFiles`, payload);
   }
 
   setConfig(config) {

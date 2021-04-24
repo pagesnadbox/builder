@@ -2,7 +2,7 @@
   <v-app class="ui-application">
     <home-settings />
 
-    <home-gallery @files-loaded="onFilesLoaded" />
+    <home-gallery />
 
     <home-tools />
   </v-app>
@@ -20,11 +20,6 @@ export default {
     HomeGallery: () => import("@/components/tweak/Gallery")
   },
 
-  methods: {
-    async onFilesLoaded(files) {
-      EventBus.$emit(events.GALLERY_IMAGES_LOADED, { files });
-    }
-  }
 };
 </script>
 

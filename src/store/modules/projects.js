@@ -14,25 +14,36 @@ export default (options) => {
     const state = stateFn()
     return {
         namespaced: true,
+        
         state,
+
         mutations: {
+            
             SET_ITEMS: set('items'),
+
             SET_CURRENT: set('current'),
+
             SET_ITEM: (state, payload) => {
                 Vue.set(state.items, payload.id, payload);
             },
+
             REMOVE_ITEM: (state, payload) => {
                 Vue.set(state.items, payload.id, null);
             },
+
         },
+
         actions: {
+
             setItems({ commit }, payload) {
                 commit('SET_ITEMS', payload)
             },
+
             setCurrent({ commit }, payload) {
                 commit('SET_CURRENT', payload)
                 EventBus.$emit(events.PROJECT_SELECTED, payload);
             },
+
             async fetchItems({ commit }) {
 
                 try {
@@ -104,7 +115,9 @@ export default (options) => {
                 }
             }
         },
+
         getters: {
+
             filteredProjects: (state) => {
                 return Object.keys(state.items).reduce((result, id) => {
                     const item = state.items[id]
@@ -116,6 +129,7 @@ export default (options) => {
                     return result
                 }, {})
             }
+
         },
     }
 }

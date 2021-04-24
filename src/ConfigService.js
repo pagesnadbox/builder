@@ -8,7 +8,7 @@ export default class ConfigService extends Service {
     }
 
     static saveConfig({ config = {}, id = "" } = {}, onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/config/save/`, {
+        return this.fetch(`${this.API_URL}/projects/config/save/`, {
             method: "POST",
             body: JSON.stringify({
                 config,
@@ -18,22 +18,26 @@ export default class ConfigService extends Service {
     }
 
     static fetchConfig({ id = "" } = {}, onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/config/fetch/${id}`, onError);
+        return this.fetch(`${this.API_URL}/projects/config/fetch/${id}`, onError);
     }
 
     static fetchProjects(onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/list`, onError);
+        return this.fetch(`${this.API_URL}/projects/list`, onError);
+    }
+
+    static fetchProject({ id }, onError) {
+        return this.fetch(`${this.API_URL}/projects/${id}`, onError);
     }
 
     static createProject(data, onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/create`, {
+        return this.fetch(`${this.API_URL}/projects/create`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
     }
 
     static editProject(data, onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
+        return this.fetch(`${this.API_URL}/projects/edit`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
@@ -41,14 +45,14 @@ export default class ConfigService extends Service {
 
     static editProject(data, onError) {
 
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/edit`, {
+        return this.fetch(`${this.API_URL}/projects/edit`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
     }
 
     static removeProject(data, onError) {
-        return ConfigService.fetch(`${ConfigService.API_URL}/projects/remove`, {
+        return this.fetch(`${this.API_URL}/projects/remove`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);

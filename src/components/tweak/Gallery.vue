@@ -41,7 +41,7 @@
         </template>
 
       <v-list>
-        <v-list-item>
+        <v-list-item @click="onClearClick">
           <v-list-item-title>Clear</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -52,7 +52,7 @@
 
       <v-card-text>
         <div
-          v-if="empty"
+          v-if="empty && !files.length"
           class="text-center py-10"
         >
           No items uploaded
@@ -80,12 +80,11 @@
                     @click="onImageClick(file)"
                   >
                     <v-card-title class="text-truncate">
-                      {{ file.name }}
+                      {{ file.fileName }}
                     </v-card-title>
                     <v-img
                       max-height="300"
-                      :src="file.url"
-                      :lazy-src="file.url"
+                      :src="getImageUrl(file.fileName)"
                       class="grey lighten-2"
                     >
                       <template v-slot:placeholder>
@@ -113,19 +112,23 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
-  import { EventBus } from '../../utils/eventBus'
+  import { mapActions, mapState } from 'vuex';
+  import { EventBus } from '../../utils/eventBus';
+
+  const apiUrl = window.location.origin.replace("8081", "3000")
+
   export default {
 
     data () {
       return {
-        files: {},
         empty: true,
       }
     },
 
     computed: {
+      ...mapState('gallery', ['files']),
       ...mapState('settings', ['showGallery']),
+      ...mapState('projects', ['current']),
 
       dialog: {
         get () {
@@ -147,6 +150,8 @@
 
     methods: {
       ...mapActions("settings", ["setShowGallery"]),
+      ...mapActions("gallery", ["upload", "clearAll"]),
+
       onImageClick (img) {
         EventBus.$emit('on-image-click', img)
       },
@@ -155,32 +160,41 @@
         this.$refs.upload.click()
       },
 
+      getImageUrl(fileName) {
+        return `${apiUrl}/${this.current.id}/images/${fileName}`
+      },
+
+      onClearClick() {
+        this.clearAll({ id: this.current.id});
+      },
+
       onFilesChange (event) {
         const files = event.target.files
         const loaded = {};
 
         files.forEach((file, index) => {
-          if (!this.files[file.name]) {
-            const fr = new FileReader()
+          const fr = new FileReader()
 
-            fr.addEventListener('load', () => {
-              this.empty = false
-              const loadedFile = {
-                name: file.name,
-                file,
-                url: fr.result,
-              }
+          fr.addEventListener('load', () => {
+            this.empty = false
+            const loadedFile = {
+              name: file.name,
+              file,
+              url: fr.result,
+            }
 
-              loaded[file.name] = loadedFile;
-              this.$set(this.files, file.name, loadedFile)
+            loaded[file.name] = loadedFile;
+            // this.$set(this.files, file.name, loadedFile)
 
-              if (index === files.length - 1) {
-                this.$emit("files-loaded", loaded)
-              }
-            })
+            if (index === files.length - 1) {
+              this.upload({
+                files: loaded,
+                id: this.current.id
+              })
+            }
+          })
 
-            fr.readAsDataURL(file)
-          }
+          fr.readAsDataURL(file)
         });
 
       },

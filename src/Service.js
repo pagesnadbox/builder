@@ -14,11 +14,10 @@ export default class Service {
     }
 
     static async fetch(url, { body = {}, method = "GET" } = {}, onError) {
-        debugger
         try {
             const options = {
                 method,
-                headers: Service.headers
+                headers: this.headers
             };
 
             if (method !== "GET") {

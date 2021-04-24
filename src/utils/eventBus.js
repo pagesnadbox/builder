@@ -3,7 +3,6 @@ import Vue from 'vue'
 export const EventBus = new Vue()
 
 export const events = {
-    GALLERY_IMAGES_LOADED: "GALLERY_IMAGES_LOADED",
     CLEAR_COMPONENT_HIGHLIGHT: "CLEAR_COMPONENT_HIGHLIGHT",
     ACTION: "ACTION",
     ENGINE_SLOT_RENDERED: "ENGINE_SLOT_RENDERED",

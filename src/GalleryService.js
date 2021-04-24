@@ -15,4 +15,10 @@ export default class GalleryService extends Service {
         });
     }
 
+    static clearAll({ id }) {
+        return GalleryService.fetch(`${GalleryService.API_URL}/projects/${id}/images/clear`, {
+            method: "DELETE",
+        });
+    }
+
 }

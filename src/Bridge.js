@@ -97,6 +97,8 @@ export default class Bridge {
 
         switch (event) {
             case API.events.PROJECT_SELECTED:
+                // this.app.setImages();
+                this._fetchProject(data);
                 this._fetchConfig(data);
                 break;
 
@@ -105,13 +107,6 @@ export default class Bridge {
                 if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
                     this._debouncedSaveConfigFn(data);
                 }
-                break;
-
-            case API.events.GALLERY_IMAGES_LOADED:
-                this._uploadImages({
-                    id: this.app.currentProjectId,
-                    files: data.files
-                })
                 break;
 
             case API.events.ENGINE_SLOT_RENDERED:
@@ -133,23 +128,11 @@ export default class Bridge {
         }
     }
 
-    async _uploadImages(data) {
-        const response = GalleryService.upload({
-            id: data.id,
-            files: data.files
-        }, this._onError.bind(this));
-
-        console.error(response)
-    }
-
-    async _saveConfig(data) {
+    async _saveConfig() {
         ConfigService.saveConfig({
             config: this.cfg,
             id: this.app.currentProjectId
         }, this._onError.bind(this))
-
-        // this.app.setConfig(this.cfg)
-        // this.engine.setConfig(this.cfg);
     }
 
     async _fetchConfig(data) {
@@ -166,6 +149,16 @@ export default class Bridge {
 
         this.history.setApp(data.id, this.engine.store);
         this.history.subscribe();
+    }
+
+    async _fetchProject(data) {
+        const response = await ConfigService.fetchProject({
+            id: data.id
+        }, this._onError.bind(this));
+
+        if (response.success) {
+            this.app.setImages(response.images)
+        }
     }
 
     _onEngineEvent(event, data) {
