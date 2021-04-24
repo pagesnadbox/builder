@@ -1,33 +1,6 @@
-export default class GalleryService {
+import Service from "./Service";
 
-    static get API_URL() {
-        return `http://localhost:3000/pagesandbox/api/v1`
-    }
-
-    static get headers() {
-        return {
-            // set default headers here
-        }
-    }
-
-    static async fetch(url, { body = {}, method = "GET" } = {}, onError) {
-        try {
-            const options = {
-                method,
-                headers: GalleryService.headers
-            };
-
-            if (method !== "GET") {
-                options.body = body;
-            }
-
-            const response = await fetch(url, options);
-
-            return response.json();
-        } catch (error) {
-            onError && onError({ message: error })
-        }
-    }
+export default class GalleryService extends Service {
 
     static upload({ id = "", files = [] } = {}, onError) {
         const formData = new FormData();

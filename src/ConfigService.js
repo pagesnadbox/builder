@@ -1,31 +1,9 @@
-export default class ConfigService {
-
-    static get API_URL() {
-        return `http://localhost:3000/pagesandbox/api/v1`
-    }
+import Service from "./Service";
+export default class ConfigService extends Service {
 
     static get headers() {
         return {
             'Content-Type': 'application/json',
-        }
-    }
-
-    static async fetch(url, { body = {}, method = "GET" } = {}, onError) {
-        try {
-            const options = {
-                method,
-                headers: ConfigService.headers
-            };
-
-            if (method !== "GET") {
-                options.body = body;
-            }
-
-            const response = await fetch(url, options);
-
-            return response.json();
-        } catch (error) {
-            onError && onError({ message: error })
         }
     }
 
