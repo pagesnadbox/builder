@@ -14,11 +14,25 @@
 
         <v-spacer />
 
-        <v-btn outlined text @click="onUploadClick">
+        <v-btn 
+          outlined text 
+          class="mr-3"
+          @click="onUploadClick"
+        >
           upload
           <v-icon right>
             mdi-upload
           </v-icon>
+        </v-btn>
+
+        <v-btn 
+          depressed
+          color="primary"
+          @click="showDefaultImages = !showDefaultImages" 
+          :outlined="!showDefaultImages"
+          :text="!showDefaultImages"
+        >
+          Show default
         </v-btn>
 
         <input
@@ -33,10 +47,10 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn          
-            class="ml-3" 
+            class="mx-3" 
             v-bind="attrs"
             v-on="on" icon>
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon>mdi-dots-horizontal</v-icon>
           </v-btn>
         </template>
 
@@ -52,7 +66,7 @@
 
       <v-card-text>
         <div
-          v-if="empty && !files.length"
+          v-if="empty && !effectiveFiles.length"
           class="text-center py-10"
         >
           No items uploaded
@@ -64,7 +78,7 @@
         >
           <v-row>
             <v-col
-              v-for="(file, i) in files"
+              v-for="(file, i) in effectiveFiles"
               :key="i"
               class="d-flex child-flex"
               cols="12"
@@ -113,14 +127,14 @@
 
 <script>
   import { mapActions, mapState } from 'vuex';
-  import { EventBus } from '../../utils/eventBus';
-
-  const apiUrl = window.location.origin.replace("8081", "3000")
+  import { EventBus, eventsInternal } from '../../utils/eventBus';
+  import ImagesService from "@/services/ImagesService";
 
   export default {
 
     data () {
       return {
+        showDefaultImages: true,
         empty: true,
       }
     },
@@ -129,6 +143,19 @@
       ...mapState('gallery', ['files']),
       ...mapState('settings', ['showGallery']),
       ...mapState('projects', ['current']),
+
+      effectiveFiles () {
+        const imageService = ImagesService.getInstance();
+        let files = [];
+
+        if (this.showDefaultImages) {
+          files = imageService.defaultImages.map(url => {
+            return { fileName: url };
+          });
+        }
+
+        return [...files, ...this.files]
+      },
 
       dialog: {
         get () {
@@ -143,7 +170,7 @@
     watch: {
       dialog: function (value) {
         if (!value) {
-          EventBus.$off('on-img-click')
+          EventBus.$off(eventsInternal.ON_IMAGE_CLICK)
         }
       },
     },
@@ -153,15 +180,17 @@
       ...mapActions("gallery", ["upload", "clearAll"]),
 
       onImageClick (img) {
-        EventBus.$emit('on-image-click', img)
+        EventBus.$emit(eventsInternal.ON_IMAGE_CLICK, img)
       },
 
       onUploadClick () {
         this.$refs.upload.click()
       },
 
-      getImageUrl(fileName) {
-        return `${apiUrl}/${this.current.id}/images/${fileName}`
+      getImageUrl(assetName) {
+        const imageService = ImagesService.getInstance();
+
+        return imageService.transformURL({ assetName })
       },
 
       onClearClick() {

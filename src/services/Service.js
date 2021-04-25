@@ -1,6 +1,6 @@
-const domain = window.location.origin.replace("8081", "3000");
-const apiURL = `${domain}/pagesandbox/api/v1`;
+import { getDomain } from "./DomainService";
 
+const apiURL = `${getDomain()}/pagesandbox/api/v1`;
 export default class Service {
 
     static get API_URL() {

@@ -1,5 +1,5 @@
 import { set } from '@/utils/vuex'
-import GalleryService from '../../GalleryService'
+import GalleryService from '../../services/GalleryService'
 
 const stateFn = () => ({
     files: []

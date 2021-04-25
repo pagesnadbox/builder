@@ -2,7 +2,7 @@ import { set } from '@/utils/vuex'
 import { EventBus, events } from '@/utils/eventBus'
 
 import Vue from 'vue'
-import ConfigService from '../../ConfigService'
+import ConfigService from '../../services/ConfigService'
 
 const stateFn = () => ({
     items: {},

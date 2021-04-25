@@ -3,8 +3,8 @@ import appConfig from "./appConfig";
 
 import API from "./API";
 import History from "./History";
-import GalleryService from "./GalleryService"
-import ConfigService from "./ConfigService"
+import ConfigService from "./services/ConfigService"
+import ImagesService from "./services/ImagesService";
 
 const Engine = window.API.Engine;
 
@@ -24,6 +24,7 @@ export default class Bridge {
     init() {
         this.config().then(cfg => {
             this.cfg = cfg
+            this.imageService = ImagesService.getInstance();
             this.createApp();
             this.createEngine();
         });
@@ -67,7 +68,13 @@ export default class Bridge {
         this.createHistory();
 
         const engine = this.engine = new Engine();
-        await engine.init({ config: this.cfg, preventMount: true })
+
+        await engine.init({
+            imageService: this.imageService,
+            config: this.cfg,
+            preventMount: true
+        });
+
         engine.app.$mount();
 
         this._attachEngineEvent();
@@ -97,7 +104,7 @@ export default class Bridge {
 
         switch (event) {
             case API.events.PROJECT_SELECTED:
-                // this.app.setImages();
+                this.imageService.projectId = data.id;
                 this._fetchProject(data);
                 this._fetchConfig(data);
                 break;

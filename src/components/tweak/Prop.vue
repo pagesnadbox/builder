@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../utils/eventBus";
+import { EventBus, eventsInternal } from "../../utils/eventBus";
 import { mapActions } from "vuex";
 
 export default {
@@ -144,16 +144,16 @@ export default {
   methods: {
     ...mapActions("settings", ["setShowGallery"]),
     onGalleryClick() {
-      EventBus.$on("on-image-click", this.onImageClick.bind(this));
+      EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));
 
       this.setShowGallery(true);
     },
 
     onImageClick(payload) {
       const data = {
-        name: `assets/${payload.name}`,
+        name: payload.fileName,
         value: {
-          url: payload.url,
+          url: payload.fileName,
           file: payload.file
         }
       };
