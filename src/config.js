@@ -181,6 +181,12 @@ const dark = {
     type: 'boolean',
 }
 
+const iconDark = {
+    displayName: 'Dark',
+    propName: 'iconDark',
+    type: 'boolean',
+}
+
 const hideOnScroll = {
     displayName: 'Hide on scroll',
     propName: 'hideOnScroll',
@@ -217,7 +223,7 @@ const aggregations = {
 }
 
 const lightSrc = {
-    displayName: 'Light source',
+    displayName: 'Src',
     propName: 'src',
     type: 'file',
 }
@@ -291,7 +297,7 @@ const baseImg = {
         height,
         maxWidth,
         lightSrc,
-        darkSrc
+        // darkSrc
     ],
 
 };
@@ -413,7 +419,6 @@ export default {
         props: [
             ...mixinHeading.props,
             hidden,
-            dark,
             outlined,
             horizontal,
             title,
@@ -423,6 +428,7 @@ export default {
             ...baseImg.props,
             divider,
             label("Icon"),
+            iconDark,
             icon,
             iconSize,
             color,
@@ -533,13 +539,13 @@ export default {
             aggregations,
             label("Background"),
             divider,
-            lightSrc,
             {
                 displayName: "Overlay",
                 type: "boolean",
                 propName: "overlay"
             },
-            darkSrc,
+            lightSrc,
+            // darkSrc,
             {
                 ...color,
                 displayName: 'Solid Color'
