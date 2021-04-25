@@ -14,7 +14,7 @@ export default class Bridge {
 
     constructor() {
         this.styles = []
-        this._debouncedSaveConfigFn = debounce(this._saveConfig.bind(this), 300)
+        this.debouncedSaveConfigFn = debounce(this.saveConfig.bind(this), 300)
     }
 
     get skipSaveActions() {
@@ -87,6 +87,8 @@ export default class Bridge {
             case History.events.REPLACE_STATE:
                 this.app.replaceConfig(data);
                 this.engine.replaceConfig(data);
+                this.replaceConfig(data)
+                this.debouncedSaveConfigFn();
                 break;
 
             case History.events.CAN_REDO:
@@ -105,14 +107,14 @@ export default class Bridge {
         switch (event) {
             case API.events.PROJECT_SELECTED:
                 this.imageService.projectId = data.id;
-                this._fetchProject(data);
-                this._fetchConfig(data);
+                this.fetchProject(data);
+                this.fetchConfig(data);
                 break;
 
             case API.events.ACTION:
                 this.engine.action(data);
                 if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
-                    this._debouncedSaveConfigFn(data);
+                    this.debouncedSaveConfigFn();
                 }
                 break;
 
@@ -132,39 +134,6 @@ export default class Bridge {
             case API.events.HISTORY_REDO:
                 this.history.redo();
                 break;
-        }
-    }
-
-    async _saveConfig() {
-        ConfigService.saveConfig({
-            config: this.cfg,
-            id: this.app.currentProjectId
-        }, this._onError.bind(this))
-    }
-
-    async _fetchConfig(data) {
-        const response = await ConfigService.fetchConfig({
-            id: data.id
-        }, this._onError.bind(this));
-
-        this.history.initialized && this.history.unsubscribe();
-
-        this.cfg = response.config;
-
-        this.app.setConfig(this.cfg)
-        this.engine.setConfig(this.cfg);
-
-        this.history.setApp(data.id, this.engine.store);
-        this.history.subscribe();
-    }
-
-    async _fetchProject(data) {
-        const response = await ConfigService.fetchProject({
-            id: data.id
-        }, this._onError.bind(this));
-
-        if (response.success) {
-            this.app.setImages(response.images)
         }
     }
 
@@ -235,7 +204,55 @@ export default class Bridge {
         this.styles = newStyles;
     }
 
-    _onError(error) {
+    onError(error) {
         this.app.setSnackbar(error.message)
     }
+
+    replaceConfig(data) {
+        [
+            "app",
+            "hero",
+            "themeFeatures",
+            "features",
+            "affiliates",
+            "social",
+            "footer"
+        ].forEach((key) => {
+            this.cfg[key] = data[key].data;
+        });
+    }
+
+    async saveConfig() {
+        ConfigService.saveConfig({
+            config: this.cfg,
+            id: this.app.currentProjectId
+        }, this.onError.bind(this))
+    }
+
+    async fetchConfig(data) {
+        const response = await ConfigService.fetchConfig({
+            id: data.id
+        }, this.onError.bind(this));
+
+        this.history.initialized && this.history.unsubscribe();
+
+        this.cfg = response.config;
+
+        this.app.setConfig(this.cfg)
+        this.engine.setConfig(this.cfg);
+
+        this.history.setApp(data.id, this.engine.store);
+        this.history.subscribe();
+    }
+
+    async fetchProject(data) {
+        const response = await ConfigService.fetchProject({
+            id: data.id
+        }, this.onError.bind(this));
+
+        if (response.success) {
+            this.app.setImages(response.images)
+        }
+    }
+
 }
