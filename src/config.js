@@ -95,6 +95,11 @@ const hidden = {
     type: 'switch',
 }
 
+const hiddenImage = {
+    ...hidden,
+    propName: 'hiddenImage',
+}
+
 const subtitle = {
     displayName: 'Subtitle',
     propName: 'subtitle',
@@ -302,6 +307,13 @@ const baseImg = {
 
 };
 
+const avatarCardImage = {
+    ...baseImg,
+    props: [
+        ...baseImg.props.map(p => p.propName === "hidden" ? hiddenImage : p)
+    ]
+}
+
 export default {
     BaseApp: {
         displayName: 'Application',
@@ -425,7 +437,7 @@ export default {
             text,
             divider,
             label("Image"),
-            ...baseImg.props,
+            ...avatarCardImage.props,
             divider,
             label("Icon"),
             iconDark,
