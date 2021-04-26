@@ -51,7 +51,7 @@ export default class Bridge {
         window.com.app = this.app;
 
         this.app.setConfig(this.cfg)
-        this._attachAppEvent();
+        this.attachAppEvent();
     }
 
     createHistory() {
@@ -59,7 +59,7 @@ export default class Bridge {
             interests: ['app', 'hero', 'themeFeatures', 'features', 'affiliates', 'social']
         });
 
-        this._attachHistoryEvents();
+        this.attachHistoryEvents();
 
         return this.history;
     }
@@ -77,101 +77,103 @@ export default class Bridge {
 
         engine.app.$mount();
 
-        this._attachEngineEvent();
+        this.attachEngineEvent();
     }
 
-    _onHistoryEvent(event, data) {
-        console.log(`History Event: ${event}`, data);
-
-        switch (event) {
-            case History.events.REPLACE_STATE:
-                this.app.replaceConfig(data);
-                this.engine.replaceConfig(data);
-                this.replaceConfig(data)
-                this.debouncedSaveConfigFn();
-                break;
-
-            case History.events.CAN_REDO:
-                this.app.undoRedoManager.setCanRedo(data)
-                break;
-
-            case History.events.CAN_UNDO:
-                this.app.undoRedoManager.setCanUndo(data)
-                break;
-        }
-    }
-
-    _onAppEvent(event, data) {
-        console.log(`App Event: ${event}`, data);
-
-        switch (event) {
-            case API.events.PROJECT_SELECTED:
-                this.imageService.projectId = data.id;
-                this.fetchProject(data);
-                this.fetchConfig(data);
-                break;
-
-            case API.events.ACTION:
-                this.engine.action(data);
-                if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
-                    this.debouncedSaveConfigFn();
-                }
-                break;
-
-            case API.events.ENGINE_SLOT_RENDERED:
-                this.styles = this.reloadEngineCss();
-                this.app.setEngine(data.slot, this.engine.app.$el);
-                break;
-
-            case API.events.HISTORY_RESET:
-                this.history.reset();
-                break;
-
-            case API.events.HISTORY_UNDO:
-                this.history.undo();
-                break;
-
-            case API.events.HISTORY_REDO:
-                this.history.redo();
-                break;
-        }
-    }
-
-    _onEngineEvent(event, data) {
-        console.log(`Engine Event: ${event}`, data);
-
-        switch (event) {
-            case Engine.events.SETTINGS_ACTION:
-                this.app.setSetting(data);
-                break;
-            case Engine.events.THEME_COLOR_CHANGE:
-                // this.engine.setThemeColor(data);
-                requestAnimationFrame(() => {
-                    this.reloadEngineCss();
-                })
-                break;
-        }
-    }
-
-    _attachHistoryEvents() {
+    attachHistoryEvents() {
         Object.keys(History.events).forEach(key => {
             const event = History.events[key]
-            this.history.on(event, (data) => this._onHistoryEvent(event, data));
+            this.history.on(event, (data) => this.onHistoryEvent(event, data));
         });
     }
 
-    _attachEngineEvent() {
+    attachEngineEvent() {
         Object.keys(Engine.events).forEach(key => {
             const event = Engine.events[key]
-            this.engine.on(event, (data) => this._onEngineEvent(event, data));
+            this.engine.on(event, (data) => this.onEngineEvent(event, data));
         });
     }
 
-    _attachAppEvent() {
+    attachAppEvent() {
         Object.keys(API.events).forEach(key => {
             const event = API.events[key]
-            this.app.on(event, (data) => this._onAppEvent(event, data));
+            this.app.on(event, (data) => this.onAppEvent(event, data));
         });
+    }
+
+    onHistoryEvent(event, data) {
+        console.log(`History Event: ${event}`, data);
+
+        const mediator = {
+            [History.events.REPLACE_STATE]: (data) => this.onReplaceState(data),
+            [History.events.CAN_REDO]: (data) => this.app.undoRedoManager.setCanRedo(data),
+            [History.events.CAN_UNDO]: (data) => this.app.undoRedoManager.setCanUndo(data),
+        }
+
+        if (mediator[event]) {
+            mediator[event](data);
+        }
+    }
+
+    onAppEvent(event, data) {
+        console.log(`App Event: ${event}`, data);
+
+        const mediator = {
+            [API.events.PROJECT_SELECTED]: (data) => this.onProjectSelected(data),
+            [API.events.ACTION]: (data) => this.onAppAction(data),
+            [API.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
+            [API.events.HISTORY_RESET]: () => this.history.reset(),
+            [API.events.HISTORY_UNDO]: () => this.history.undo(),
+            [API.events.HISTORY_REDO]: () => this.history.redo(),
+        }
+
+        if (mediator[event]) {
+            mediator[event](data);
+        }
+    }
+
+    onEngineEvent(event, data) {
+        console.log(`Engine Event: ${event}`, data);
+
+        const mediator = {
+            // settings change performed from engine, inform builder
+            [Engine.events.SETTINGS_ACTION]: (data) => this.app.setSetting(data),
+            // reload the css when theme property is changed
+            [Engine.events.THEME_COLOR_CHANGE]: () => requestAnimationFrame(() => this.reloadEngineCss()),
+        }
+
+        if (mediator[event]) {
+            mediator[event](data);
+        }
+    }
+
+    onReplaceState(data) {
+        // sync configs of interested parties
+        this.app.replaceConfig(data);
+        this.engine.replaceConfig(data);
+        this.replaceConfig(data)
+
+        // save config
+        this.debouncedSaveConfigFn();
+    }
+
+    onEngineSlotRendered(data) {
+        this.styles = this.reloadEngineCss();
+        this.app.setEngine(data.slot, this.engine.app.$el);
+    }
+
+    onProjectSelected(data) {
+        this.imageService.projectId = data.id;
+        this.fetchProject(data);
+        this.fetchConfig(data);
+    }
+
+    onAppAction(data) {
+        this.engine.action(data);
+        if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
+            // save only if interested action was performed
+            this.debouncedSaveConfigFn();
+        }
     }
 
     loadEngineCss() {
