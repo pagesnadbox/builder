@@ -183,13 +183,15 @@ const dense = {
 const dark = {
     displayName: 'Dark',
     propName: 'dark',
-    type: 'boolean',
+    type: 'boolean'
 }
 
 const iconDark = {
-    displayName: 'Dark',
+    ...dark,
     propName: 'iconDark',
-    type: 'boolean',
+    options: {
+        indeterminate: true
+    }
 }
 
 const hideOnScroll = {
@@ -511,7 +513,6 @@ export default {
         props: [
             ...mixinHeading.props,
             hidden,
-            dark,
             icon,
             subtitle,
             title,

@@ -163,6 +163,7 @@
             v-for="(prop, i) in primitiveProps"
             :key="i"
             v-bind="prop"
+            :options="prop.options"
             @property-change="onValueChange"
           />
         </v-row>

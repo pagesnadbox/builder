@@ -1,10 +1,14 @@
 <template>
   <v-col cols="6" v-if="type === 'boolean'">
-    <v-checkbox v-model="checkboxSwitchValue" :label="displayName" />
+    <v-checkbox
+      v-model="checkboxValue"
+      :indeterminate="value === false && options.indeterminate"
+      :label="displayName"
+    />
   </v-col>
 
   <v-col cols="12" v-else-if="type === 'switch'">
-    <v-switch v-model="checkboxSwitchValue" :label="displayName" class="mb-3" />
+    <v-switch v-model="switchValue" :label="displayName" class="mb-3" />
   </v-col>
 
   <v-col cols="12" v-else-if="type === 'label'">
@@ -103,12 +107,18 @@ export default {
       default: () => []
     },
 
+    options: {
+      type: Object,
+      default: () => ({})
+    },
+
     value: {
-      type: [Number, String, Boolean],
+      type: [Number, String, Boolean, null],
       default() {
         if (this.type === "color") {
           return "#00000000";
         } else if (this.type === "boolean") {
+          if (this.options.indeterminate) return null;
           return false;
         } else {
           return "";
@@ -122,7 +132,33 @@ export default {
   },
 
   computed: {
-    checkboxSwitchValue: {
+    checkboxValue: {
+      get() {
+        return this.value;
+      },
+
+      set(data) {
+        let value = data;
+
+        if (this.options.indeterminate) {
+          switch (this.value) {
+            case true:
+              value = false;
+              break;
+            case false:
+              value = null;
+              break;
+            case null:
+              value = true;
+              break;
+          }
+        }
+
+        this.$emit("property-change", { key: this.propName, value });
+      }
+    },
+
+    switchValue: {
       get() {
         return this.value;
       },
