@@ -230,7 +230,7 @@ const aggregations = {
 }
 
 const lightSrc = {
-    displayName: 'Src',
+    displayName: 'URL',
     propName: 'src',
     type: 'file',
 }
