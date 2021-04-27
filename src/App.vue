@@ -71,6 +71,7 @@ export default {
   },
 
   created() {
+    console.error(process.env.VUE_APP_TEMPLATE_RESOURCES_URL)
     const isDark = localStorage.getItem("pagesandbox_theme_dark") !== "false";
     this.$nextTick(() => {
       this.$vuetify.theme.dark = isDark;

@@ -177,11 +177,12 @@ export default class Bridge {
     }
 
     loadEngineCss() {
+        const url = process.env.VUE_APP_TEMPLATE_RESOURCES_URL;
         const engineShadow = this.app.getEngineSlot();
 
         const styles = [
-            "http://localhost:8080/css/app.css",
-            "http://localhost:8080/css/chunk-vendors.css",
+            `${url}/css/app.css`,
+            `${url}/css/chunk-vendors.css`,
             "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
             "https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css",
             "https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700:100,300,400,500,700,900&display=swap"
