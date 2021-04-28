@@ -2,7 +2,7 @@
   <v-col cols="6" v-if="type === 'boolean'">
     <v-checkbox
       v-model="checkboxValue"
-      :indeterminate="value === false && options.indeterminate"
+      :indeterminate="effectiveValue === false && options.indeterminate"
       :label="displayName"
     />
   </v-col>
@@ -31,13 +31,13 @@
   <v-col cols="12" v-else-if="type === 'color'">
     <p>{{ displayName }}</p>
 
-    <tweak-color clearable :value="value" @input="onValueChange" />
+    <tweak-color clearable :value="effectiveValue" @input="onValueChange" />
   </v-col>
 
   <v-col cols="12" v-else-if="type === 'icon'">
     <v-text-field
       :label="displayName"
-      :value="value"
+      :value="effectiveValue"
       outlined
       @input="onValueChange"
     >
@@ -52,7 +52,7 @@
       :label="displayName"
       outlined
       :items="enums"
-      :value="value"
+      :value="effectiveValue"
       @change="onValueChange"
     />
   </v-col>
@@ -60,7 +60,7 @@
   <v-col cols="12" v-else-if="type === 'file'">
     <p>{{ displayName }}</p>
 
-    <v-text-field outlined :value="value" @input="onValueChange">
+    <v-text-field outlined :value="effectiveValue" @input="onValueChange">
       <template v-slot:append-outer>
         <v-btn x-large depressed color="primary" @click="onGalleryClick">
           Image
@@ -72,7 +72,7 @@
   <v-col cols="12" v-else>
     <v-text-field
       :label="displayName"
-      :value="value"
+      :value="effectiveValue"
       outlined
       @input="onValueChange"
     />
@@ -112,6 +112,8 @@ export default {
       default: () => ({})
     },
 
+    defaultValue: null,
+
     value: {
       type: [Number, String, Boolean, null],
       default() {
@@ -132,16 +134,20 @@ export default {
   },
 
   computed: {
+    effectiveValue() {
+      return this.value || this.defaultValue;
+    },
+
     checkboxValue: {
       get() {
-        return this.value;
+        return this.effectiveValue;
       },
 
       set(data) {
         let value = data;
 
         if (this.options.indeterminate) {
-          switch (this.value) {
+          switch (this.effectiveValue) {
             case true:
               value = false;
               break;
@@ -160,7 +166,7 @@ export default {
 
     switchValue: {
       get() {
-        return this.value;
+        return this.effectiveValue;
       },
       set(value) {
         this.$emit("property-change", { key: this.propName, value });
@@ -169,7 +175,7 @@ export default {
 
     groupValue: {
       get() {
-        return this.enums.findIndex(e => e.value === this.value);
+        return this.enums.findIndex(e => e.value === this.effectiveValue);
       },
       set(value) {
         this.onValueChange(value);

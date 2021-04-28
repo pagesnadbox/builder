@@ -208,12 +208,15 @@ export default {
   computed: {
     ...mapState("settings", [
       "allowEdit",
-      "id",
       "open",
       "componentName",
       "history",
       "moreComponents"
     ]),
+
+    id() {
+      return this.$store.state.settings.id || "app";
+    },
 
     ...mapState("engine", ["vuetify"]),
 

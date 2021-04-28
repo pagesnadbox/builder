@@ -235,10 +235,11 @@ const lightSrc = {
     type: 'file',
 }
 
-const darkSrc = {
-    displayName: 'Dark Source',
-    propName: 'srcDark',
-    type: 'file',
+const publicPath = {
+    displayName: 'Public Path',
+    propName: 'publicPath',
+    type: 'text',
+    defaultValue: './'
 }
 
 const cols = {
@@ -319,7 +320,9 @@ const avatarCardImage = {
 export default {
     BaseApp: {
         displayName: 'Application',
-        type: 'list',
+        props: [
+            publicPath,
+        ],
     },
 
     BaseAppBar: {
