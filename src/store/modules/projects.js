@@ -1,12 +1,9 @@
 import { set } from '@/utils/vuex'
-import { EventBus, events } from '@/utils/eventBus'
 
-import Vue from 'vue'
 import ConfigService from '../../services/ConfigService'
 
 const stateFn = () => ({
-    items: {},
-    current: {}
+    project: null,
 })
 
 
@@ -18,60 +15,24 @@ export default (options) => {
         state,
 
         mutations: {
-            
-            SET_ITEMS: set('items'),
-
-            SET_CURRENT: set('current'),
-
-            SET_ITEM: (state, payload) => {
-                Vue.set(state.items, payload.id, payload);
-            },
-
-            REMOVE_ITEM: (state, payload) => {
-                Vue.set(state.items, payload.id, null);
-            },
-
+            SET_PROJECT: set('project'),
         },
 
         actions: {
 
-            setItems({ commit }, payload) {
-                commit('SET_ITEMS', payload)
-            },
-
-            setCurrent({ commit }, payload) {
-                commit('SET_CURRENT', payload)
-                EventBus.$emit(events.PROJECT_SELECTED, payload);
-            },
-
-            async fetchItems({ commit }) {
-
+            async fetchProject({ commit, rootState }) {
                 try {
-                    const { success, ...data } = await ConfigService.fetchProjects();
+                    const data = rootState.editableDialog.data;
+
+                    const { success, ...project } = await ConfigService.fetchProject(data);
 
                     if (!success) return // TODO show message
 
-                    const projects = Object.keys(data.projects).reduce((result, id, index) => {
-                        const projectConfig = data.projects[id].projectConfig;
-                        const appConfig = data.projects[id].appConfig;
+                    commit("SET_PROJECT", project)
 
-                        const { title, description } = projectConfig;
-
-                        result[id] = {
-                            id,
-                            config: appConfig,
-                            title,
-                            description
-                        }
-
-                        return result
-                    }, {})
-
-                    commit("SET_ITEMS", projects)
                 } catch (error) {
                     console.error(error)
                 }
-
             },
 
             async create({ commit, rootState }) {
@@ -82,7 +43,7 @@ export default (options) => {
 
                     if (!success) return // TODO show message
 
-                    commit("SET_ITEM", project)
+                    commit("SET_PROJECT", project)
 
                 } catch (error) {
                     console.error(error)
@@ -97,7 +58,7 @@ export default (options) => {
 
                     if (!success) return // TODO show message
 
-                    commit("SET_ITEM", project)
+                    commit("SET_PROJECT", project)
                 } catch (error) {
                     console.error(error)
                 }
@@ -109,7 +70,7 @@ export default (options) => {
 
                     if (!success) return // TODO show message
 
-                    commit("REMOVE_ITEM", project)
+                    commit("SET_PROJECT", null)
                 } catch (error) {
                     console.error(error)
                 }
@@ -117,19 +78,6 @@ export default (options) => {
         },
 
         getters: {
-
-            filteredProjects: (state) => {
-                return Object.keys(state.items).reduce((result, id) => {
-                    const item = state.items[id]
-
-                    if (item) {
-                        result[id] = item
-                    }
-
-                    return result
-                }, {})
-            }
-
         },
     }
 }

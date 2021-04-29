@@ -20,18 +20,6 @@ export default class API extends EventEmitter {
     return events;
   }
 
-  get currentProject() {
-    return store.state.projects.current
-  }
-
-  get currentProjectConfig() {
-    return this.currentProject.config;
-  }
-
-  get currentProjectId() {
-    return this.currentProject.id;
-  }
-
   get undoRedoManager() {
     return {
       setCanRedo: (value) => store.dispatch('settings/setCanRedo', value),

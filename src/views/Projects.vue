@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-start">
-      <v-col class="flex-grow-0">
+      <v-col class="flex-grow-0" v-if="!project">
         <v-card
           outlined
           @click="onCrateClick"
@@ -17,17 +17,13 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col
-        v-for="(project, id, index) in filteredProjects"
-        :key="id"
-        class="flex-grow-0"
-      >
+      <v-col v-else class="flex-grow-0">
         <base-project-card
           width="400"
           min-height="356"
           class="fill-height"
           outlined
-          :image="`/assets/article-${index + 1}.jpg`"
+          :image="`/assets/article-1.jpg`"
           v-bind="project"
           @click="onTemplateClick(project)"
           @remove-click="onRemoveClick(project)"
@@ -40,8 +36,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { EventBus, events } from '../utils/eventBus';
+
 export default {
   data() {
     return {
@@ -50,15 +47,15 @@ export default {
   },
 
   created() {
-    this.fetchItems();
+    this.fetchProject();
   },
 
   computed: {
-    ...mapGetters("projects", ["filteredProjects"])
+    ...mapState("projects", ["project"])
   },
 
   methods: {
-    ...mapActions("projects", ["fetchItems", "remove", "setCurrent"]),
+    ...mapActions("projects", ["fetchProject", "remove"]),
 
     ...mapActions("editableDialog", ["setEditMode", "setVisible", "setData"]),
 
@@ -76,27 +73,27 @@ export default {
       this.setVisible(true);
     },
 
-    onRemoveClick(project) {
+    onRemoveClick() {
       this.setModalData({
         key: "confirm",
         value: {
           visibility: true,
           action: "remove this project",
-          callback: () => this.onRemoveConfirmed(project.id)
+          callback: () => this.onRemoveConfirmed()
         }
       });
     },
 
-    async onRemoveConfirmed(id) {
+    async onRemoveConfirmed() {
       this.loading = true;
-      await this.remove({ id });
+      await this.remove();
       this.loading = false;
     },
 
     onTemplateClick(project) {
-      this.setCurrent(project);
+      EventBus.$emit(events.PROJECT_SELECTED, project);
 
-      this.$router.push({ path: `/projects/${project.id}` });
+      this.$router.push({ path: `/project` });
     }
   }
 };

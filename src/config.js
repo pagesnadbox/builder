@@ -264,7 +264,7 @@ const baseHeading = {
         align,
         // dense,
         size,
-        space,
+        // space,
         mobileSize,
         weight,
     ],
@@ -290,7 +290,7 @@ const baseList = {
     displayName: 'List',
     type: 'list',
     props: [
-        space,
+        // space,
         items,
         cols,
         md
@@ -474,7 +474,7 @@ export default {
             ...baseHeading.props,
             title,
             text,
-            space,
+            // space,
         ],
     },
 
@@ -489,7 +489,7 @@ export default {
                 type: 'string',
             },
             maxWidth,
-            space,
+            // space,
         ],
     },
 
@@ -498,13 +498,15 @@ export default {
         props: [
             color,
             dense,
-            space,
+            // space,
         ],
     },
 
     BaseIcon: {
         displayName: 'Icon',
         props: [
+            openInNewTab,
+            href,
             icon,
             color,
             size,
@@ -535,7 +537,7 @@ export default {
             subtitle,
             title,
             text,
-            space,
+            // space,
             { ...color, displayName: "Background Color" },
             divider,
             label("Icon"),
@@ -549,7 +551,7 @@ export default {
         displayName: 'Hero',
         props: [
             dark,
-            space,
+            // space,
             height,
             mobileHeight,
             aggregations,
@@ -573,7 +575,7 @@ export default {
         displayName: 'Hero Container',
         props: [
             ...mixinHeading.props,
-            space,
+            // space,
             maxWidth,
             // aggregations
         ],

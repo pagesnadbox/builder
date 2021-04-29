@@ -23,11 +23,6 @@
 <script>
 export default {
   props: {
-    id: {
-      type: [String, Number],
-      default: ""
-    },
-
     image: {
       type: String,
       default: ""

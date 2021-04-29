@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 import SettingsContainer from "@/layouts/home/SettingsContainer";
 
@@ -93,15 +93,10 @@ export default {
   },
 
   mounted() {
-    this.setCurrent({ id: this.$route.params.id });
-
+    EventBus.$emit(events.PROJECT_SELECTED)
     EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
       slot: this.$refs.engineSlot
     });
   },
-
-  methods: {
-    ...mapActions("projects", ["setCurrent"])
-  }
 };
 </script>

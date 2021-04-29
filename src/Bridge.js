@@ -119,7 +119,7 @@ export default class Bridge {
         console.log(`App Event: ${event}`, data);
 
         const mediator = {
-            [API.events.PROJECT_SELECTED]: (data) => this.onProjectSelected(data),
+            [API.events.PROJECT_SELECTED]: () => this.onProjectSelected(),
             [API.events.ACTION]: (data) => this.onAppAction(data),
             [API.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
             [API.events.HISTORY_RESET]: () => this.history.reset(),
@@ -162,10 +162,9 @@ export default class Bridge {
         this.app.setEngine(data.slot, this.engine.app.$el);
     }
 
-    onProjectSelected(data) {
-        this.imageService.projectId = data.id;
-        this.fetchProject(data);
-        this.fetchConfig(data);
+    onProjectSelected() {
+        this.fetchProject();
+        this.fetchConfig();
     }
 
     onAppAction(data) {
@@ -228,14 +227,11 @@ export default class Bridge {
     async saveConfig() {
         ConfigService.saveConfig({
             config: this.cfg,
-            id: this.app.currentProjectId
         }, this.onError.bind(this))
     }
 
-    async fetchConfig(data) {
-        const response = await ConfigService.fetchConfig({
-            id: data.id
-        }, this.onError.bind(this));
+    async fetchConfig() {
+        const response = await ConfigService.fetchConfig(this.onError.bind(this));
 
         this.history.initialized && this.history.unsubscribe();
 
@@ -244,14 +240,12 @@ export default class Bridge {
         this.app.setConfig(this.cfg)
         this.engine.setConfig(this.cfg);
 
-        this.history.setApp(data.id, this.engine.store);
+        this.history.setApp("engine", this.engine.store);
         this.history.subscribe();
     }
 
-    async fetchProject(data) {
-        const response = await ConfigService.fetchProject({
-            id: data.id
-        }, this.onError.bind(this));
+    async fetchProject() {
+        const response = await ConfigService.fetchProject(this.onError.bind(this));
 
         if (response.success) {
             this.app.setImages(response.images)

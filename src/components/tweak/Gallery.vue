@@ -142,7 +142,6 @@
     computed: {
       ...mapState('gallery', ['files']),
       ...mapState('settings', ['showGallery']),
-      ...mapState('projects', ['current']),
 
       effectiveFiles () {
         const imageService = ImagesService.getInstance();
@@ -194,7 +193,7 @@
       },
 
       onClearClick() {
-        this.clearAll({ id: this.current.id});
+        this.clearAll();
       },
 
       onFilesChange (event) {
@@ -218,7 +217,6 @@
             if (index === files.length - 1) {
               this.upload({
                 files: loaded,
-                id: this.current.id
               })
             }
           })

@@ -24,7 +24,7 @@ const router = new Router({
       }
     },
     {
-      path: '/projects/:id',
+      path: '/project',
       component: () => import('@/views/Tweak.vue'),
     },
   ],

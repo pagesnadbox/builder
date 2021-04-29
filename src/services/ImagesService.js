@@ -15,21 +15,13 @@ class ImagesService {
     get defaultImages() {
         return defaultImages;
     }
-
-    set projectId(value) {
-        this._projectId = value
-    }
-
-    get projectId() {
-        return this._projectId;
-    }
-
+ 
     transformURL({ assetName }) {
-        if (this.defaultImages.indexOf(assetName) > -1 || !this.projectId) {
+        if (this.defaultImages.indexOf(assetName) > -1) {
             return assetName;
         }
 
-        return `${domain}/${this.projectId}/images/${assetName}`;
+        return `${domain}/images/${assetName}`;
     }
 }
 

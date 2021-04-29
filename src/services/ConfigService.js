@@ -7,54 +7,51 @@ export default class ConfigService extends Service {
         }
     }
 
-    static saveConfig({ config = {}, id = "" } = {}, onError) {
-        return this.fetch(`${this.API_URL}/projects/config/save/`, {
+    static saveConfig({ config = {} } = {}, onError) {
+        return this.fetch(`${this.API_URL}/project/config/save/`, {
             method: "POST",
             body: JSON.stringify({
                 config,
-                id
             })
         }, onError);
     }
 
-    static fetchConfig({ id = "" } = {}, onError) {
-        return this.fetch(`${this.API_URL}/projects/config/fetch/${id}`, onError);
+    static fetchConfig(onError) {
+        return this.fetch(`${this.API_URL}/project/config/fetch/`, onError);
     }
 
     static fetchProjects(onError) {
-        return this.fetch(`${this.API_URL}/projects/list`, onError);
+        return this.fetch(`${this.API_URL}/project/list`, onError);
     }
 
-    static fetchProject({ id }, onError) {
-        return this.fetch(`${this.API_URL}/projects/${id}`, onError);
+    static fetchProject(onError) {
+        return this.fetch(`${this.API_URL}/project`, onError);
     }
 
     static createProject(data, onError) {
-        return this.fetch(`${this.API_URL}/projects/create`, {
+        return this.fetch(`${this.API_URL}/project/create`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
     }
 
     static editProject(data, onError) {
-        return this.fetch(`${this.API_URL}/projects/edit`, {
+        return this.fetch(`${this.API_URL}/project/edit`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
     }
 
     static editProject(data, onError) {
-
-        return this.fetch(`${this.API_URL}/projects/edit`, {
+        return this.fetch(`${this.API_URL}/project/edit`, {
             method: "POST",
             body: JSON.stringify(data)
         }, onError);
     }
 
-    static removeProject(data, onError) {
-        return this.fetch(`${this.API_URL}/projects/remove`, {
+    static removeProject(onError) {
+        return this.fetch(`${this.API_URL}/project/remove`, {
             method: "POST",
-            body: JSON.stringify(data)
         }, onError);
     }
 }

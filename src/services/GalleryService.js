@@ -9,14 +9,14 @@ export default class GalleryService extends Service {
             formData.append("files", files[key].file);
         });
 
-        return GalleryService.fetch(`${GalleryService.API_URL}/projects/${id}/images`, {
+        return GalleryService.fetch(`${GalleryService.API_URL}/project/images`, {
             method: "POST",
             body: formData
         });
     }
 
     static clearAll({ id }) {
-        return GalleryService.fetch(`${GalleryService.API_URL}/projects/${id}/images/clear`, {
+        return GalleryService.fetch(`${GalleryService.API_URL}/project/images/clear`, {
             method: "DELETE",
         });
     }
