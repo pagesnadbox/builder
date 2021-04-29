@@ -1,5 +1,4 @@
 import { loadCss, debounce } from "./utils/helpers";
-import appConfig from "./appConfig";
 
 import API from "./API";
 import History from "./History";
@@ -7,8 +6,6 @@ import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
 
 const Engine = window.API.Engine;
-
-let config = appConfig;
 
 export default class Bridge {
 
@@ -33,16 +30,9 @@ export default class Bridge {
     }
 
     async config() {
-        try {
-            const data = await fetch('./config.json')
-            config = await data.json()
-        } catch (e) {
-            console.error(e)
-        }
-
-        window.config = config
-
-        return config
+        const response = await ConfigService.fetchConfig(this.onError.bind(this));
+        window.config = response.config;
+        return response.config;
     }
 
     createApp() {
@@ -231,11 +221,9 @@ export default class Bridge {
     }
 
     async fetchConfig() {
-        const response = await ConfigService.fetchConfig(this.onError.bind(this));
+        this.cfg = await this.config();
 
         this.history.initialized && this.history.unsubscribe();
-
-        this.cfg = response.config;
 
         this.app.setConfig(this.cfg)
         this.engine.setConfig(this.cfg);

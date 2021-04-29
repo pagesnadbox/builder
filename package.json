@@ -1,6 +1,6 @@
 {
   "name": "pagesandbox-builder",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "private": false,
   "scripts": {
     "serve": "cp -f ./buildfiles/dev/index.html ./public/; vue-cli-service serve --port 8081 --mode development",
