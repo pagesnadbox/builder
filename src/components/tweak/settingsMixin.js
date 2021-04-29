@@ -21,7 +21,7 @@ export default {
     },
 
     methods: {
-    ...mapActions("settings", ["setBottom"]),
+        ...mapActions("settings", ["setBottom"]),
     }
 
 }

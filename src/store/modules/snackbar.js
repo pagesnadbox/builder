@@ -14,16 +14,23 @@ export default (options) => {
     const state = stateFn()
     return {
         namespaced: true,
+
         state,
+
         mutations: {
             SET_TOP: set('top'),
-            SET_BOTTOM: set('bottom'),
-            SET_LEFT: set('left'),
-            SET_RIGHT: set('right'),
-            SET_COLOR: set('color'),
-            SET_SNACKBAR: set('snackbar'),
-            SET_MESSAGE: set('message')
 
+            SET_BOTTOM: set('bottom'),
+
+            SET_LEFT: set('left'),
+
+            SET_RIGHT: set('right'),
+
+            SET_COLOR: set('color'),
+
+            SET_SNACKBAR: set('snackbar'),
+
+            SET_MESSAGE: set('message')
         },
         actions: {
             setPositon({ commit }, payload) {
@@ -32,21 +39,26 @@ export default (options) => {
                 commit('SET_LEFT', payload.left || false)
                 commit('SET_RIGHT', payload.right || false)
             },
+
             setSnackbar({ commit }, payload) {
                 commit('SET_SNACKBAR', payload)
             },
+
             setColor({ commit }, payload) {
                 commit('SET_COLOR', payload)
             },
+
             setMessage({ commit }, payload) {
                 commit('SET_MESSAGE', payload)
             },
+
             setState({ commit }, { snackbar = true, message = 'Server Error', color = 'red' }) {
                 commit('SET_SNACKBAR', snackbar)
                 commit('SET_MESSAGE', message)
                 commit('SET_COLOR', color)
             }
         },
+        
         getters: {
             positon: (state) => {
                 return {

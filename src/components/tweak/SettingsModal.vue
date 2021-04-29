@@ -95,6 +95,7 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setCompact"]),
+    
     setStaticData() {
       this.staticData && this.staticData();
 

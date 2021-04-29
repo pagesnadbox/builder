@@ -1,6 +1,6 @@
 import { loadCss, debounce } from "./utils/helpers";
 
-import API from "./API";
+import Builder from "./API";
 import History from "./History";
 import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
@@ -36,11 +36,11 @@ export default class Bridge {
     }
 
     createApp() {
-        this.app = new API();
-        this.app.init()
-        window.com.app = this.app;
+        this.builder = new Builder();
+        this.builder.init()
+        window.com.app = this.builder;
 
-        this.app.setConfig(this.cfg)
+        this.builder.setConfig(this.cfg)
         this.attachAppEvent();
     }
 
@@ -57,15 +57,15 @@ export default class Bridge {
     async createEngine() {
         this.createHistory();
 
-        const engine = this.engine = new Engine();
+        this.engine = new Engine();
 
-        await engine.init({
+        await this.engine.init({
             imageService: this.imageService,
             config: this.cfg,
             preventMount: true
         });
 
-        engine.app.$mount();
+        this.engine.app.$mount();
 
         this.attachEngineEvent();
     }
@@ -85,9 +85,9 @@ export default class Bridge {
     }
 
     attachAppEvent() {
-        Object.keys(API.events).forEach(key => {
-            const event = API.events[key]
-            this.app.on(event, (data) => this.onAppEvent(event, data));
+        Object.keys(Builder.events).forEach(key => {
+            const event = Builder.events[key]
+            this.builder.on(event, (data) => this.onAppEvent(event, data));
         });
     }
 
@@ -96,8 +96,8 @@ export default class Bridge {
 
         const mediator = {
             [History.events.REPLACE_STATE]: (data) => this.onReplaceState(data),
-            [History.events.CAN_REDO]: (data) => this.app.undoRedoManager.setCanRedo(data),
-            [History.events.CAN_UNDO]: (data) => this.app.undoRedoManager.setCanUndo(data),
+            [History.events.CAN_REDO]: (data) => this.builder.undoRedoManager.setCanRedo(data),
+            [History.events.CAN_UNDO]: (data) => this.builder.undoRedoManager.setCanUndo(data),
         }
 
         if (mediator[event]) {
@@ -109,12 +109,12 @@ export default class Bridge {
         console.log(`App Event: ${event}`, data);
 
         const mediator = {
-            [API.events.PROJECT_SELECTED]: () => this.onProjectSelected(),
-            [API.events.ACTION]: (data) => this.onAppAction(data),
-            [API.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
-            [API.events.HISTORY_RESET]: () => this.history.reset(),
-            [API.events.HISTORY_UNDO]: () => this.history.undo(),
-            [API.events.HISTORY_REDO]: () => this.history.redo(),
+            [Builder.events.PROJECT_SELECTED]: () => this.onProjectSelected(),
+            [Builder.events.ACTION]: (data) => this.onAppAction(data),
+            [Builder.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
+            [Builder.events.HISTORY_RESET]: () => this.history.reset(),
+            [Builder.events.HISTORY_UNDO]: () => this.history.undo(),
+            [Builder.events.HISTORY_REDO]: () => this.history.redo(),
         }
 
         if (mediator[event]) {
@@ -127,7 +127,7 @@ export default class Bridge {
 
         const mediator = {
             // settings change performed from engine, inform builder
-            [Engine.events.SETTINGS_ACTION]: (data) => this.app.setSetting(data),
+            [Engine.events.SETTINGS_ACTION]: (data) => this.builder.setSetting(data),
             // reload the css when theme property is changed
             [Engine.events.THEME_COLOR_CHANGE]: () => requestAnimationFrame(() => this.reloadEngineCss()),
         }
@@ -139,7 +139,7 @@ export default class Bridge {
 
     onReplaceState(data) {
         // sync configs of interested parties
-        this.app.replaceConfig(data);
+        this.builder.replaceConfig(data);
         this.engine.replaceConfig(data);
         this.replaceConfig(data)
 
@@ -149,7 +149,7 @@ export default class Bridge {
 
     onEngineSlotRendered(data) {
         this.styles = this.reloadEngineCss();
-        this.app.setEngine(data.slot, this.engine.app.$el);
+        this.builder.setEngine(data.slot, this.engine.app.$el);
     }
 
     onProjectSelected() {
@@ -167,7 +167,7 @@ export default class Bridge {
 
     loadEngineCss() {
         const url = process.env.VUE_APP_TEMPLATE_RESOURCES_URL;
-        const engineShadow = this.app.getEngineSlot();
+        const engineShadow = this.builder.getEngineSlot();
 
         const styles = [
             `${url}/css/app.css`,
@@ -197,7 +197,7 @@ export default class Bridge {
     }
 
     onError(error) {
-        this.app.setSnackbar(error.message)
+        this.builder.setSnackbar(error.message)
     }
 
     replaceConfig(data) {
@@ -225,7 +225,7 @@ export default class Bridge {
 
         this.history.initialized && this.history.unsubscribe();
 
-        this.app.setConfig(this.cfg)
+        this.builder.setConfig(this.cfg)
         this.engine.setConfig(this.cfg);
 
         this.history.setApp("engine", this.engine.store);
@@ -236,7 +236,7 @@ export default class Bridge {
         const response = await ConfigService.fetchProject(this.onError.bind(this));
 
         if (response.success) {
-            this.app.setImages(response.images)
+            this.builder.setImages(response.images)
         }
     }
 

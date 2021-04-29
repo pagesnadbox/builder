@@ -28,32 +28,41 @@ export const getDefaultModule = (defaultItem) => {
     return {
         mutations: {
             SET_PROP: setProp,
+
             SET_ITEMS: (state, payload) => {
                 Vue.set(state.data.list, 'items', payload)
             },
+
             ADD_ITEM: (state, payload) => {
                 state.data.list.items.push(payload)
             },
+
             REMOVE_ITEM: (state, payload) => {
                 state.data.list.items.splice(payload, 1)
             },
+
         },
+
         actions: {
             setProp ({ commit }, payload) {
                 commit('SET_PROP', payload)
             },
+
             setItems ({ commit }, payload) {
                 commit('SET_ITEMS', payload)
             },
+
             addItem ({ commit, state }) {
                 const item = defaultItem()
 
                 commit('ADD_ITEM', item)
             },
+
             removeItem ({ commit }, payload) {
                 commit('REMOVE_ITEM', payload)
             },
         },
+        
         getters: {
             items: (state) => state.data.list.items,
         },

@@ -9,10 +9,13 @@ export default (options) => {
     const state = stateFn()
     return {
         namespaced: true,
+
         state,
+
         mutations: {
             SET_FILES: set('files'),
         },
+
         actions: {
             setFiles({ commit }, payload) {
                 commit('SET_FILES', payload)
@@ -49,6 +52,7 @@ export default (options) => {
             },
 
         },
+        
         getters: {
 
         },

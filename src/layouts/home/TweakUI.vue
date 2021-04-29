@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import { EventBus, events } from "../../utils/eventBus";
-
 export default {
   name: "TweakUI",
 

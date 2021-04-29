@@ -310,6 +310,7 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setComponent", "setAllowEdit"]),
+    
     ...mapActions("engine", ["setEngineDark", "setEngineColor"]),
 
     getData(prop) {

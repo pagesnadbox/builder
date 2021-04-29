@@ -61,6 +61,7 @@
     },
 
     props: {
+      
       editable: {
         type: Boolean,
         default: false,
@@ -80,6 +81,7 @@
         type: String,
         default: '',
       }
+      
     },
 
     data () {
@@ -104,6 +106,7 @@
       onItemClick (i) {
         this.$emit('item-click', i)
       },
+
       onValueChange (key, index, value) {
         this.$emit('property-change', {
           apendix: `-items-${index}`,
@@ -112,11 +115,13 @@
           value,
         })
       },
+
       onRemoveClick (index) {
         this.$emit('remove-click', {
           index,
         })
       },
+
       onAddClick () {
         this.$emit('add-click')
       },

@@ -59,9 +59,11 @@
           this.page * this.visibleIcons,
         )
       },
+
       icons () {
         return icons.filter((icon) => icon.indexOf(this.searchTerm) > -1)
       },
+
       pages () {
         return Math.round(this.icons.length / this.visibleIcons)
       },
@@ -73,9 +75,11 @@
       onIconClick (value) {
         this.$emit('icon-click', value)
       },
+
       onSearchTermChange () {
         this.page = 1
       },
+
     },
   }
 </script>

@@ -185,6 +185,7 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setShowGallery"]),
+    
     onGalleryClick() {
       EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));
 

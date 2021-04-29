@@ -176,6 +176,7 @@
 
     methods: {
       ...mapActions("settings", ["setShowGallery"]),
+      
       ...mapActions("gallery", ["upload", "clearAll"]),
 
       onImageClick (img) {
