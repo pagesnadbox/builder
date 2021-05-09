@@ -1,8 +1,11 @@
 import Vue from 'vue'
-import { set } from '@/utils/vuex'
+import { set, getDefaultModule } from '@/utils/vuex-builder'
+
+const defaultModule = getDefaultModule()
 
 const stateFn = () => ({
-    config: {},
+    data: {},
+    counter: 0,
     vuetify: {
         theme: {
             dark: true,
@@ -19,8 +22,28 @@ export default (options) => {
         state,
 
         mutations: {
+            ADD_SLOT: (state, payload) => {
+                let data = state.data.app;
+                let paths = payload.id.split("-").slice(1);
+
+                paths.forEach(path => {
+                    data = data.slots[path];
+                });
+
+                if (!data.slots) {
+                    Vue.set(data, "slots", {})
+                }
+
+                data = data.slots;
+
+                Vue.set(data, payload.key, payload.value)
+
+                state.counter++
+            },
+
             SET_CONFIG: (state, payload) => {
-                Vue.set(state.config, payload.key, { data: payload.value })
+                // Vue.set(state.config, payload.key, { data: payload.value })
+                state.data = payload.value
             },
 
             SET_THEME_DARK: set("dark", state.vuetify.theme),
@@ -31,6 +54,7 @@ export default (options) => {
         },
 
         actions: {
+            addSlot: defaultModule.actions.addSlot,
             setConfig({ commit }, payload) {
                 commit('SET_CONFIG', payload)
             },
@@ -43,7 +67,7 @@ export default (options) => {
                 commit('SET_THEME_COLOR', payload)
             },
         },
-        
+
         getters: {
 
         },

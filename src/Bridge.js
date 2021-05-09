@@ -5,6 +5,10 @@ import History from "./History";
 import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
 
+import BTN from "./config/base/components/Btn"
+
+window.BTN = BTN
+
 const Engine = window.API.Engine;
 
 export default class Bridge {
@@ -46,7 +50,7 @@ export default class Bridge {
 
     createHistory() {
         this.history = new History({
-            interests: ['app', 'hero', 'themeFeatures', 'features', 'affiliates', 'social']
+            interests: ['config']
         });
 
         this.attachHistoryEvents();
@@ -215,7 +219,7 @@ export default class Bridge {
     }
 
     async saveConfig() {
-        ConfigService.saveConfig({
+        await ConfigService.saveConfig({
             config: this.cfg,
         }, this.onError.bind(this))
     }

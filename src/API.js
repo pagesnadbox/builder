@@ -67,18 +67,18 @@ export default class API extends EventEmitter {
     store.dispatch(`gallery/setFiles`, payload);
   }
 
-  setConfig(config) {
-    [
-      "app",
-      "hero",
-      "themeFeatures",
-      "features",
-      "affiliates",
-      "social",
-      "footer"
-    ].forEach((key) => {
-      store.dispatch(`engine/setConfig`, { key, value: config[key].data || config[key] });
-    })
+  setConfig(config = {}) {
+    // [
+    //   "app",
+    //   "hero",
+    //   "themeFeatures",
+    //   "features",
+    //   "affiliates",
+    //   "social",
+    //   "footer"
+    // ].forEach((key) => {
+    store.dispatch(`engine/setConfig`, { value: config.data || config });
+    // })
   }
 
   replaceConfig(state) {

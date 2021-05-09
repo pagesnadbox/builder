@@ -1,4 +1,4 @@
-import { set } from '@/utils/vuex'
+import { set } from '@/utils/vuex-builder'
 import GalleryService from '../../services/GalleryService'
 
 const stateFn = () => ({

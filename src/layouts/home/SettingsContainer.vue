@@ -48,6 +48,13 @@
         <v-divider class="my-6" />
       </div>
 
+      <tweak-add-component
+        :items="Object.keys(componentConfigs)"
+        @save-click="onSaveClick"
+      ></tweak-add-component>
+
+      <br />
+
       <v-menu v-if="history.length" offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -108,34 +115,6 @@
 
       <br />
 
-      <v-menu v-if="aggregations" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ Object.keys(aggregations).length }} Aggregated Components
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in Object.values(aggregations)"
-            :key="index"
-            @click="setComponent({ ...item, name: item.componentName })"
-          >
-            <v-list-item-title>{{ item.componentName }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
       <v-divider class="my-6" />
     </div>
 
@@ -144,18 +123,7 @@
       :class="{ 'overflow-y-auto': scrollable }"
       class="fill-height px-2"
     >
-      <h3 align="center" :title="config.displayName" space="0" />
-
-      <tweak-items
-        v-if="items.length"
-        :listId="list.id"
-        :region="region || undefined"
-        :items="items"
-        @item-click="onItemClick"
-        @property-change="onValueChange"
-        @add-click="onAddClick"
-        @remove-click="onRemoveClick"
-      />
+      <h3 class="text-subtitle-1 text-center">{{ config.displayName }}</h3>
 
       <v-container class="pa-0">
         <v-row no-gutters>
@@ -173,7 +141,7 @@
 </template>
 
 <script>
-import config from "../../config";
+import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
 import { EventBus, events } from "../../utils/eventBus";
 
@@ -195,6 +163,7 @@ export default {
 
   data() {
     return {
+      componentConfigs,
       selectedComponentsBefore: [],
       colors: [this.$vuetify.theme.currentTheme.primary, "#9368e9", "#F4511E"]
     };
@@ -218,8 +187,6 @@ export default {
       return this.$store.state.settings.id || "app";
     },
 
-    ...mapState("engine", ["vuetify"]),
-
     allowEditModel: {
       get() {
         return this.allowEdit;
@@ -229,40 +196,15 @@ export default {
       }
     },
 
-    isList() {
-      return this.config.type === "list";
-    },
-
-    list() {
-      return this.getData("list");
-    },
-
-    aggregations() {
-      const data = this.getData();
-      let aggregations = data.aggregations;
-
-      if (Array.isArray(aggregations)) {
-        aggregations = aggregations.map(a => data[a]);
-      }
-
-      return aggregations;
-    },
-
-    items() {
-      return this.list?.items || [];
-    },
-
-    region() {
-      // third level nesting (index -> for array like data)
-      return this.id.split("-")[0] || "app";
-    },
-
     componentData() {
       return this.getData();
     },
 
     config() {
-      return config[this.componentName] || config.BaseApp;
+      return (
+        this.componentConfigs[this.componentName] ||
+        this.componentConfigs.BaseApp
+      );
     },
 
     props() {
@@ -281,11 +223,10 @@ export default {
 
     engineDark: {
       get() {
-        return this.$store.state.engine.config.app.data.dark;
+        return this.$store.state.engine.data.app.dark;
       },
       set(value) {
         this.dispatch("setProp", {
-          region: "app",
           id: "app",
           key: "dark",
           value
@@ -295,11 +236,10 @@ export default {
 
     currentThemePrimary: {
       get() {
-        return this.$store.state.engine.config.app.data.primary;
+        return this.$store.state.engine.data.app.primary;
       },
       set(value) {
         this.dispatch("setProp", {
-          region: "app",
           id: "app",
           key: "primary",
           value
@@ -310,44 +250,53 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setComponent", "setAllowEdit"]),
-    
-    ...mapActions("engine", ["setEngineDark", "setEngineColor"]),
 
-    getData(prop) {
-      let data = this.$store.state.engine.config;
-      let id = this.id || "app-list";
+    ...mapActions("engine", ["setEngineDark", "setEngineColor", "addSlot"]),
 
-      const paths = id.split("-");
+    onSaveClick(data) {
+      const slots = this.componentData.slots || {};
+      const filtredByType = Object.values(slots)
+        .filter(s => s.componentName === data.component)
+        .sort()
+        .reverse();
 
-      paths.splice(1, 0, "data");
+      let index = 0;
 
-      for (let path of paths) {
-        data = data[path];
-        if (prop === path) break;
-        else if (data === undefined) break;
+      if (filtredByType.length) {
+        index = ++filtredByType[0].index;
       }
+
+      const key = `${data.component}_${index}`;
+
+      const payload = {
+        id: this.id,
+        key,
+        value: {
+          componentName: data.component,
+          id: `${this.id}-${key}`,
+          index
+        }
+      };
+
+      this.addSlot(payload);
+      this.dispatch("addSlot", payload);
+    },
+
+    getData() {
+      let data = this.$store.state.engine.data.app;
+      let id = this.id || "app";
+
+      const paths = id.split("-").slice(1);
+
+      paths.forEach(path => {
+        data = data.slots[path];
+      });
 
       return data || {};
     },
 
-    onItemClick(index) {
-      let id = `${this.items[index].id}-${index}`;
-      const name = this.items[index].componentName;
-
-      this.setComponent({ id, name });
-    },
-
-    onAddClick() {
-      this.dispatch("addItem");
-    },
-
-    onRemoveClick(index) {
-      this.dispatch("removeItem", index);
-    },
-
     onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
-
       this.dispatch("setProp", {
         id: `${id || this.id}${apendix}`,
         key,
@@ -355,9 +304,8 @@ export default {
       });
     },
 
-    dispatch(actionName, { region = this.region, ...payload } = {}) {
-      // this.$store.dispatch(`${this.region}/${actionName}`, payload);
-      this.$action(`${region}/${actionName}`, payload);
+    dispatch(actionName, { ...payload } = {}) {
+      this.$action(`config/${actionName}`, payload);
     },
 
     onAppSettinsClick() {

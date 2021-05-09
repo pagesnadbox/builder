@@ -1,4 +1,4 @@
-import { set } from '@/utils/vuex'
+import { set } from '@/utils/vuex-builder'
 
 import ConfigService from '../../services/ConfigService'
 
