@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import { set, getDefaultModule } from '@/utils/vuex-builder'
+import { set } from '@/utils/vuex-builder'
 
-const defaultModule = getDefaultModule()
 
 const stateFn = () => ({
     data: {},
@@ -24,7 +23,7 @@ export default (options) => {
         mutations: {
             ADD_SLOT: (state, payload) => {
                 let data = state.data.app;
-                let paths = payload.id.split("-").slice(1);
+                let paths = payload.id.split("-").slice(1); // remove the first id as we are already working with the app node
 
                 paths.forEach(path => {
                     data = data.slots[path];
@@ -41,6 +40,23 @@ export default (options) => {
                 state.counter++
             },
 
+            REMOVE_SLOT: (state, payload) => {
+                let data = state.data.app;
+                let paths = payload.id.split("-").slice(1);
+                
+                const lastNodeKey = paths.pop(); // remove the last id and use the parent of the target node
+
+                paths.forEach(path => {
+                    data = data.slots[path];
+                });
+            
+                data = data.slots;
+            
+                delete data[lastNodeKey]
+                state.counter++
+            },
+
+
             SET_CONFIG: (state, payload) => {
                 // Vue.set(state.config, payload.key, { data: payload.value })
                 state.data = payload.value
@@ -54,7 +70,14 @@ export default (options) => {
         },
 
         actions: {
-            addSlot: defaultModule.actions.addSlot,
+            addSlot({ commit }, payload) {
+                commit('ADD_SLOT', payload)
+            },
+
+            removeSlot({ commit }, payload) {
+                commit('REMOVE_SLOT', payload)
+            },
+
             setConfig({ commit }, payload) {
                 commit('SET_CONFIG', payload)
             },

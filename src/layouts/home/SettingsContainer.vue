@@ -126,7 +126,7 @@
       <h3 class="text-subtitle-1 text-center">{{ config.displayName }}</h3>
 
       <v-container class="pa-0">
-        <v-row no-gutters>
+        <v-row>
           <tweak-prop
             v-for="(prop, i) in primitiveProps"
             :key="i"

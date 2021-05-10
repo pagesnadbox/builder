@@ -47,11 +47,13 @@
     </v-text-field>
   </v-col>
 
-  <v-col cols="12" v-else-if="type === 'enum'">
+  <v-col :cols="tweakSize" v-else-if="type === 'enum'">
     <v-select
+      offset-y
       :label="displayName"
       outlined
       :items="enums"
+      clearable
       :value="effectiveValue"
       @change="onValueChange"
     />
@@ -100,6 +102,11 @@ export default {
     type: {
       type: String,
       default: ""
+    },
+
+    tweakSize: {
+      type: String,
+      default: "12"
     },
 
     enums: {
@@ -185,7 +192,7 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setShowGallery"]),
-    
+
     onGalleryClick() {
       EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));
 

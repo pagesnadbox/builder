@@ -20,6 +20,44 @@ const iconColor = {
     type: 'color',
 }
 
+const fluid = {
+    displayName: 'Fluid (Full width)',
+    propName: 'fluid',
+    type: 'boolean',
+}
+
+const fillHeight = {
+    displayName: 'Fill Height',
+    propName: 'fillHeight',
+    type: 'boolean',
+}
+
+const justify = {
+    displayName: 'Justify',
+    propName: 'justify',
+    type: 'enum',
+    enums: [
+        "start",
+        "center",
+        "end",
+        "space-between",
+        "space-around",
+    ],
+}
+
+const rowAlign = {
+    displayName: 'Align',
+    propName: 'align',
+    type: 'enum',
+    enums: [
+        "start",
+        "center",
+        "end",
+        "baseline",
+        "stretch",
+    ],
+}
+
 const size = {
     displayName: 'Size',
     propName: 'size',
@@ -243,17 +281,27 @@ const publicPath = {
 }
 
 const cols = {
-    displayName: 'Items per row (Mobile)',
+    displayName: 'Columns per row',
     propName: 'cols',
     type: 'enum',
-    enums: ['1', '2', '3', '4', '5', '6'],
+    enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+}
+
+const getCols = (breakpoint) => {
+    return {
+        displayName: `Cols (${breakpoint})`,
+        propName: breakpoint,
+        type: 'enum',
+        tweakSize: '12',
+        enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    }
 }
 
 const md = {
     displayName: 'Items per row (Desktop)',
     propName: 'md',
     type: 'enum',
-    enums: ['1', '2', '3', '4', '5', '6'],
+    enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 }
 /// ///
 
@@ -327,14 +375,30 @@ export default {
 
     BaseContainer: {
         displayName: 'Container',
+        props: [
+            fillHeight,
+            fluid
+        ]
     },
 
     BaseRow: {
         displayName: 'Row',
+        props: [
+            fillHeight,
+            justify,
+            rowAlign
+        ]
     },
 
     BaseCol: {
-        displayName: 'Col',
+        displayName: 'Column',
+        props: [
+            getCols("cols"),
+            getCols("sm"),
+            getCols("md"),
+            getCols("lg"),
+            getCols("xl"),
+        ]
     },
 
     BaseAppBar: {

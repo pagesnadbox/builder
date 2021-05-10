@@ -23,39 +23,17 @@ export const setProp = (state, payload) => {
     Vue.set(data, payload.key, payload.value)
 }
 
-export const addSlot = (state, payload) => {
-    let data = state.data.app;
-    let paths = payload.id.split("-").slice(1);
-
-    paths.forEach(path => {
-        data = data.slots[path];
-    });
-
-    if (!data.slots) {
-        Vue.set(data, "slots", {})
-    }
-
-    data = data.slots;
-
-    Vue.set(data, payload.key, payload.value)
-}
-
 export const getDefaultModule = () => {
     return {
         mutations: {
             SET_PROP: setProp,
-            ADD_SLOT: addSlot,
         },
 
         actions: {
             setProp ({ commit }, payload) {
                 commit('SET_PROP', payload)
             },
-            addSlot({ commit }, payload) {
-                commit('ADD_SLOT', payload)
-            },
         },
-        
         getters: {
         },
     }
