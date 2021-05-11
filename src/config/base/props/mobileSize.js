@@ -1,8 +1,7 @@
-import BaseProp from "../BaseProp"
+import EnumProp from "./types/EnumProp"
 
-export default new BaseProp({
+export default new EnumProp({
     displayName: 'Size Mobile',
     propName: 'mobileSize',
-    type: 'enum',
     enums: ['text-h1', 'text-h2', 'text-h3', 'text-h4', 'text-h5', 'text-h6'],
 })

@@ -336,3 +336,36 @@ export const loadCss = (href, targetDom) => {
 
   return element;
 }
+
+export const getNextSlotIndex = ({ slots = {}, componentName }) => {
+  const filtredByType = Object.values(slots)
+    .filter(s => s.componentName === componentName)
+    .sort()
+    .reverse();
+
+  let index = 0;
+
+  if (filtredByType.length) {
+    index = ++filtredByType[0].index;
+  }
+
+  return index
+}
+
+export const createSlot = ({ componentName, parentData, id }) => {
+  const index = getNextSlotIndex({ slots: parentData.slots, componentName })
+
+  const key = `${componentName}_${index}`;
+
+  const payload = {
+    id: id,
+    key,
+    value: {
+      componentName: componentName,
+      id: `${id}-${key}`,
+      index
+    }
+  };
+
+  return payload
+}

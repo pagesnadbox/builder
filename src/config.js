@@ -1,3 +1,6 @@
+import props from "./config/base/props"
+import BaseComponent from "./config/base/BaseComponent";
+
 const divider = {
     displayName: '',
     type: 'divider',
@@ -8,304 +11,55 @@ const label = (label) => ({
     type: 'label',
 })
 
-const color = {
-    displayName: 'Color',
-    propName: 'color',
-    type: 'color',
-}
+const {
+    color,
+    iconColor,
+    fluid,
+    fillHeight,
+    justify,
+    rowAlign,
+    size,
+    mobileSize,
+    sizeDef,
+    icon,
+    iconSize,
+    iconSrc,
+    text,
+    title,
+    space,
+    outlined,
+    horizontal,
+    hiddenImage,
+    subtitle,
+    align,
+    height,
+    mobileHeight,
+    mobileWidth,
+    maxWidth,
+    minWidth,
+    weight,
+    dense,
+    dark,
+    iconDark,
+    hideOnScroll,
+    href,
+    openInNewTab,
+    block,
+    blockOnMobile,
+    depressed,
+    tile,
+    textOnly,
+    items,
+    aggregations,
+    lightSrc,
+    publicPath,
+    cols,
+} = props;
 
-const iconColor = {
-    displayName: 'Icon color',
-    propName: 'iconColor',
-    type: 'color',
-}
+const getCols = (...params) => cols.getCols(...params)
+const md = getCols("md");
 
-const fluid = {
-    displayName: 'Fluid (Full width)',
-    propName: 'fluid',
-    type: 'boolean',
-}
-
-const fillHeight = {
-    displayName: 'Fill Height',
-    propName: 'fillHeight',
-    type: 'boolean',
-}
-
-const justify = {
-    displayName: 'Justify',
-    propName: 'justify',
-    type: 'enum',
-    enums: [
-        "start",
-        "center",
-        "end",
-        "space-between",
-        "space-around",
-    ],
-}
-
-const rowAlign = {
-    displayName: 'Align',
-    propName: 'align',
-    type: 'enum',
-    enums: [
-        "start",
-        "center",
-        "end",
-        "baseline",
-        "stretch",
-    ],
-}
-
-const size = {
-    displayName: 'Size',
-    propName: 'size',
-    type: 'enum',
-    enums: ['text-h1', 'text-h2', 'text-h3', 'text-h4', 'text-h5', 'text-h6'],
-}
-
-const mobileSize = {
-    displayName: 'Size Mobile',
-    propName: 'mobileSize',
-    type: 'enum',
-    enums: ['text-h1', 'text-h2', 'text-h3', 'text-h4', 'text-h5', 'text-h6'],
-}
-
-const sizeDef = {
-    displayName: 'Size',
-    propName: 'size',
-    type: 'enum',
-    enums: ['x-small', 'small', 'normal', 'large', 'x-large'],
-}
-
-const icon = {
-    displayName: 'Icon',
-    propName: 'icon',
-    type: 'icon',
-}
-
-const iconSize = {
-    displayName: 'Icon size',
-    propName: 'size',
-    type: 'string',
-}
-
-const iconSrc = {
-    displayName: 'Icon',
-    propName: 'iconSrc',
-    type: 'icon',
-}
-
-const text = {
-    displayName: 'Text',
-    propName: 'text',
-    type: 'string',
-}
-
-const title = {
-    displayName: 'Title',
-    propName: 'title',
-    type: 'string',
-}
-
-const space = {
-    displayName: 'Space (top and bottom space in px)',
-    propName: 'space',
-    type: 'string',
-}
-
-const outlined = {
-    displayName: 'Outlined',
-    propName: 'outlined',
-    type: 'boolean',
-}
-
-const horizontal = {
-    displayName: 'Horizontal',
-    propName: 'horizontal',
-    type: 'boolean',
-}
-
-const hidden = {
-    displayName: 'Hidden',
-    propName: 'hidden',
-    type: 'switch',
-}
-
-const hiddenImage = {
-    ...hidden,
-    propName: 'hiddenImage',
-}
-
-const subtitle = {
-    displayName: 'Subtitle',
-    propName: 'subtitle',
-    type: 'string',
-}
-
-const align = {
-    displayName: 'Align',
-    propName: 'align',
-    type: 'group',
-    enums: [
-        {
-            icon: 'mdi-format-align-left',
-            value: 'left',
-        },
-        {
-            icon: 'mdi-format-align-center',
-            value: 'center',
-        },
-        {
-            icon: 'mdi-format-align-right',
-            value: 'right',
-        },
-        {
-            icon: 'mdi-format-float-none',
-            value: '',
-        },
-    ],
-}
-
-const height = {
-    displayName: 'Height (px)',
-    propName: 'height',
-    type: 'string',
-}
-
-const mobileHeight = {
-    displayName: 'Mobile Height (px)',
-    propName: 'mobileHeight',
-    type: 'string',
-}
-
-const mobileWidth = {
-    displayName: 'Mobile width',
-    propName: 'mobileMinWidth',
-    type: 'string',
-}
-
-const maxWidth = {
-    displayName: 'Max Width',
-    propName: 'maxWidth',
-    type: 'string',
-}
-
-const minWidth = {
-    displayName: 'Desktop width',
-    propName: 'minWidth',
-    type: 'string',
-}
-
-const weight = {
-    displayName: 'Weight',
-    propName: 'weight',
-    type: 'enum',
-    enums: [
-        "black",
-        "bold",
-        "medium",
-        "regular",
-        "light",
-        "thin",
-    ],
-}
-
-const dense = {
-    displayName: 'Dense',
-    propName: 'dense',
-    type: 'boolean',
-}
-
-const dark = {
-    displayName: 'Dark',
-    propName: 'dark',
-    type: 'boolean'
-}
-
-const iconDark = {
-    ...dark,
-    propName: 'iconDark',
-    options: {
-        indeterminate: true
-    }
-}
-
-const hideOnScroll = {
-    displayName: 'Hide on scroll',
-    propName: 'hideOnScroll',
-    type: 'boolean',
-}
-
-const href = {
-    displayName: 'URL',
-    propName: 'href',
-    type: 'string',
-}
-
-const openInNewTab = {
-    displayName: 'Open in new tab',
-    propName: 'openInNewTab',
-    type: 'boolean',
-}
-
-const textOnly = {
-    displayName: 'Text Only',
-    propName: 'textOnly',
-    type: 'boolean',
-}
-
-const items = {
-    displayName: 'Items',
-    propName: 'items',
-    type: 'array',
-}
-
-const aggregations = {
-    displayName: "Aggregations",
-    type: 'array',
-}
-
-const lightSrc = {
-    displayName: 'URL',
-    propName: 'src',
-    type: 'file',
-}
-
-const publicPath = {
-    displayName: 'Public Path',
-    propName: 'publicPath',
-    type: 'text',
-    defaultValue: './'
-}
-
-const cols = {
-    displayName: 'Columns per row',
-    propName: 'cols',
-    type: 'enum',
-    enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-}
-
-const getCols = (breakpoint) => {
-    return {
-        displayName: `Cols (${breakpoint})`,
-        propName: breakpoint,
-        type: 'enum',
-        tweakSize: '12',
-        enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-    }
-}
-
-const md = {
-    displayName: 'Items per row (Desktop)',
-    propName: 'md',
-    type: 'enum',
-    enums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-}
-/// ///
-
-const baseHeading = {
+const baseHeading = new BaseComponent({
     displayName: 'Heading',
     props: [
         title,
@@ -316,9 +70,9 @@ const baseHeading = {
         mobileSize,
         weight,
     ],
-}
+})
 
-const baseSection = {
+const baseSection = new BaseComponent({
     displayName: 'Section',
     props: [
         dark,
@@ -326,15 +80,16 @@ const baseSection = {
         height,
         color,
     ],
-}
+})
 
-const mixinHeading = {
+
+const mixinHeading = new BaseComponent({
     props: [
         align,
     ],
-}
+})
 
-const baseList = {
+const baseList = new BaseComponent({
     displayName: 'List',
     type: 'list',
     props: [
@@ -343,12 +98,12 @@ const baseList = {
         cols,
         md
     ],
-}
+})
 
-const baseImg = {
+const baseImg = new BaseComponent({
     displayName: 'Image',
     props: [
-        hidden,
+
         mobileHeight,
         height,
         maxWidth,
@@ -356,41 +111,41 @@ const baseImg = {
         // darkSrc
     ],
 
-};
+})
 
-const avatarCardImage = {
+const avatarCardImage = new BaseComponent({
     ...baseImg,
     props: [
         ...baseImg.props.map(p => p.propName === "hidden" ? hiddenImage : p)
     ]
-}
+})
 
 export default {
-    BaseApp: {
+    BaseApp: new BaseComponent({
         displayName: 'Application',
         props: [
             publicPath,
         ],
-    },
+    }),
 
-    BaseContainer: {
+    BaseContainer: new BaseComponent({
         displayName: 'Container',
         props: [
             fillHeight,
             fluid
         ]
-    },
+    }),
 
-    BaseRow: {
+    BaseRow: new BaseComponent({
         displayName: 'Row',
         props: [
             fillHeight,
             justify,
             rowAlign
         ]
-    },
+    }),
 
-    BaseCol: {
+    BaseCol: new BaseComponent({
         displayName: 'Column',
         props: [
             getCols("cols"),
@@ -399,9 +154,9 @@ export default {
             getCols("lg"),
             getCols("xl"),
         ]
-    },
+    }),
 
-    BaseAppBar: {
+    BaseAppBar: new BaseComponent({
         displayName: 'Application Top Bar',
         props: [
             dark,
@@ -409,13 +164,13 @@ export default {
             height,
             color,
         ],
-    },
+    }),
 
     BaseVuetifyImg: baseImg,
 
     BaseImg: baseImg,
 
-    BaseActions: {
+    BaseActions: new BaseComponent({
         displayName: 'Call-To-Action',
         props: [
             horizontal,
@@ -440,64 +195,39 @@ export default {
                 type: 'boolean',
             },
         ]
-    },
+    }),
 
-    BaseBtn: {
+    BaseBtn: new BaseComponent({
         displayName: 'Button',
         props: [
-            hidden,
+    
             text,
             sizeDef,
             iconSrc,
             dark,
             textOnly,
             openInNewTab,
-            {
-                displayName: 'Full Width',
-                propName: 'block',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Full Width on Mobile',
-                propName: 'blockOnMobile',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Remove Shadow',
-                propName: 'depressed',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Tile',
-                propName: 'tile',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Outlined',
-                propName: 'outlined',
-                type: 'boolean',
-            },
+            block,
+            blockOnMobile,
+            depressed,
+            tile,
+            outlined,
             color,
             href,
-            {
-                displayName: 'Min Width',
-                propName: 'minWidth',
-                type: 'string',
-            },
-
+            minWidth,
         ],
-    },
+    }),
 
-    BaseLink: {
+    BaseLink: new BaseComponent({
         displayName: 'Link',
         props: [
-            hidden,
+    
             openInNewTab,
             href,
         ],
-    },
+    }),
 
-    BaseAvatar: {
+    BaseAvatar: new BaseComponent({
         displayName: 'Avatar',
         props: [
             icon,
@@ -505,13 +235,13 @@ export default {
             outlined,
             size,
         ],
-    },
+    }),
 
-    BaseAvatarCard: {
+    BaseAvatarCard: new BaseComponent({
         displayName: 'Avatar Card',
         props: [
             ...mixinHeading.props,
-            hidden,
+    
             outlined,
             horizontal,
             title,
@@ -527,23 +257,23 @@ export default {
             color,
             // space,
         ],
-    },
+    }),
 
     BaseHeading: baseHeading,
 
-    BaseTitle: {
+    BaseTitle: new BaseComponent({
         ...baseHeading,
         displayName: 'Title',
-    },
+    }),
 
-    BaseText: {
+    BaseText: new BaseComponent({
         displayName: "Text",
         props: [
             text
         ]
-    },
+    }),
 
-    BaseSubtitle: {
+    BaseSubtitle: new BaseComponent({
         ...baseHeading,
         displayName: 'Sub Title',
         props: [
@@ -552,9 +282,9 @@ export default {
             text,
             // space,
         ],
-    },
+    }),
 
-    BaseBody: {
+    BaseBody: new BaseComponent({
         displayName: 'Body',
         props: [
             ...mixinHeading.props,
@@ -567,18 +297,18 @@ export default {
             maxWidth,
             // space,
         ],
-    },
+    }),
 
-    BaseDivider: {
+    BaseDivider: new BaseComponent({
         displayName: 'Divider',
         props: [
             color,
             dense,
             // space,
         ],
-    },
+    }),
 
-    BaseIcon: {
+    BaseIcon: new BaseComponent({
         displayName: 'Icon',
         props: [
             openInNewTab,
@@ -587,24 +317,24 @@ export default {
             color,
             size,
         ],
-    },
+    }),
 
-    BaseInfoCard: {
+    BaseInfoCard: new BaseComponent({
         displayName: 'Info Card',
         props: [
             ...mixinHeading.props,
-            hidden,
+    
             icon,
             subtitle,
             title,
             text,
             color,
         ],
-    },
+    }),
 
     BaseSection: baseSection,
 
-    BaseSectionHeading: {
+    BaseSectionHeading: new BaseComponent({
         displayName: 'Section Heading',
         props: [
             align,
@@ -621,9 +351,9 @@ export default {
             iconSize,
             { ...iconColor, displayName: "Icon Color" },
         ],
-    },
+    }),
 
-    BaseHero: {
+    BaseHero: new BaseComponent({
         displayName: 'Hero',
         props: [
             dark,
@@ -645,9 +375,9 @@ export default {
                 displayName: 'Solid Color'
             },
         ],
-    },
+    }),
 
-    BaseHeroContainer: {
+    BaseHeroContainer: new BaseComponent({
         displayName: 'Hero Container',
         props: [
             ...mixinHeading.props,
@@ -655,18 +385,18 @@ export default {
             maxWidth,
             // aggregations
         ],
-    },
+    }),
 
     BaseList: baseList,
 
-    BaseSlideList: {
+    BaseSlideList: new BaseComponent({
         displayName: 'Slide List',
         props: [
             items
         ]
-    },
+    }),
 
-    BaseInput: {
+    BaseInput: new BaseComponent({
         displayName: 'Input',
         props: [
             dark,
@@ -728,9 +458,9 @@ export default {
                 type: 'color'
             },
         ]
-    },
+    }),
 
-    BaseEmailForm: {
+    BaseEmailForm: new BaseComponent({
         displayName: 'Email Form',
         props: [
             {
@@ -749,5 +479,5 @@ export default {
                 type: 'string'
             },
         ]
-    },
+    })
 }

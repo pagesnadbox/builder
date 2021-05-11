@@ -5,10 +5,6 @@ import History from "./History";
 import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
 
-import BTN from "./config/base/components/Btn"
-
-window.BTN = BTN
-
 const Engine = window.API.Engine;
 
 export default class Bridge {

@@ -54,6 +54,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { getNextSlotIndex } from "../../utils/helpers";
 export default {
   data() {
     return {
@@ -74,14 +75,35 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setComponent"]),
-    ...mapActions("engine", ["removeSlot"]),
+    ...mapActions("engine", ["removeSlot", "addSlot"]),
 
     onDrop(event, item) {
-      console.error("onDrop", event, item);
+      const componentName = this.draggedNode.componentName;
+      const index = getNextSlotIndex({
+        slots: item.slots,
+        componentName
+      });
+
+      this.removeSlot(this.draggedNode);
+      this.$action(`config/removeSlot`, this.draggedNode);
+
+      this.draggedNode.key = `${componentName}_${index}`;
+      this.draggedNode.id = `${item.id}-${this.draggedNode.key}`;
+
+      const payload = {
+        id: item.id,
+        key: this.draggedNode.key,
+        value: this.draggedNode
+      };
+
+      this.addSlot(payload);
+      this.$action(`config/addSlot`, payload);
+
       event.preventDefault();
     },
 
     onDrag(event, item) {
+      this.draggedNode = item;
       console.error("onDrag", event, item);
     },
 

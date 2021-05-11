@@ -144,6 +144,7 @@
 import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
 import { EventBus, events } from "../../utils/eventBus";
+import { createSlot } from "../../utils/helpers"
 
 export default {
   name: "HomeSettings",
@@ -254,29 +255,11 @@ export default {
     ...mapActions("engine", ["setEngineDark", "setEngineColor", "addSlot"]),
 
     onSaveClick(data) {
-      const slots = this.componentData.slots || {};
-      const filtredByType = Object.values(slots)
-        .filter(s => s.componentName === data.component)
-        .sort()
-        .reverse();
-
-      let index = 0;
-
-      if (filtredByType.length) {
-        index = ++filtredByType[0].index;
-      }
-
-      const key = `${data.component}_${index}`;
-
-      const payload = {
-        id: this.id,
-        key,
-        value: {
-          componentName: data.component,
-          id: `${this.id}-${key}`,
-          index
-        }
-      };
+      const payload = createSlot({
+        componentName: data.component,
+        parentData: this.componentData,
+        id: this.id
+      });
 
       this.addSlot(payload);
       this.dispatch("addSlot", payload);

@@ -1,6 +1,6 @@
 import ColorProp from "./types/ColorProp"
 
 export default new ColorProp({
-    displayName: 'Color',
-    propName: 'color',
+    displayName: 'Icon color',
+    propName: 'iconColor',
 })

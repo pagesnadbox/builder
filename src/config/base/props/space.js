@@ -1,6 +1,6 @@
 import StringProp from "./types/StringProp"
 
 export default new StringProp({
-    displayName: 'Text',
-    propName: 'text',
+    displayName: 'Space (top and bottom space in px)',
+    propName: 'space',
 })
