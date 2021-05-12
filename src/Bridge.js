@@ -218,6 +218,9 @@ export default class Bridge {
         await ConfigService.saveConfig({
             config: this.cfg,
         }, this.onError.bind(this))
+
+        console.error(this.cfg)
+        this.builder.setConfig(this.cfg)
     }
 
     async fetchConfig() {

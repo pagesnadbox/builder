@@ -338,7 +338,7 @@ export const loadCss = (href, targetDom) => {
 }
 
 export const getNextSlotIndex = ({ slots = {}, componentName }) => {
-  const filtredByType = Object.values(slots)
+  const filtredByType = slots
     .filter(s => s.componentName === componentName)
     .sort()
     .reverse();
@@ -362,7 +362,8 @@ export const createSlot = ({ componentName, parentData }) => {
     value: {
       componentName: componentName,
       key,
-      index
+      index,
+      slots: []
     }
   };
 

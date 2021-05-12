@@ -47,34 +47,40 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setComponent"]),
-    ...mapActions("engine", ["removeSlot", "addSlot"]),
 
     onDrop(event, item) {
       if (this.draggedNode === item) return;
-      const componentName = this.draggedNode.componentName;
-      const index = getNextSlotIndex({
-        slots: item.data.slots,
-        componentName
-      });
 
-      this.removeSlot(this.draggedNode);
-      this.$action(`config/removeSlot`, this.draggedNode);
+      if (this.draggedNode.parentId === item.parentId) {
+        this.$action(`config/moveSlot`, {
+          id: this.draggedNode.id,
+          dragged: this.draggedNode.data,
+          dropped: item.data
+        });
+      } else {
+        const componentName = this.draggedNode.componentName;
+        const index = getNextSlotIndex({
+          slots: item.data.slots,
+          componentName
+        });
 
-      const key = `${componentName}_${index}`;
-      const newNode = {
-        ...JSON.parse(JSON.stringify(this.draggedNode.data)),
-        index: index,
-        key
-      };
+        this.$action(`config/removeSlot`, this.draggedNode);
 
-      const payload = {
-        id: item.id,
-        key,
-        value: newNode
-      };
+        const key = `${componentName}_${index}`;
+        const newNode = {
+          ...JSON.parse(JSON.stringify(this.draggedNode.data)),
+          index: index,
+          key
+        };
 
-      this.addSlot(payload);
-      this.$action(`config/addSlot`, payload);
+        const payload = {
+          id: item.id,
+          key,
+          value: newNode
+        };
+
+        this.$action(`config/addSlot`, payload);
+      }
 
       event.preventDefault();
     },
@@ -106,7 +112,6 @@ export default {
     onAdd(item) {},
 
     onRemove(item) {
-      this.removeSlot(item);
       this.$action(`config/removeSlot`, item);
     },
 
@@ -124,23 +129,23 @@ export default {
       });
     },
 
-    traverse(node, id) {
+    traverse(node, id, parentId) {
       const children = [];
       if (node.slots) {
-        Object.keys(node.slots).forEach(key => {
-          const child = node.slots[key];
+        node.slots.forEach(child => {
           if (
             typeof child === "object" &&
             child !== null &&
             !Array.isArray(child)
           ) {
-            children.push(this.traverse(child, `${id}-${key}`));
+            children.push(this.traverse(child, `${id}-${child.key}`, id));
           }
         });
       }
 
       return {
         id,
+        parentId,
         name: node.componentName,
         componentName: node.componentName,
         children,

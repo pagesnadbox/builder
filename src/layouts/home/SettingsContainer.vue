@@ -262,7 +262,7 @@ export default {
 
       payload.id = this.id;
 
-      this.addSlot(payload);
+      // this.addSlot(payload);
       this.dispatch("addSlot", payload);
     },
 
@@ -273,7 +273,7 @@ export default {
       const paths = id.split("-").slice(1);
 
       paths.forEach(path => {
-        data = data.slots[path];
+        data = data.slots.find(s => s.key === path);
       });
 
       return data || {};

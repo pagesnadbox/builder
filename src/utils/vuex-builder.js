@@ -15,9 +15,9 @@ export const toggle = property => state => (state[property] = !state[property])
 export const setProp = (state, payload) => {
     let data = state.data;
     let paths = payload.id.split("-").slice(1);
-    
+
     paths.forEach(path => {
-      data = data.slots[path];
+        data = data.slots.find(s => s.key === path);
     });
 
     Vue.set(data, payload.key, payload.value)
@@ -30,7 +30,7 @@ export const getDefaultModule = () => {
         },
 
         actions: {
-            setProp ({ commit }, payload) {
+            setProp({ commit }, payload) {
                 commit('SET_PROP', payload)
             },
         },
