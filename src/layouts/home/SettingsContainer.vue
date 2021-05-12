@@ -144,7 +144,7 @@
 import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
 import { EventBus, events } from "../../utils/eventBus";
-import { createSlot } from "../../utils/helpers"
+import { createSlot } from "../../utils/helpers";
 
 export default {
   name: "HomeSettings",
@@ -257,9 +257,10 @@ export default {
     onSaveClick(data) {
       const payload = createSlot({
         componentName: data.component,
-        parentData: this.componentData,
-        id: this.id
+        parentData: this.componentData
       });
+
+      payload.id = this.id;
 
       this.addSlot(payload);
       this.dispatch("addSlot", payload);

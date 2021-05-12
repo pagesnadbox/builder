@@ -346,23 +346,22 @@ export const getNextSlotIndex = ({ slots = {}, componentName }) => {
   let index = 0;
 
   if (filtredByType.length) {
-    index = ++filtredByType[0].index;
+    index = filtredByType[0].index + 1;
   }
 
   return index
 }
 
-export const createSlot = ({ componentName, parentData, id }) => {
+export const createSlot = ({ componentName, parentData }) => {
   const index = getNextSlotIndex({ slots: parentData.slots, componentName })
 
   const key = `${componentName}_${index}`;
 
   const payload = {
-    id: id,
     key,
     value: {
       componentName: componentName,
-      id: `${id}-${key}`,
+      key,
       index
     }
   };

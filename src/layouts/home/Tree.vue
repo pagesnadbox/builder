@@ -8,46 +8,12 @@
     return-object
   >
     <template v-slot:label="{ item }">
-      <div
-        draggable="true"
+      <tree-item-node
         @drop="onDrop($event, item)"
-        @dragstart="onDrag($event, item)"
-        @dragover="allowDrop($event, item)"
-        @dragenter="allowDrop($event, item)"
-      >
-        <v-icon
-          v-if="item.children.length"
-          v-text="`mdi-${item.id === 1 ? 'home-variant' : 'folder-network'}`"
-        ></v-icon>
-        <span>{{ item.name }}</span>
-
-        <v-menu offset-y>
-          <template v-slot:activator="{ attrs, on }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon
-              class="tree-item-more-button mr-2 mt-0"
-            >
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item @click="onItemClick('remove', item)">
-              <v-list-item-title>Remove</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="onItemClick('hide', item)">
-              <v-list-item-title>{{
-                item.data.hidden ? "Show" : "Hide"
-              }}</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="onItemClick('add', item)">
-              <v-list-item-title>Add</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
+        @drag="onDrag($event, item)"
+        @item-click="onItemClick($event, item)"
+        :item="item"
+      ></tree-item-node>
     </template>
   </v-treeview>
 </template>
@@ -55,7 +21,13 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { getNextSlotIndex } from "../../utils/helpers";
+import TreeItemNode from "./TreeItemNode";
+
 export default {
+  components: {
+    TreeItemNode
+  },
+
   data() {
     return {
       entries: []
@@ -78,22 +50,27 @@ export default {
     ...mapActions("engine", ["removeSlot", "addSlot"]),
 
     onDrop(event, item) {
+      if (this.draggedNode === item) return;
       const componentName = this.draggedNode.componentName;
       const index = getNextSlotIndex({
-        slots: item.slots,
+        slots: item.data.slots,
         componentName
       });
 
       this.removeSlot(this.draggedNode);
       this.$action(`config/removeSlot`, this.draggedNode);
 
-      this.draggedNode.key = `${componentName}_${index}`;
-      this.draggedNode.id = `${item.id}-${this.draggedNode.key}`;
+      const key = `${componentName}_${index}`;
+      const newNode = {
+        ...JSON.parse(JSON.stringify(this.draggedNode.data)),
+        index: index,
+        key
+      };
 
       const payload = {
         id: item.id,
-        key: this.draggedNode.key,
-        value: this.draggedNode
+        key,
+        value: newNode
       };
 
       this.addSlot(payload);
@@ -105,11 +82,6 @@ export default {
     onDrag(event, item) {
       this.draggedNode = item;
       console.error("onDrag", event, item);
-    },
-
-    allowDrop(event, item) {
-      console.error("allowDrop", event, item);
-      event.preventDefault();
     },
 
     onItemSelected(event) {
@@ -148,11 +120,11 @@ export default {
 
     onDataChange() {
       this.entries = Object.keys(this.data).map(key => {
-        return this.traverse(this.data[key]);
+        return this.traverse(this.data[key], key);
       });
     },
 
-    traverse(node) {
+    traverse(node, id) {
       const children = [];
       if (node.slots) {
         Object.keys(node.slots).forEach(key => {
@@ -162,13 +134,13 @@ export default {
             child !== null &&
             !Array.isArray(child)
           ) {
-            children.push(this.traverse(child, key));
+            children.push(this.traverse(child, `${id}-${key}`));
           }
         });
       }
 
       return {
-        id: node.id,
+        id,
         name: node.componentName,
         componentName: node.componentName,
         children,
@@ -178,11 +150,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.tree-item-more-button {
-  position: absolute;
-  right: 0;
-  top: 6px;
-}
-</style>
