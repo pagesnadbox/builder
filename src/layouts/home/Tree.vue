@@ -9,6 +9,8 @@
   >
     <template v-slot:label="{ item }">
       <tree-item-node
+        @hold-start="hold = true"
+        @hold-end="hold = false"
         @drop="onDrop($event, item)"
         @drag="onDrag($event, item)"
         @item-click="onItemClick($event, item)"
@@ -30,7 +32,8 @@ export default {
 
   data() {
     return {
-      entries: []
+      entries: [],
+      hold: false
     };
   },
 
@@ -48,38 +51,48 @@ export default {
   methods: {
     ...mapActions("settings", ["setComponent"]),
 
+    moveTo(item) {
+      const componentName = this.draggedNode.componentName;
+      const index = getNextSlotIndex({
+        slots: item.data.slots,
+        componentName
+      });
+
+      this.$action(`config/removeSlot`, this.draggedNode);
+
+      const key = `${componentName}_${index}`;
+      const newNode = {
+        ...JSON.parse(JSON.stringify(this.draggedNode.data)),
+        index: index,
+        key
+      };
+
+      const payload = {
+        id: item.id,
+        key,
+        value: newNode
+      };
+
+      this.$action(`config/addSlot`, payload);
+    },
+
+    changePosition(item) {
+      this.$action(`config/moveSlot`, {
+        id: this.draggedNode.id,
+        dragged: this.draggedNode.data,
+        dropped: item.data
+      });
+    },
+
     onDrop(event, item) {
       if (this.draggedNode === item) return;
 
-      if (this.draggedNode.parentId === item.parentId) {
-        this.$action(`config/moveSlot`, {
-          id: this.draggedNode.id,
-          dragged: this.draggedNode.data,
-          dropped: item.data
-        });
-      } else {
-        const componentName = this.draggedNode.componentName;
-        const index = getNextSlotIndex({
-          slots: item.data.slots,
-          componentName
-        });
+      const siblings = this.draggedNode.parentId === item.parentId;
 
-        this.$action(`config/removeSlot`, this.draggedNode);
-
-        const key = `${componentName}_${index}`;
-        const newNode = {
-          ...JSON.parse(JSON.stringify(this.draggedNode.data)),
-          index: index,
-          key
-        };
-
-        const payload = {
-          id: item.id,
-          key,
-          value: newNode
-        };
-
-        this.$action(`config/addSlot`, payload);
+      if (!siblings || this.hold) {
+        this.moveTo(item);
+      } else if (siblings) {
+        this.changePosition(item);
       }
 
       event.preventDefault();

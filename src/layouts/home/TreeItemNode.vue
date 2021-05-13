@@ -4,7 +4,8 @@
     draggable="true"
     @drop="onDrop($event, item)"
     @dragstart="onDrag($event, item)"
-    @dragenter="allowDrop($event, item)"
+    @dragenter="onDragEnter($event, item)"
+    @dragleave="onDragLeave($event, item)"
     @dragover="allowDrop($event, item)"
   >
     <v-icon
@@ -51,19 +52,19 @@ export default {
     }
   },
 
-  data() {
-    return {
-      dragged: false
-    };
-  },
 
   methods: {
-    onDragEnter() {
-      this.dragged = true;
+    onDragEnter(event) {
+      this.holdId = setTimeout(() => {
+        this.$emit("hold-start");
+      }, 2000);
+
+      event.preventDefault();
     },
 
     onDragLeave() {
-      this.dragged = false;
+      clearTimeout(this.holdId);
+      this.$emit("hold-end");
     },
 
     onDrop(event) {
@@ -76,7 +77,6 @@ export default {
     },
 
     allowDrop(event) {
-      this.dragged = true;
       event.preventDefault();
     },
 
@@ -101,7 +101,7 @@ export default {
   height: 5px;
   border: 1px dashed;
 }
-.dragged {
-  height: 20px;
+.hold {
+  transform: scale(1.2);
 }
 </style>

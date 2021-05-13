@@ -128,6 +128,16 @@ export default {
         ],
     }),
 
+    BaseDrawer: new BaseComponent({
+        displayName: 'Drawer',
+        props: [],
+    }),
+
+    BaseDrawerButton: new BaseComponent({
+        displayName: 'Drawer Toggle Button',
+        props: [],
+    }),
+
     BaseContainer: new BaseComponent({
         displayName: 'Container',
         props: [
@@ -200,7 +210,7 @@ export default {
     BaseBtn: new BaseComponent({
         displayName: 'Button',
         props: [
-    
+
             text,
             sizeDef,
             iconSrc,
@@ -221,7 +231,7 @@ export default {
     BaseLink: new BaseComponent({
         displayName: 'Link',
         props: [
-    
+
             openInNewTab,
             href,
         ],
@@ -241,7 +251,7 @@ export default {
         displayName: 'Avatar Card',
         props: [
             ...mixinHeading.props,
-    
+
             outlined,
             horizontal,
             title,
@@ -323,7 +333,7 @@ export default {
         displayName: 'Info Card',
         props: [
             ...mixinHeading.props,
-    
+
             icon,
             subtitle,
             title,
