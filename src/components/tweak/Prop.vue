@@ -71,6 +71,24 @@
     </v-text-field>
   </v-col>
 
+  <v-col cols="12" v-else-if="type === 'panel'">
+    <v-expansion-panels flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header class="pa-0 px-2">
+          {{ displayName }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="px-0">
+          <tweak-prop
+            v-for="(prop, i) in props"
+            v-bind="prop"
+            :key="i"
+            @property-change="$emit('property-change', $event)"
+          ></tweak-prop>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </v-col>
+
   <v-col cols="12" v-else>
     <v-text-field
       :label="displayName"
@@ -110,6 +128,11 @@ export default {
     },
 
     enums: {
+      type: Array,
+      default: () => []
+    },
+
+    props: {
       type: Array,
       default: () => []
     },
@@ -233,5 +256,8 @@ export default {
   margin: 2px;
   margin-left: 5px;
   height: 100%;
+}
+>>> .v-expansion-panel-content__wrap {
+  padding: 0;
 }
 </style>

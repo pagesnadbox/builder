@@ -26,7 +26,6 @@ const {
     iconSrc,
     text,
     title,
-    space,
     outlined,
     horizontal,
     hiddenImage,
@@ -59,24 +58,36 @@ const {
 const getCols = (...params) => cols.getCols(...params)
 const md = getCols("md");
 
-const baseHeading = new BaseComponent({
-    displayName: 'Heading',
-    props: [
-        title,
-        align,
-        // dense,
-        size,
-        // space,
-        mobileSize,
-        weight,
-    ],
-})
+class BaseHeading extends BaseComponent {
+    constructor() {
+        super({
+            props: [
+                title,
+                align,
+                color,
+                // dense,
+                size,
+                mobileSize,
+                weight,
+            ]
+        });
+        this.displayName = 'Heading'
+    }
+}
+
+class BaseTitle extends BaseHeading {
+    constructor() {
+        super();
+        this.displayName = 'Title'
+    }
+}
+
+const baseHeading = new BaseHeading()
 
 const baseSection = new BaseComponent({
     displayName: 'Section',
     props: [
         dark,
-        space,
         height,
         color,
     ],
@@ -93,7 +104,6 @@ const baseList = new BaseComponent({
     displayName: 'List',
     type: 'list',
     props: [
-        // space,
         items,
         cols,
         md
@@ -265,16 +275,12 @@ export default {
             icon,
             iconSize,
             color,
-            // space,
         ],
     }),
 
     BaseHeading: baseHeading,
 
-    BaseTitle: new BaseComponent({
-        ...baseHeading,
-        displayName: 'Title',
-    }),
+    BaseTitle: new BaseTitle(),
 
     BaseText: new BaseComponent({
         displayName: "Text",
@@ -290,7 +296,6 @@ export default {
             ...baseHeading.props,
             title,
             text,
-            // space,
         ],
     }),
 
@@ -305,7 +310,6 @@ export default {
                 type: 'string',
             },
             maxWidth,
-            // space,
         ],
     }),
 
@@ -314,7 +318,6 @@ export default {
         props: [
             color,
             dense,
-            // space,
         ],
     }),
 
@@ -353,7 +356,6 @@ export default {
             subtitle,
             title,
             text,
-            // space,
             { ...color, displayName: "Background Color" },
             divider,
             label("Icon"),
@@ -367,7 +369,6 @@ export default {
         displayName: 'Hero',
         props: [
             dark,
-            // space,
             height,
             mobileHeight,
             aggregations,
@@ -391,7 +392,6 @@ export default {
         displayName: 'Hero Container',
         props: [
             ...mixinHeading.props,
-            // space,
             maxWidth,
             // aggregations
         ],
