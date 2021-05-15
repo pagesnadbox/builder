@@ -128,7 +128,7 @@
       <v-container class="pa-0">
         <v-row>
           <tweak-prop
-            v-for="(prop, i) in primitiveProps"
+            v-for="(prop, i) in props"
             :key="i"
             v-bind="prop"
             :options="prop.options"
@@ -143,7 +143,7 @@
 <script>
 import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
-import { EventBus, events } from "../../utils/eventBus";
+import { EventBus } from "../../utils/eventBus";
 import { createSlot } from "../../utils/helpers";
 
 export default {
@@ -217,10 +217,6 @@ export default {
       });
     },
 
-    primitiveProps() {
-      return this.props.filter(prop => prop.type !== "array");
-    },
-
     engineDark: {
       get() {
         return this.$store.state.engine.data.app.dark;
@@ -258,10 +254,7 @@ export default {
         componentName: data.component,
         parentData: this.componentData
       });
-
       payload.id = this.id;
-
-      // this.addSlot(payload);
       this.dispatch("addSlot", payload);
     },
 

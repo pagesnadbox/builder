@@ -115,8 +115,8 @@ export default class Bridge {
             [Builder.events.HISTORY_RESET]: () => this.history.reset(),
             [Builder.events.HISTORY_UNDO]: () => this.history.undo(),
             [Builder.events.HISTORY_REDO]: () => this.history.redo(),
-            [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highligh(id),
-            [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highligh(null),
+            [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highlight(id),
+            [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highlight(null),
         }
 
         if (mediator[event]) {

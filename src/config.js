@@ -50,8 +50,6 @@ const {
     depressed,
     tile,
     textOnly,
-    items,
-    aggregations,
     lightSrc,
     publicPath,
     cols,
@@ -164,16 +162,6 @@ const baseSection = new BaseComponent({
 const mixinHeading = new BaseComponent({
     props: [
         align,
-    ],
-})
-
-const baseList = new BaseComponent({
-    displayName: 'List',
-    type: 'list',
-    props: [
-        items,
-        cols,
-        md
     ],
 })
 
@@ -411,47 +399,6 @@ export default {
         ],
     }),
 
-    BaseHero: new BaseComponent({
-        displayName: 'Hero',
-        props: [
-            dark,
-            height,
-            mobileHeight,
-            aggregations,
-            label("Background"),
-            divider,
-            {
-                displayName: "Overlay",
-                type: "boolean",
-                propName: "overlay"
-            },
-            lightSrc,
-            // darkSrc,
-            {
-                ...color,
-                displayName: 'Solid Color'
-            },
-        ],
-    }),
-
-    BaseHeroContainer: new BaseComponent({
-        displayName: 'Hero Container',
-        props: [
-            ...mixinHeading.props,
-            maxWidth,
-            // aggregations
-        ],
-    }),
-
-    BaseList: baseList,
-
-    BaseSlideList: new BaseComponent({
-        displayName: 'Slide List',
-        props: [
-            items
-        ]
-    }),
-
     BaseInput: new BaseComponent({
         displayName: 'Input',
         props: [
@@ -528,12 +475,7 @@ export default {
                 displayName: "Action",
                 propName: "action",
                 type: 'string'
-            },
-            {
-                displayName: "Field Name",
-                propName: "name",
-                type: 'string'
-            },
+            }
         ]
     })
 }
