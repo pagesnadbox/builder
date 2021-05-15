@@ -49,7 +49,7 @@
       </div>
 
       <tweak-add-component
-        :items="Object.keys(componentConfigs)"
+        :items="Object.values(componentConfigs)"
         @save-click="onSaveClick"
       ></tweak-add-component>
 

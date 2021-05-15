@@ -13,8 +13,9 @@ export default class BaseComponent {
         return this._customProps || [];
     }
 
-    constructor({ displayName, props } = {}) {
+    constructor({ displayName, componentName, props } = {}) {
         this.displayName = displayName;
+        this.componentName = componentName;
 
         if (props) {
             this._customProps = props;

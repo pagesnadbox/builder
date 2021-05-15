@@ -9,11 +9,14 @@
 
       <v-card>
         <v-card-text>
-          <v-select
+          <v-combobox
             label="Pick component"
             v-model="selected"
+            item-text="displayName"
+            item-value="componentName"
+            :return-object="false"
             :items="items"
-          ></v-select>
+          ></v-combobox>
         </v-card-text>
 
         <v-card-actions>

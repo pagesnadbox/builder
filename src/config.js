@@ -72,6 +72,7 @@ class BaseHeading extends MixinHeading {
     constructor() {
         super();
         this.displayName = 'Heading'
+        this.componentName = 'BaseHeading'
     }
 
     get customProps() {
@@ -92,6 +93,7 @@ class BaseTitle extends BaseHeading {
     constructor() {
         super();
         this.displayName = 'Title'
+        this.componentName = 'BaseTitle'
     }
 }
 
@@ -99,6 +101,7 @@ class BaseBody extends MixinHeading {
     constructor() {
         super();
         this.displayName = 'Body'
+        this.componentName = 'BaseBody'
     }
 
     get customProps() {
@@ -120,6 +123,7 @@ class BaseImage extends BaseComponent {
     constructor() {
         super();
         this.displayName = 'Image'
+        this.componentName = 'BaseImage'
     }
 
     get customProps() {
@@ -135,7 +139,8 @@ class BaseImage extends BaseComponent {
 class BaseVuetifyImage extends BaseImage {
     constructor() {
         super();
-        this.displayName = 'Vuetify Image'
+        this.displayName = 'Advanced Image'
+        this.componentName = 'BaseVuetifyImage'
     }
 
     get customProps() {
@@ -149,6 +154,7 @@ class BaseVuetifyImage extends BaseImage {
 const baseHeading = new BaseHeading()
 
 const baseSection = new BaseComponent({
+    componentName: 'BaseSection',
     displayName: 'Section',
     props: [
         dark,
@@ -176,6 +182,7 @@ const avatarCardImage = new BaseComponent({
 
 export default {
     BaseApp: new BaseComponent({
+        componentName: "BaseApp",
         displayName: 'Application',
         props: [
             publicPath,
@@ -183,16 +190,19 @@ export default {
     }),
 
     BaseDrawer: new BaseComponent({
+        componentName: "BaseDrawer",
         displayName: 'Drawer',
         props: [],
     }),
 
     BaseDrawerButton: new BaseComponent({
+        componentName: "BaseDrawerButton",
         displayName: 'Drawer Toggle Button',
         props: [],
     }),
 
     BaseContainer: new BaseComponent({
+        componentName: "BaseContainer",
         displayName: 'Container',
         props: [
             fillHeight,
@@ -201,6 +211,7 @@ export default {
     }),
 
     BaseRow: new BaseComponent({
+        componentName: "BaseRow",
         displayName: 'Row',
         props: [
             preventWrap,
@@ -211,6 +222,7 @@ export default {
     }),
 
     BaseCol: new BaseComponent({
+        componentName: "BaseCol",
         displayName: 'Column',
         props: [
             getCols("cols"),
@@ -222,6 +234,7 @@ export default {
     }),
 
     BaseAppBar: new BaseComponent({
+        componentName: "BaseAppBar",
         displayName: 'Application Top Bar',
         props: [
             dark,
@@ -236,6 +249,7 @@ export default {
     BaseImg: baseImg,
 
     BaseActions: new BaseComponent({
+        componentName: "BaseActions",
         displayName: 'Call-To-Action',
         props: [
             horizontal,
@@ -263,6 +277,7 @@ export default {
     }),
 
     BaseBtn: new BaseComponent({
+        componentName: "BaseBtn",
         displayName: 'Button',
         props: [
 
@@ -284,6 +299,7 @@ export default {
     }),
 
     BaseLink: new BaseComponent({
+        componentName: "BaseLink",
         displayName: 'Link',
         props: [
 
@@ -293,6 +309,7 @@ export default {
     }),
 
     BaseAvatar: new BaseComponent({
+        componentName: "BaseAvatar",
         displayName: 'Avatar',
         props: [
             icon,
@@ -303,6 +320,7 @@ export default {
     }),
 
     BaseAvatarCard: new BaseComponent({
+        componentName: "BaseAvatarCard",
         displayName: 'Avatar Card',
         props: [
             ...mixinHeading.props,
@@ -328,6 +346,7 @@ export default {
     BaseTitle: new BaseTitle(),
 
     BaseText: new BaseComponent({
+        componentName: "BaseText",
         displayName: "Text",
         props: [
             text,
@@ -337,6 +356,7 @@ export default {
 
     BaseSubtitle: new BaseComponent({
         ...baseHeading,
+        componentName: "BaseSubtitle",
         displayName: 'Sub Title',
         props: [
             ...baseHeading.props,
@@ -346,8 +366,10 @@ export default {
     }),
 
     BaseBody: new BaseBody(),
+    componentName: "BaseBody",
 
     BaseDivider: new BaseComponent({
+        componentName: "BaseDivider",
         displayName: 'Divider',
         props: [
             color,
@@ -356,6 +378,7 @@ export default {
     }),
 
     BaseIcon: new BaseComponent({
+        componentName: "BaseIcon",
         displayName: 'Icon',
         props: [
             openInNewTab,
@@ -367,10 +390,10 @@ export default {
     }),
 
     BaseInfoCard: new BaseComponent({
+        componentName: "BaseInfoCard",
         displayName: 'Info Card',
         props: [
             ...mixinHeading.props,
-
             icon,
             subtitle,
             title,
@@ -382,6 +405,7 @@ export default {
     BaseSection: baseSection,
 
     BaseSectionHeading: new BaseComponent({
+        componentName: "BaseSectionHeading",
         displayName: 'Section Heading',
         props: [
             align,
@@ -400,6 +424,7 @@ export default {
     }),
 
     BaseInput: new BaseComponent({
+        componentName: "BaseInput",
         displayName: 'Input',
         props: [
             dark,
@@ -464,6 +489,7 @@ export default {
     }),
 
     BaseEmailForm: new BaseComponent({
+        componentName: "BaseEmailForm",
         displayName: 'Email Form',
         props: [
             {
