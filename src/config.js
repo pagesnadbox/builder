@@ -164,13 +164,6 @@ const baseSection = new BaseComponent({
     ],
 })
 
-
-const mixinHeading = new BaseComponent({
-    props: [
-        align,
-    ],
-})
-
 const baseImg = new BaseImage()
 
 const avatarCardImage = new BaseComponent({
@@ -323,15 +316,11 @@ export default {
         componentName: "BaseAvatarCard",
         displayName: 'Avatar Card',
         props: [
-            ...mixinHeading.props,
-
+            align,
             outlined,
             horizontal,
             title,
             text,
-            divider,
-            label("Image"),
-            ...avatarCardImage.props,
             divider,
             label("Icon"),
             iconDark,
@@ -393,7 +382,7 @@ export default {
         componentName: "BaseInfoCard",
         displayName: 'Info Card',
         props: [
-            ...mixinHeading.props,
+            align,
             icon,
             subtitle,
             title,
@@ -500,6 +489,29 @@ export default {
             {
                 displayName: "Action",
                 propName: "action",
+                type: 'string'
+            }
+        ]
+    }),
+
+    BaseSpacer: new BaseComponent({
+        componentName: "BaseSpacer",
+        displayName: 'Spacer',
+    }),
+
+    BaseTabs: new BaseComponent({
+        componentName: "BaseTabs",
+        displayName: 'Tabs',
+    }),
+
+    BaseTab: new BaseComponent({
+        componentName: "BaseTab",
+        displayName: 'Tab',
+        props: [
+            text,
+            {
+                displayName: "Go to (element id)",
+                propName: "goTo",
                 type: 'string'
             }
         ]

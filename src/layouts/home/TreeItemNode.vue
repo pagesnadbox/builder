@@ -43,6 +43,9 @@
         <v-list-item @click="onItemClick('copy', item)">
           <v-list-item-title>Copy</v-list-item-title>
         </v-list-item>
+        <v-list-item @click="copyToClipBoard(item)">
+          <v-list-item-title>Copy id to clipboard</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
   </div>
@@ -95,6 +98,23 @@ export default {
 
     onItemClick(action) {
       this.$emit("item-click", action);
+    },
+
+    copyToClipBoard(item) {
+      var data = [
+        new ClipboardItem({
+          "text/plain": new Blob([item.id], { type: "text/plain" })
+        })
+      ];
+
+      window.navigator.clipboard.write(data).then(
+        function() {
+          console.log("Copied to clipboard successfully!");
+        },
+        function(e) {
+          console.error("Unable to write to clipboard. :-(", e);
+        }
+      );
     },
 
     onMouseEnter() {
