@@ -14,13 +14,15 @@ const label = (label) => ({
 const {
     color,
     iconColor,
+    gradient,
     fluid,
     fillHeight,
+    preventWrap,
     justify,
     rowAlign,
     size,
     mobileSize,
-    sizeDef,
+    sizeBtn,
     icon,
     iconSize,
     iconSrc,
@@ -58,20 +60,33 @@ const {
 const getCols = (...params) => cols.getCols(...params)
 const md = getCols("md");
 
-class BaseHeading extends BaseComponent {
+class MixinHeading extends BaseComponent {
     constructor() {
         super({
             props: [
-                title,
                 align,
-                color,
-                // dense,
-                size,
-                mobileSize,
-                weight,
             ]
         });
+    }
+}
+
+class BaseHeading extends MixinHeading {
+    constructor() {
+        super();
         this.displayName = 'Heading'
+    }
+
+    get customProps() {
+        return [
+            ...super.customProps,
+            title,
+            align,
+            color,
+            // dense,
+            size,
+            mobileSize,
+            weight,
+        ]
     }
 }
 
@@ -82,6 +97,57 @@ class BaseTitle extends BaseHeading {
     }
 }
 
+class BaseBody extends MixinHeading {
+    constructor() {
+        super();
+        this.displayName = 'Body'
+    }
+
+    get customProps() {
+        return [
+            ...super.customProps,
+            color,
+            text,
+            {
+                displayName: 'HTML',
+                propName: 'html',
+                type: 'string',
+            },
+            maxWidth,
+        ]
+    }
+}
+
+class BaseImage extends BaseComponent {
+    constructor() {
+        super();
+        this.displayName = 'Image'
+    }
+
+    get customProps() {
+        return [
+            mobileHeight,
+            height,
+            maxWidth,
+            lightSrc,
+        ]
+    }
+}
+
+class BaseVuetifyImage extends BaseImage {
+    constructor() {
+        super();
+        this.displayName = 'Vuetify Image'
+    }
+
+    get customProps() {
+        return [
+            ...super.customProps,
+            gradient
+        ]
+    }
+}
+
 const baseHeading = new BaseHeading()
 
 const baseSection = new BaseComponent({
@@ -89,6 +155,7 @@ const baseSection = new BaseComponent({
     props: [
         dark,
         height,
+        maxWidth,
         color,
     ],
 })
@@ -110,18 +177,7 @@ const baseList = new BaseComponent({
     ],
 })
 
-const baseImg = new BaseComponent({
-    displayName: 'Image',
-    props: [
-
-        mobileHeight,
-        height,
-        maxWidth,
-        lightSrc,
-        // darkSrc
-    ],
-
-})
+const baseImg = new BaseImage()
 
 const avatarCardImage = new BaseComponent({
     ...baseImg,
@@ -159,6 +215,7 @@ export default {
     BaseRow: new BaseComponent({
         displayName: 'Row',
         props: [
+            preventWrap,
             fillHeight,
             justify,
             rowAlign
@@ -186,7 +243,7 @@ export default {
         ],
     }),
 
-    BaseVuetifyImg: baseImg,
+    BaseVuetifyImg: new BaseVuetifyImage(),
 
     BaseImg: baseImg,
 
@@ -222,7 +279,7 @@ export default {
         props: [
 
             text,
-            sizeDef,
+            sizeBtn,
             iconSrc,
             dark,
             textOnly,
@@ -285,7 +342,8 @@ export default {
     BaseText: new BaseComponent({
         displayName: "Text",
         props: [
-            text
+            text,
+            color
         ]
     }),
 
@@ -299,19 +357,7 @@ export default {
         ],
     }),
 
-    BaseBody: new BaseComponent({
-        displayName: 'Body',
-        props: [
-            ...mixinHeading.props,
-            text,
-            {
-                displayName: 'HTML',
-                propName: 'html',
-                type: 'string',
-            },
-            maxWidth,
-        ],
-    }),
+    BaseBody: new BaseBody(),
 
     BaseDivider: new BaseComponent({
         displayName: 'Divider',

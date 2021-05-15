@@ -38,6 +38,9 @@
         <v-list-item @click="onItemClick('add', item)">
           <v-list-item-title>Add</v-list-item-title>
         </v-list-item>
+        <v-list-item @click="onItemClick('copy', item)">
+          <v-list-item-title>Copy</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
   </div>

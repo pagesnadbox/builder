@@ -51,24 +51,26 @@ export default {
   methods: {
     ...mapActions("settings", ["setComponent"]),
 
-    moveTo(item) {
-      const componentName = this.draggedNode.componentName;
+    moveTo(target, to, copy) {
+      const componentName = target.componentName;
       const index = getNextSlotIndex({
-        slots: item.data.slots,
+        slots: to.data.slots,
         componentName
       });
 
-      this.$action(`config/removeSlot`, this.draggedNode);
+      if (!copy) {
+        this.$action(`config/removeSlot`, target);
+      }
 
       const key = `${componentName}_${index}`;
       const newNode = {
-        ...JSON.parse(JSON.stringify(this.draggedNode.data)),
+        ...JSON.parse(JSON.stringify(target.data)),
         index: index,
         key
       };
 
       const payload = {
-        id: item.id,
+        id: to.id,
         key,
         value: newNode
       };
@@ -90,7 +92,7 @@ export default {
       const siblings = this.draggedNode.parentId === item.parentId;
 
       if (!siblings || this.hold) {
-        this.moveTo(item);
+        this.moveTo(this.draggedNode, item);
       } else if (siblings) {
         this.changePosition(item);
       }
@@ -115,6 +117,7 @@ export default {
     onItemClick(action, item) {
       const actions = {
         add: this.onAdd,
+        copy: this.onCopy,
         remove: this.onRemove,
         hide: this.onHide
       };
@@ -123,6 +126,14 @@ export default {
     },
 
     onAdd(item) {},
+
+    onCopy(item) {
+      this.moveTo(
+        item,
+        { id: item.parentId, data: { slots: item.parent.slots } },
+        true
+      );
+    },
 
     onRemove(item) {
       this.$action(`config/removeSlot`, item);
@@ -142,7 +153,7 @@ export default {
       });
     },
 
-    traverse(node, id, parentId) {
+    traverse(node, id, parentId, parent) {
       const children = [];
       if (node.slots) {
         node.slots.forEach(child => {
@@ -151,13 +162,14 @@ export default {
             child !== null &&
             !Array.isArray(child)
           ) {
-            children.push(this.traverse(child, `${id}-${child.key}`, id));
+            children.push(this.traverse(child, `${id}-${child.key}`, id, node));
           }
         });
       }
 
       return {
         id,
+        parent,
         parentId,
         name: node.componentName,
         componentName: node.componentName,
