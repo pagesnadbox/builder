@@ -108,13 +108,15 @@ export default class Bridge {
     onAppEvent(event, data) {
         console.log(`App Event: ${event}`, data);
 
-        const mediator = {
+        const mediator = {  
             [Builder.events.PROJECT_SELECTED]: () => this.onProjectSelected(),
             [Builder.events.ACTION]: (data) => this.onAppAction(data),
             [Builder.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
             [Builder.events.HISTORY_RESET]: () => this.history.reset(),
             [Builder.events.HISTORY_UNDO]: () => this.history.undo(),
             [Builder.events.HISTORY_REDO]: () => this.history.redo(),
+            [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highligh(id),
+            [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highligh(null),
         }
 
         if (mediator[event]) {

@@ -9,6 +9,8 @@ export const events = {
     HISTORY_RESET: "HISTORY_RESET",
     HISTORY_UNDO: "HISTORY_UNDO",
     HISTORY_REDO: "HISTORY_REDO",
+    TREE_NODE_MOUSE_ENTER: "TREE_NODE_MOUSE_ENTER",
+    TREE_NODE_MOUSE_LEAVE: "TREE_NODE_MOUSE_LEAVE",
 }
 
 export const eventsInternal = {

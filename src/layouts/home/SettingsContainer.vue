@@ -171,8 +171,7 @@ export default {
   },
 
   created() {
-    EventBus.$on("on-keydown", this.onKeyDown.bind(this));
-    EventBus.$on("on-keyup", this.onKeyUp.bind(this));
+    EventBus.$on("on-keydown", this.onKeyUp.bind(this));
   },
 
   computed: {
@@ -297,15 +296,9 @@ export default {
       this.setComponent({ id: "", name: "" });
     },
 
-    onKeyDown(e) {
-      if (!this.allowEdit && e.keyCode === 69) {
-        this.setAllowEdit(true);
-      }
-    },
-
     onKeyUp(e) {
-      if (this.allowEdit && e.keyCode === 69) {
-        this.setAllowEdit(false);
+      if (e.keyCode === 69 && e.ctrlKey && e.altKey) {
+        this.setAllowEdit(!this.allowEdit);
       }
     }
   }

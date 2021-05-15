@@ -2,17 +2,19 @@
   <div
     class="item"
     draggable="true"
-    @drop="onDrop($event, item)"
-    @dragstart="onDrag($event, item)"
-    @dragenter="onDragEnter($event, item)"
-    @dragleave="onDragLeave($event, item)"
-    @dragover="allowDrop($event, item)"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+    @drop="onDrop"
+    @dragstart="onDrag"
+    @dragenter="onDragEnter"
+    @dragleave="onDragLeave"
+    @dragover="allowDrop"
   >
     <v-icon
       v-if="item.children.length"
       v-text="`mdi-${item.id === 1 ? 'home-variant' : 'folder-network'}`"
     ></v-icon>
-    <span>{{ item.name }}</span>
+    <span>{{ config.displayName }}</span>
 
     <v-menu offset-y>
       <template v-slot:activator="{ attrs, on }">
@@ -47,6 +49,9 @@
 </template>
 
 <script>
+import componentConfigs from "../../config";
+import { EventBus, events } from "../../utils/eventBus";
+
 export default {
   props: {
     item: {
@@ -55,6 +60,11 @@ export default {
     }
   },
 
+  computed: {
+    config() {
+      return componentConfigs[this.item.name];
+    }
+  },
 
   methods: {
     onDragEnter(event) {
@@ -85,6 +95,14 @@ export default {
 
     onItemClick(action) {
       this.$emit("item-click", action);
+    },
+
+    onMouseEnter() {
+      EventBus.$emit(events.TREE_NODE_MOUSE_ENTER, this.item.id);
+    },
+
+    onMouseLeave() {
+      EventBus.$emit(events.TREE_NODE_MOUSE_LEAVE, this.item.id);
     }
   }
 };
