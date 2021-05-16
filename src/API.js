@@ -68,25 +68,18 @@ export default class API extends EventEmitter {
   }
 
   setConfig(config = {}) {
-    // [
-    //   "app",
-    //   "hero",
-    //   "themeFeatures",
-    //   "features",
-    //   "affiliates",
-    //   "social",
-    //   "footer"
-    // ].forEach((key) => {
     store.dispatch(`engine/setConfig`, { value: config.data || config });
-    // })
   }
 
   replaceConfig(state) {
     store.replaceState({
       ...store.state,
       engine: {
-        config: {
-          ...state
+        ...store.state.engine,
+        data: {
+          app: {
+            ...state.config.data
+          }
         }
       }
     })
