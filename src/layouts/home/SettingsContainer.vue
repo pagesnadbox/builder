@@ -252,29 +252,22 @@ export default {
     onSaveClick(data) {
       const payload = createSlot({
         componentName: data.component,
-        parentData: this.componentData
+        parentId: this.id
       });
-      payload.id = this.id;
+
       this.dispatch("addSlot", payload);
     },
 
     getData() {
-      let data = this.$store.state.engine.data.app;
-      let id = this.id || "app";
+      let data = this.$store.state.engine.data;
 
-      const paths = id.split("-").slice(1);
-
-      paths.forEach(path => {
-        data = data.slots.find(s => s.key === path);
-      });
-
-      return data || {};
+      return data[this.id];
     },
 
     onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
       this.dispatch("setProp", {
-        id: `${id || this.id}${apendix}`,
+        id: this.id,
         key,
         value
       });

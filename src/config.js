@@ -123,7 +123,7 @@ class BaseImage extends BaseComponent {
     constructor() {
         super();
         this.displayName = 'Image'
-        this.componentName = 'BaseImage'
+        this.componentName = 'BaseImg'
     }
 
     get customProps() {

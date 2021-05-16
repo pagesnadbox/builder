@@ -11,18 +11,18 @@
       <tree-item-node
         @hold-start="hold = true"
         @hold-end="hold = false"
-        @drop="onDrop($event, item)"
-        @drag="onDrag($event, item)"
-        @item-click="onItemClick($event, item)"
-        :item="item"
+        @drop="onDrop($event, item.data)"
+        @drag="onDrag($event, item.data)"
+        @item-click="onItemClick($event, item.data)"
+        :item="item.data"
+        :hasChildren="item.length > 0"
       ></tree-item-node>
     </template>
   </v-treeview>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import { getNextSlotIndex } from "../../utils/helpers";
+import { mapActions, mapGetters, mapState } from "vuex";
 import TreeItemNode from "./TreeItemNode";
 
 export default {
@@ -38,7 +38,8 @@ export default {
   },
 
   computed: {
-    ...mapState("engine", ["data", "counter"])
+    ...mapState("engine", ["data", "counter"]),
+    ...mapGetters("engine", ["getComponent"])
   },
 
   watch: {
@@ -51,38 +52,18 @@ export default {
   methods: {
     ...mapActions("settings", ["setComponent"]),
 
-    moveTo(target, to, copy) {
-      const componentName = target.componentName;
-      const index = getNextSlotIndex({
-        slots: to.data.slots,
-        componentName
+    moveTo(item, to, copy) {
+      this.$action(`config/moveSlot`, {
+        item,
+        to,
+        copy
       });
-
-      if (!copy) {
-        this.$action(`config/removeSlot`, target);
-      }
-
-      const key = `${componentName}_${index}`;
-      const newNode = {
-        ...JSON.parse(JSON.stringify(target.data)),
-        index: index,
-        key
-      };
-
-      const payload = {
-        id: to.id,
-        key,
-        value: newNode
-      };
-
-      this.$action(`config/addSlot`, payload);
     },
 
     changePosition(item) {
       this.$action(`config/moveSlot`, {
-        id: this.draggedNode.id,
-        dragged: this.draggedNode.data,
-        dropped: item.data
+        item: this.draggedNode,
+        to: item.id
       });
     },
 
@@ -92,7 +73,7 @@ export default {
       const siblings = this.draggedNode.parentId === item.parentId;
 
       if (!siblings || this.hold) {
-        this.moveTo(this.draggedNode, item);
+        this.moveTo(this.draggedNode, item.id);
       } else if (siblings) {
         this.changePosition(item);
       }
@@ -109,8 +90,8 @@ export default {
       this.$emit("item-selected", event);
 
       this.setComponent({
-        id: event[0].id,
-        name: event[0].componentName
+        id: event[0].data.id,
+        name: event[0].data.componentName
       });
     },
 
@@ -128,11 +109,7 @@ export default {
     onAdd(item) {},
 
     onCopy(item) {
-      this.moveTo(
-        item,
-        { id: item.parentId, data: { slots: item.parent.slots } },
-        true
-      );
+      // this.moveTo(item.data, item.data.parentId, true);
     },
 
     onRemove(item) {
@@ -143,36 +120,23 @@ export default {
       this.$action(`config/setProp`, {
         id: item.id,
         key: "hidden",
-        value: !item.data.hidden
+        value: !item.hidden
       });
     },
 
     onDataChange() {
-      this.entries = Object.keys(this.data).map(key => {
-        return this.traverse(this.data[key], key);
-      });
+      this.entries = [this.traverse(this.data.app)];
     },
 
-    traverse(node, id, parentId, parent) {
+    traverse(node) {
       const children = [];
       if (node.slots) {
         node.slots.forEach(child => {
-          if (
-            typeof child === "object" &&
-            child !== null &&
-            !Array.isArray(child)
-          ) {
-            children.push(this.traverse(child, `${id}-${child.key}`, id, node));
-          }
+          children.push(this.traverse(this.getComponent(child)));
         });
       }
 
       return {
-        id,
-        parent,
-        parentId,
-        name: node.componentName,
-        componentName: node.componentName,
         children,
         data: node
       };

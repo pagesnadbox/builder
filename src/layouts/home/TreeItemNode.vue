@@ -11,7 +11,7 @@
     @dragover="allowDrop"
   >
     <v-icon
-      v-if="item.children.length"
+      v-if="hasChildren"
       v-text="`mdi-${item.id === 1 ? 'home-variant' : 'folder-network'}`"
     ></v-icon>
     <span>{{ config.displayName }}</span>
@@ -29,21 +29,21 @@
       </template>
 
       <v-list>
-        <v-list-item @click="onItemClick('remove', item)">
+        <v-list-item @click="onItemClick('remove')">
           <v-list-item-title>Remove</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="onItemClick('hide', item)">
+        <v-list-item @click="onItemClick('hide')">
           <v-list-item-title>{{
-            item.data.hidden ? "Show" : "Hide"
+            item.hidden ? "Show" : "Hide"
           }}</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="onItemClick('add', item)">
+        <v-list-item @click="onItemClick('add')">
           <v-list-item-title>Add</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="onItemClick('copy', item)">
+        <v-list-item @click="onItemClick('copy')">
           <v-list-item-title>Copy</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="copyToClipBoard(item)">
+        <v-list-item @click="copyToClipBoard()">
           <v-list-item-title>Copy id to clipboard</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -60,12 +60,16 @@ export default {
     item: {
       type: Object,
       default: () => ({})
+    },
+    hasChildren: {
+      type: Boolean,
+      default: false
     }
   },
 
   computed: {
     config() {
-      return componentConfigs[this.item.name];
+      return componentConfigs[this.item.componentName];
     }
   },
 
@@ -100,10 +104,10 @@ export default {
       this.$emit("item-click", action);
     },
 
-    copyToClipBoard(item) {
+    copyToClipBoard() {
       var data = [
         new ClipboardItem({
-          "text/plain": new Blob([item.id], { type: "text/plain" })
+          "text/plain": new Blob([this.item.id], { type: "text/plain" })
         })
       ];
 

@@ -49,7 +49,9 @@ export default (options) => {
         },
 
         getters: {
-
+            getComponent: (state) => (id) => {
+                return state.data[id] || {}
+            }
         },
     }
 }
