@@ -1,7 +1,7 @@
 // import { store } from '@/main'
 
 // import moment from 'moment-timezone'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';  
 const proxy = '' // "https://sleepy-oasis-50684.herokuapp.com/";
 
 const defaultHeaders = () => {
@@ -353,23 +353,7 @@ export const getNextSlotIndex = ({ slots = {}, componentName }) => {
 }
 
 export const createSlot = ({ componentName, parentId }) => {
-  const id = uuidv4();
-
   const payload = {
-    id,
-    parentId,
-    componentName: componentName,
-    slots: []
-  };
-
-  return payload
-}
-
-export const copySlot = ({ slot }) => {
-  const id = uuidv4();
-
-  const payload = {
-    id,
     parentId,
     componentName: componentName,
     slots: []

@@ -3,9 +3,10 @@
     shaped
     hoverable
     activatable
+    :open.sync="open"
+    :active.sync="active"
     :items="entries"
     @update:active="onItemSelected"
-    return-object
   >
     <template v-slot:label="{ item }">
       <tree-item-node
@@ -33,11 +34,14 @@ export default {
   data() {
     return {
       entries: [],
-      hold: false
+      hold: false,
+      open: [],
+      active: []
     };
   },
 
   computed: {
+    ...mapState("settings", ["id"]),
     ...mapState("engine", ["data", "counter"]),
     ...mapGetters("engine", ["getComponent"])
   },
@@ -46,11 +50,29 @@ export default {
     counter: {
       immediate: true,
       handler: "onDataChange"
+    },
+    id: {
+      immediate: false,
+      handler: "onSelectedIdChange"
     }
   },
 
   methods: {
     ...mapActions("settings", ["setComponent"]),
+
+    onSelectedIdChange(id) {
+      let open = [id];
+      let component = this.getComponent(id);
+
+      this.active.push(id);
+
+      while (component.parentId) {
+        open.push(component.parentId);
+        component = this.getComponent(component.parentId);
+      }
+
+      this.open = open;
+    },
 
     moveTo(item, to, copy) {
       this.$action(`config/moveSlot`, {
@@ -61,7 +83,7 @@ export default {
     },
 
     changePosition(item) {
-      this.$action(`config/moveSlot`, {
+      this.$action(`config/changePosition`, {
         item: this.draggedNode,
         to: item.id
       });
@@ -89,10 +111,13 @@ export default {
     onItemSelected(event) {
       this.$emit("item-selected", event);
 
-      this.setComponent({
-        id: event[0].data.id,
-        name: event[0].data.componentName
-      });
+      if (event.length && event[0] !== this.id) {
+        const item = this.getComponent(event[0]);
+        this.setComponent({
+          id: item.id,
+          name: item.componentName
+        });
+      }
     },
 
     onItemClick(action, item) {
@@ -109,7 +134,7 @@ export default {
     onAdd(item) {},
 
     onCopy(item) {
-      // this.moveTo(item.data, item.data.parentId, true);
+      this.$action(`config/copySlot`, item);
     },
 
     onRemove(item) {
@@ -137,6 +162,7 @@ export default {
       }
 
       return {
+        id: node.id,
         children,
         data: node
       };
