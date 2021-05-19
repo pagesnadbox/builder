@@ -6,6 +6,7 @@ const stateFn = () => ({
     data: {
         title: "",
         description: "",
+        template: "landing-page",
         id: ""
     }
 })

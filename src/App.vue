@@ -19,11 +19,6 @@
 
       <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-switch
-        label="Dark"
-        v-model="$vuetify.theme.dark"
-        class="mt-5 mr-10"
-      ></v-switch>
     </v-app-bar>
 
     <v-main>
