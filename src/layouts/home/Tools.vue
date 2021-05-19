@@ -14,9 +14,9 @@
     <v-icon :disabled="!canRedo" class="mb-3" large @click="onRedoClick">
       mdi-redo-variant
     </v-icon>
-    <v-icon class="mb-3" large @click="onResetClick">
+    <!-- <v-icon class="mb-3" large @click="onResetClick">
       mdi-lock-reset
-    </v-icon>
+    </v-icon> -->
     <v-icon class="mb-3" large @click="onToggleCompact">
       mdi-rotate-right-variant
     </v-icon>

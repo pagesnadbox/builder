@@ -203,7 +203,7 @@ export default class Bridge {
     }
 
     replaceConfig(data) {
-        this.cfg.app = data.config.data;
+        this.cfg = data.config.data;
     }
 
     async saveConfig() {

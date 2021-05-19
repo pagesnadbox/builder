@@ -17,29 +17,7 @@
 
     <component :is="settingsComponent" v-model="menu">
       <v-card-text ref="scrollableContainer">
-        <v-tabs class="px-4 pb-1" fixed-tabs v-model="tab">
-          <v-tabs-slider color="yellow"></v-tabs-slider>
-
-          <v-tab :key="0">Tree</v-tab>
-          <v-tab :key="1">Properties</v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item :key="0">
-            <v-card flat>
-              <v-card-text>
-                <Tree @item-selected="tab = 1" />
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item :key="1">
-            <v-card flat>
-              <v-card-text>
-                <SettingsContainer />
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs-items>
+        <SettingsTabs />
       </v-card-text>
     </component>
   </div>
@@ -48,26 +26,17 @@
 <script>
 import { mapState, mapActions } from "vuex";
 
-import SettingsContainer from "@/layouts/home/SettingsContainer";
+import SettingsTabs from "./SettingsTabs";
 import SettingsModal from "@/components/tweak/SettingsModal";
 import SettingsBottomSheet from "@/components/tweak/SettingsBottomSheet";
-
-import Tree from "./Tree";
 
 export default {
   name: "HomeSettings",
 
-  data() {
-    return {
-      tab: null
-    };
-  },
-
   components: {
-    SettingsContainer,
+    SettingsTabs,
     SettingsModal,
-    SettingsBottomSheet,
-    Tree
+    SettingsBottomSheet
   },
 
   watch: {

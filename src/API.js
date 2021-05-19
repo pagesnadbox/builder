@@ -77,9 +77,7 @@ export default class API extends EventEmitter {
       engine: {
         ...store.state.engine,
         data: {
-          app: {
-            ...state.config.data
-          }
+          ...state.config.data
         }
       }
     })

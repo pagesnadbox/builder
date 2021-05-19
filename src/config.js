@@ -97,6 +97,22 @@ class BaseTitle extends BaseHeading {
     }
 }
 
+class BaseSubtitle extends BaseHeading {
+    constructor() {
+        super();
+        this.displayName = 'Sub Title'
+        this.componentName = 'BaseSubtitle'
+    }
+
+    get customProps() {
+        return [
+            ...super.customProps,
+            title,
+            text,
+        ]
+    }
+}
+
 class BaseBody extends MixinHeading {
     constructor() {
         super();
@@ -231,7 +247,6 @@ export default {
         displayName: 'Application Top Bar',
         props: [
             dark,
-            hideOnScroll,
             height,
             color,
         ],
@@ -343,16 +358,7 @@ export default {
         ]
     }),
 
-    BaseSubtitle: new BaseComponent({
-        ...baseHeading,
-        componentName: "BaseSubtitle",
-        displayName: 'Sub Title',
-        props: [
-            ...baseHeading.props,
-            title,
-            text,
-        ],
-    }),
+    BaseSubtitle: new BaseSubtitle(),
 
     BaseBody: new BaseBody(),
     componentName: "BaseBody",

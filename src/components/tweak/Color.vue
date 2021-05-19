@@ -3,7 +3,7 @@
     <v-item-group class="d-flex justify-center">
       <v-item v-if="clearable" :value="'primary_pagesandbox'">
         <v-icon
-          @click="onValueChange('')"
+          @click="onValueChange('primary_pagesandbox')"
           outlined
           class="ma-2"
           size="36"
@@ -113,7 +113,7 @@ export default {
       return [
         this.$vuetify.theme.isDark ? "#50778D" : "#42A5F6",
         "#009688",
-        "#9368e9",
+        "#9368e9"
       ];
     }
   },

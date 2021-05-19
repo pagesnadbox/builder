@@ -279,7 +279,7 @@ export default {
 
     onAppSettinsClick() {
       // reset all so application (BaseApp) is set for editing
-      this.setComponent({ id: "", name: "" });
+      this.setComponent({ id: "app", name: "BaseApp" });
     },
 
     onKeyUp(e) {

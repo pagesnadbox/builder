@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { EventBus } from "./utils/eventBus";
 
 export default {
@@ -55,27 +56,26 @@ export default {
   },
 
   computed: {
+    ...mapState("engine", ["data"]),
     meta() {
       return this.$route.meta;
     }
   },
 
   watch: {
-    "$vuetify.theme.dark": "onThemeChange"
+    "data.app.dark": {
+      handler: "onThemeChange",
+      immediate: true
+    }
   },
 
   methods: {
     onThemeChange(value) {
-      localStorage.setItem("pagesandbox_theme_dark", value);
+      this.$vuetify.theme.dark = value;
     }
   },
 
   created() {
-    const isDark = localStorage.getItem("pagesandbox_theme_dark") !== "false";
-    this.$nextTick(() => {
-      this.$vuetify.theme.dark = isDark;
-    });
-
     window.addEventListener("wheel", e => e.stopPropagation());
 
     window.addEventListener("keydown", e => EventBus.$emit("on-keydown", e));
