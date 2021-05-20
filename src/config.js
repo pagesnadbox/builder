@@ -247,6 +247,7 @@ export default {
         displayName: 'Application Top Bar',
         props: [
             dark,
+            hideOnScroll,
             height,
             color,
         ],

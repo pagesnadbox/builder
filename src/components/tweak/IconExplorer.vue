@@ -1,8 +1,9 @@
 <template>
   <v-card max-width="500px">
-    <v-card-title class="text-h5 grey lighten-2">
+    <v-card-title class="text-h5">
       Choose an icon
     </v-card-title>
+    <v-divider></v-divider>
 
     <v-card-text max-height="500px">
       <v-text-field

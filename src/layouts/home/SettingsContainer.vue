@@ -12,7 +12,7 @@
       <div>
         <h3 align="center" title="Theme Colors" space="0" />
 
-        <tweak-color v-model="currentThemePrimary" />
+        <tweak-color v-model="currentThemePrimary" :showPrimary="false" />
 
         <v-divider class="my-6" />
 
@@ -273,8 +273,8 @@ export default {
       });
     },
 
-    dispatch(actionName, { ...payload } = {}) {
-      this.$action(`config/${actionName}`, payload);
+    dispatch(actionName, payload) {
+      this.$store.dispatch(`engine/${actionName}`, payload);
     },
 
     onAppSettinsClick() {

@@ -35,7 +35,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { EventBus } from "./utils/eventBus";
+import { EventBus, events } from "./utils/eventBus";
 
 export default {
   name: "App",
@@ -58,6 +58,10 @@ export default {
   },
 
   watch: {
+    data: {
+      deep: true,
+      handler: "onDataChange"
+    },
     "data.app.dark": {
       handler: "onThemeChange",
       immediate: true
@@ -67,6 +71,9 @@ export default {
   methods: {
     onThemeChange(value) {
       this.$vuetify.theme.dark = value;
+    },
+    onDataChange() {
+      EventBus.$emit(events.DATA_CHANGE);
     }
   },
 

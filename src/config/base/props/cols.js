@@ -6,7 +6,6 @@ class Cols extends EnumProp {
     }
 
     getCols(breakpoint) {
-        console.error(this)
         return {
             ...this,
             displayName: `Cols (${breakpoint})`,

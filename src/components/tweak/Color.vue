@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-item-group class="d-flex justify-center">
-      <v-item v-if="clearable" :value="'primary_pagesandbox'">
+      <v-item v-if="clearable" :value="''">
         <v-icon
-          @click="onValueChange('primary_pagesandbox')"
+          @click="onValueChange(null)"
           outlined
           class="ma-2"
           size="36"
@@ -28,6 +28,17 @@
       </v-item>
 
       <v-divider vertical class="mx-2"></v-divider>
+
+      <v-item v-if="showPrimary" :value="data.app.primary">
+        <base-avatar
+          @click.stop="onValueChange(data.app.primary)"
+          :color="data.app.primary"
+          :outlined="data.app.primary === value"
+          class="ma-2"
+          size="36"
+          style="cursor: pointer"
+        />
+      </v-item>
 
       <v-item>
         <v-menu
@@ -88,6 +99,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     value: {
@@ -98,6 +110,11 @@ export default {
     clearable: {
       type: Boolean,
       default: false
+    },
+
+    showPrimary: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -109,6 +126,8 @@ export default {
   },
 
   computed: {
+    ...mapState("engine", ["data"]),
+
     colors() {
       return [
         this.$vuetify.theme.isDark ? "#50778D" : "#42A5F6",

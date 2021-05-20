@@ -17,9 +17,15 @@
           class="fill-height"
         >
           <v-sheet class="overflow-y-auto" height="100%">
-            <v-container fluid class="pa-0">
-              <div id="engine" ref="engineSlot" :class="classes"></div>
-            </v-container>
+            <iframe
+              @load="onWindowLoaded"
+              src="http://localhost:8080/"
+              width="100%"
+              height="100%"
+              id="engine"
+              ref="engineSlot"
+              frameborder="0"
+            ></iframe>
           </v-sheet>
         </v-col>
       </v-row>
@@ -83,11 +89,13 @@ export default {
     }
   },
 
-  mounted() {
-    EventBus.$emit(events.PROJECT_SELECTED);
-    EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
-      slot: this.$refs.engineSlot
-    });
+  methods: {
+    onWindowLoaded() {
+      EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
+        slot: this.$refs.engineSlot
+      });
+      EventBus.$emit(events.PROJECT_SELECTED);
+    }
   }
 };
 </script>

@@ -75,7 +75,7 @@ export default {
     },
 
     moveTo(item, to, copy) {
-      this.$action(`config/moveSlot`, {
+      this.dispatch('moveSlot', {
         item,
         to,
         copy
@@ -83,10 +83,15 @@ export default {
     },
 
     changePosition(item) {
-      this.$action(`config/changePosition`, {
+      this.dispatch('changePosition', {
         item: this.draggedNode,
         to: item.id
       });
+    },
+
+
+    dispatch(actionName, payload) {
+      this.$store.dispatch(`engine/${actionName}`, payload);
     },
 
     onDrop(event, item) {
@@ -105,7 +110,6 @@ export default {
 
     onDrag(event, item) {
       this.draggedNode = item;
-      console.error("onDrag", event, item);
     },
 
     onItemSelected(event) {
@@ -134,15 +138,17 @@ export default {
     onAdd(item) {},
 
     onCopy(item) {
-      this.$action(`config/copySlot`, item);
+      this.dispatch('copySlot', item)
+
     },
 
     onRemove(item) {
-      this.$action(`config/removeSlot`, item);
+      this.dispatch('removeSlot', item);
+
     },
 
     onHide(item) {
-      this.$action(`config/setProp`, {
+      this.dispatch('setProp', {
         id: item.id,
         key: "hidden",
         value: !item.hidden

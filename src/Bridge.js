@@ -1,11 +1,10 @@
-import { loadCss, debounce } from "./utils/helpers";
+import { debounce } from "./utils/helpers";
 
 import Builder from "./API";
 import History from "./History";
+import EngineAdapter from "./EngineAdapter";
 import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
-
-const Engine = window.API.Engine;
 
 export default class Bridge {
 
@@ -23,7 +22,6 @@ export default class Bridge {
             this.cfg = cfg
             this.imageService = ImagesService.getInstance();
             this.createApp();
-            this.createEngine();
         });
 
         return this;
@@ -40,7 +38,6 @@ export default class Bridge {
         this.builder.init()
         window.com.app = this.builder;
 
-        this.builder.setConfig(this.cfg)
         this.attachAppEvent();
     }
 
@@ -54,18 +51,17 @@ export default class Bridge {
         return this.history;
     }
 
-    async createEngine() {
-        this.createHistory();
+    async createEngine(data) {
+        if (this.engine) return;
+        // this.createHistory();
 
-        this.engine = new Engine();
+        this.engine = new EngineAdapter();
+        this.engine.target = data.slot.contentWindow
 
         await this.engine.init({
-            imageService: this.imageService,
+            baseUrl: this.imageService.BASE_URL,
             config: this.cfg,
-            preventMount: true
         });
-
-        this.engine.app.$mount();
 
         this.attachEngineEvent();
     }
@@ -78,8 +74,8 @@ export default class Bridge {
     }
 
     attachEngineEvent() {
-        Object.keys(Engine.events).forEach(key => {
-            const event = Engine.events[key]
+        Object.keys(EngineAdapter.events).forEach(key => {
+            const event = EngineAdapter.events[key]
             this.engine.on(event, (data) => this.onEngineEvent(event, data));
         });
     }
@@ -117,6 +113,7 @@ export default class Bridge {
             [Builder.events.HISTORY_REDO]: () => this.history.redo(),
             [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highlight(id),
             [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highlight(null),
+            [Builder.events.DATA_CHANGE]: (data) => this.saveConfig(data),
         }
 
         if (mediator[event]) {
@@ -125,13 +122,11 @@ export default class Bridge {
     }
 
     onEngineEvent(event, data) {
-        console.log(`Engine Event: ${event}`, data);
+        console.log(`EngineAdapter Event: ${event}`, data);
 
         const mediator = {
             // settings change performed from engine, inform builder
-            [Engine.events.SETTINGS_ACTION]: (data) => this.builder.setSetting(data),
-            // reload the css when theme property is changed
-            [Engine.events.THEME_COLOR_CHANGE]: () => requestAnimationFrame(() => this.reloadEngineCss()),
+            [EngineAdapter.events.SETTINGS_ACTION]: (data) => this.builder.setSetting(data),
         }
 
         if (mediator[event]) {
@@ -150,8 +145,7 @@ export default class Bridge {
     }
 
     onEngineSlotRendered(data) {
-        this.styles = this.reloadEngineCss();
-        this.builder.setEngine(data.slot, this.engine.app.$el);
+        this.createEngine(data);
     }
 
     onProjectSelected() {
@@ -161,41 +155,6 @@ export default class Bridge {
 
     onAppAction(data) {
         this.engine.action(data);
-        if (this.skipSaveActions.every(a => !data.key.startsWith(a))) {
-            // save only if interested action was performed
-            this.debouncedSaveConfigFn();
-        }
-    }
-
-    loadEngineCss() {
-        const url = process.env.VUE_APP_TEMPLATE_RESOURCES_URL;
-        const engineShadow = this.builder.getEngineSlot();
-
-        const styles = [
-            `${url}/css/app.css`,
-            `${url}/css/chunk-vendors.css`,
-            "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
-            "https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css",
-            "https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700:100,300,400,500,700,900&display=swap"
-        ].map(href => {
-            return loadCss(href, engineShadow);
-        });
-
-        const themeStyles = document.getElementById("vuetify-theme-stylesheet");
-
-        engineShadow.appendChild(themeStyles.cloneNode(true));
-
-        return styles
-    }
-
-    reloadEngineCss() {
-        const newStyles = this.loadEngineCss();
-
-        if (this.styles) {
-            this.styles.forEach(element => element.remove())
-        }
-
-        this.styles = newStyles;
     }
 
     onError(error) {
@@ -206,24 +165,24 @@ export default class Bridge {
         this.cfg = data.config.data;
     }
 
-    async saveConfig() {
-        await ConfigService.saveConfig({
+    saveConfig() {
+        this.engine.setConfig(this.cfg)
+
+        ConfigService.saveConfig({
             config: this.cfg,
         }, this.onError.bind(this))
-
-        this.builder.setConfig(this.cfg)
     }
 
     async fetchConfig() {
         this.cfg = await this.config();
 
-        this.history.initialized && this.history.unsubscribe();
+        // this.history.initialized && this.history.unsubscribe();
 
-        this.builder.setConfig(this.cfg)
+        this.builder.setConfig(this.cfg);
         this.engine.setConfig(this.cfg);
 
-        this.history.setApp("engine", this.engine.store);
-        this.history.subscribe();
+        // this.history.setApp("engine", this.engine.store);
+        // this.history.subscribe();
     }
 
     async fetchProject() {

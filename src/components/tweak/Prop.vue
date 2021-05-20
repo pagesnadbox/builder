@@ -39,6 +39,7 @@
       :label="displayName"
       :value="effectiveValue"
       outlined
+      clearable
       @input="onValueChange"
     >
       <template v-slot:append-outer>
@@ -91,6 +92,7 @@
 
   <v-col cols="12" v-else>
     <v-text-field
+      clearable
       :label="displayName"
       :value="effectiveValue"
       outlined
@@ -214,7 +216,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("settings", ["setShowGallery"]),
+    ...mapActions("settings", ["setShowGallery", "setImage"]),
 
     onGalleryClick() {
       EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));
@@ -232,6 +234,7 @@ export default {
       };
 
       this.$action("settings/setImage", data);
+      this.setImage(data);
 
       this.onValueChange(data.name);
     },
