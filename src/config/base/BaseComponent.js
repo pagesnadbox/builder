@@ -3,9 +3,14 @@ export default class BaseComponent {
     get props() {
         return [
             properties.hidden,
+            ...this.customProps
+        ]
+    }
+
+    get alignProps() {
+        return [
             properties.customSpace.getSpace("Margin"),
             properties.customSpace.getSpace("Padding"),
-            ...this.customProps
         ]
     }
 

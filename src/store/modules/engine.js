@@ -17,11 +17,10 @@ const stateFn = (options) => {
 }
 
 function addSlot(state, payload) {
-    const id = uuidv4();
     const parentId = payload.parentId
 
-    Vue.set(state.data, id, { ...payload, id })
-    state.data[parentId].slots.push(id)
+    Vue.set(state.data, payload.id, payload)
+    state.data[parentId].slots.push(payload.id)
 }
 
 function removeSlot(state, payload) {
@@ -127,7 +126,6 @@ function setProp(state, payload) {
 }
 
 export default (options) => {
-    console.log(options)
     const state = stateFn()
     return {
         namespaced: true,
@@ -136,8 +134,11 @@ export default (options) => {
 
         mutations: {
             SET_CONFIG: (state, payload) => {
-                // Vue.set(state.config, payload.key, { data: payload.value })
                 state.data = payload.value
+                state.counter++
+            },
+
+            INCREASE_COUNTER: (state) => {
                 state.counter++
             },
 
@@ -146,11 +147,17 @@ export default (options) => {
             SET_THEME_COLOR: (state, payload) => {
                 state.vuetify.theme[payload.key] = payload.value
             },
+
             SET_PROP: setProp,
+
             ADD_SLOT: addSlot,
+
             REMOVE_SLOT: removeSlot,
+
             MOVE_SLOT: moveSlot,
+
             COPY_SLOT: copySlot,
+
             CHANGE_POSITION: changePosition,
         },
 
@@ -158,29 +165,46 @@ export default (options) => {
             setConfig({ commit }, payload) {
                 commit('SET_CONFIG', payload)
             },
+
             setEngineDark({ commit }, payload) {
                 commit('SET_THEME_DARK', payload)
             },
+
             setEngineColor({ commit }, payload) {
                 commit('SET_THEME_COLOR', payload)
             },
+
             setProp({ commit }, payload) {
                 commit('SET_PROP', payload)
             },
+
             addSlot({ commit }, payload) {
-                commit('ADD_SLOT', payload)
+                const slotData = { ...payload, id: uuidv4() };
+
+                commit('ADD_SLOT', slotData)
+                commit('INCREASE_COUNTER')
+
+                return slotData;
             },
+
             removeSlot({ commit }, payload) {
                 commit('REMOVE_SLOT', payload)
+                commit('INCREASE_COUNTER')
             },
+
             moveSlot({ commit }, payload) {
                 commit('MOVE_SLOT', payload)
+                commit('INCREASE_COUNTER')
             },
+
             changePosition({ commit }, payload) {
                 commit('CHANGE_POSITION', payload)
+                commit('INCREASE_COUNTER')
             },
+
             copySlot({ commit }, payload) {
                 commit('COPY_SLOT', payload)
+                commit('INCREASE_COUNTER')
             },
         },
 

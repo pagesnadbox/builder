@@ -10,40 +10,112 @@
 
       <v-divider class="my-6" />
       <div>
-        <h3 align="center" title="Theme Colors" space="0" />
+        <v-expansion-panels flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header class="pa-0 px-2">
+              Settings
+            </v-expansion-panel-header>
+            <v-expansion-panel-content class="px-0">
+              <h3 align="center" title="Theme Colors" space="0" />
 
-        <tweak-color v-model="currentThemePrimary" :showPrimary="false" />
+              <tweak-color v-model="currentThemePrimary" :showPrimary="false" />
 
-        <v-divider class="my-6" />
+              <v-divider class="my-6" />
 
-        <v-switch
-          v-model="allowEditModel"
-          class="mr-4"
-          label="Edit Mode (Hold 'E' for quick edit)"
-        ></v-switch>
+              <v-switch
+                v-model="allowEditModel"
+                class="mr-4"
+                label="Edit Mode (Hold 'E' for quick edit)"
+              ></v-switch>
 
-        <v-btn
-          class="mr-4"
-          color="primary"
-          :outlined="engineDark"
-          @click="engineDark = false"
-        >
-          <v-icon left>
-            mdi-white-balance-sunny
-          </v-icon>
-          Light
-        </v-btn>
+              <v-btn
+                class="mr-4"
+                color="primary"
+                :outlined="engineDark"
+                @click="engineDark = false"
+              >
+                <v-icon left>
+                  mdi-white-balance-sunny
+                </v-icon>
+                Light
+              </v-btn>
 
-        <v-btn
-          color="primary"
-          :outlined="!engineDark"
-          @click="engineDark = true"
-        >
-          <v-icon left>
-            mdi-weather-night
-          </v-icon>
-          Dark
-        </v-btn>
+              <v-btn
+                color="primary"
+                :outlined="!engineDark"
+                @click="engineDark = true"
+              >
+                <v-icon left>
+                  mdi-weather-night
+                </v-icon>
+                Dark
+              </v-btn>
+
+              <br />
+              <br />
+
+              <v-menu v-if="history.length" offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    outlined
+                    block
+                    tile
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon left>
+                      mdi-dots-vertical
+                    </v-icon>
+                    {{ history.length }} Selected history
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in history"
+                    :key="index"
+                    @click="setComponent(item)"
+                  >
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+              <br />
+
+              <v-menu v-if="moreComponents.length" offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    outlined
+                    block
+                    tile
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon left>
+                      mdi-dots-vertical
+                    </v-icon>
+                    {{ moreComponents.length }} Components Selected
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in moreComponents"
+                    :key="index"
+                    @click="setComponent(item)"
+                  >
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+              <br />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
 
         <v-divider class="my-6" />
       </div>
@@ -52,68 +124,6 @@
         :items="Object.values(componentConfigs)"
         @save-click="onSaveClick"
       ></tweak-add-component>
-
-      <br />
-
-      <v-menu v-if="history.length" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ history.length }} Selected history
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in history"
-            :key="index"
-            @click="setComponent(item)"
-          >
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <br />
-
-      <v-menu v-if="moreComponents.length" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ moreComponents.length }} Components Selected
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in moreComponents"
-            :key="index"
-            @click="setComponent(item)"
-          >
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <br />
 
       <v-divider class="my-6" />
     </div>
@@ -125,8 +135,27 @@
     >
       <h3 class="text-subtitle-1 text-center">{{ config.displayName }}</h3>
 
+      <br />
+
       <v-container class="pa-0">
         <v-row>
+          <v-expansion-panels flat>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="pa-0 px-2">
+                Spaces
+              </v-expansion-panel-header>
+              <v-expansion-panel-content class="px-0">
+                <tweak-prop
+                  v-for="(prop, i) in alignProps"
+                  :key="i"
+                  v-bind="prop"
+                  :options="prop.options"
+                  @property-change="onValueChange"
+                />
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
           <tweak-prop
             v-for="(prop, i) in props"
             :key="i"
@@ -217,6 +246,16 @@ export default {
       });
     },
 
+    alignProps() {
+      const props = this.config.alignProps || [];
+      const componentData = this.componentData;
+
+      return props.map(config => {
+        config.value = componentData[config.propName];
+        return config;
+      });
+    },
+
     engineDark: {
       get() {
         return this.$store.state.engine.data.app.dark;
@@ -249,13 +288,14 @@ export default {
 
     ...mapActions("engine", ["setEngineDark", "setEngineColor", "addSlot"]),
 
-    onSaveClick(data) {
+    async onSaveClick(data) {
       const payload = createSlot({
         componentName: data.component,
         parentId: this.id
       });
 
-      this.dispatch("addSlot", payload);
+      const slot = await this.dispatch("addSlot", payload);
+      this.setComponent({ id: slot.id, name: slot.componentName });
     },
 
     getData() {
@@ -274,7 +314,7 @@ export default {
     },
 
     dispatch(actionName, payload) {
-      this.$store.dispatch(`engine/${actionName}`, payload);
+      return this.$store.dispatch(`engine/${actionName}`, payload);
     },
 
     onAppSettinsClick() {
@@ -294,5 +334,8 @@ export default {
 <style>
 .prevent-user-select {
   user-select: none;
+}
+.v-expansion-panel-content > .v-expansion-panel-content__wrap {
+  padding: 0 !important;
 }
 </style>

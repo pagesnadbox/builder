@@ -1,36 +1,37 @@
 <template>
   <div class="text-center">
-    <v-menu v-model="menu" :close-on-content-click="false" offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn block color="primary" v-bind="attrs" v-on="on">
-          Add component
-        </v-btn>
-      </template>
+    <v-expansion-panels flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header class="pa-0 px-2">
+          Add Components
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="px-0">
+          <v-card flat>
+            <v-card-text>
+              <v-select
+                label="Pick component"
+                v-model="selected"
+                item-text="displayName"
+                item-value="componentName"
+                :return-object="false"
+                :items="items"
+              ></v-select>
+            </v-card-text>
 
-      <v-card>
-        <v-card-text>
-          <v-select
-            label="Pick component"
-            v-model="selected"
-            item-text="displayName"
-            item-value="componentName"
-            :return-object="false"
-            :items="items"
-          ></v-select>
-        </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn text @click="menu = false">
-            Cancel
-          </v-btn>
-          <v-btn color="primary" text @click="onSaveClick">
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-menu>
+              <v-btn text @click="menu = false">
+                Cancel
+              </v-btn>
+              <v-btn color="primary" text @click="onSaveClick">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </div>
 </template>
 
