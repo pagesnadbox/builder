@@ -1,6 +1,6 @@
 <template>
   <v-app :class="{ dark: $vuetify.theme.dark }">
-    <v-navigation-drawer v-if="meta.hasDrawer" app v-model="drawer">
+    <v-navigation-drawer app v-model="drawer">
       <v-list dense rounded>
         <v-list-item v-for="item in links" :key="item.title" link>
           <v-list-item-icon>
@@ -14,7 +14,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="transparent" outlined flat app v-if="meta.hasAppBar">
+    <v-app-bar outlined flat app absolute v-if="meta.hasAppBar">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>

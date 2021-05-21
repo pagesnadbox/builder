@@ -11,43 +11,11 @@
     @dragover="allowDrop"
   >
     <v-icon
+      class="mr-4"
       v-if="hasChildren"
       v-text="`mdi-${item.id === 1 ? 'home-variant' : 'folder-network'}`"
     ></v-icon>
     <span>{{ config.displayName }}</span>
-
-    <v-menu offset-y>
-      <template v-slot:activator="{ attrs, on }">
-        <v-btn
-          v-bind="attrs"
-          v-on="on"
-          icon
-          class="tree-item-more-button mr-2 mt-0"
-        >
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item @click="onItemClick('remove')">
-          <v-list-item-title>Remove</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="onItemClick('hide')">
-          <v-list-item-title>{{
-            item.hidden ? "Show" : "Hide"
-          }}</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="onItemClick('add')">
-          <v-list-item-title>Add</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="onItemClick('copy')">
-          <v-list-item-title>Copy</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="copyToClipBoard()">
-          <v-list-item-title>Copy id to clipboard</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
   </div>
 </template>
 
@@ -98,10 +66,6 @@ export default {
 
     allowDrop(event) {
       event.preventDefault();
-    },
-
-    onItemClick(action) {
-      this.$emit("item-click", action);
     },
 
     copyToClipBoard() {

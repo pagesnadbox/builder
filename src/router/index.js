@@ -25,6 +25,10 @@ const router = new Router({
     {
       path: '/project',
       component: () => import('@/views/Tweak.vue'),
+      meta: {
+        hasAppBar: true,
+        appTitle: "Builder"
+      }
     },
   ],
 })
