@@ -1,5 +1,7 @@
 import EventEmitter from "eventemitter3";
 
+const engineOrigin = window.com.builder.cfg.engineOrigin;
+
 export default class EngineAdapter extends EventEmitter {
     static get events() {
         return {
@@ -25,7 +27,7 @@ export default class EngineAdapter extends EventEmitter {
     }
 
     onMessage(event) {
-        if (event.origin !== window.location.origin) {
+        if (event.origin !== engineOrigin) {
             return;
         }
 
