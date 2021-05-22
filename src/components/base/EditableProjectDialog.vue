@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <v-container>
-          <v-row>
+          <v-row no-gutters>
             <v-col cols="12">
               <v-text-field
                 outlined
@@ -14,6 +14,17 @@
                 required
                 v-model="title"
               ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-select
+                outlined
+                label="Template *"
+                :items="templates"
+                required
+                item-text="name"
+                item-value="key"
+                v-model="template"
+              ></v-select>
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -42,6 +53,21 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
+  data() {
+    return {
+      templates: [
+        {
+          name: "Base",
+          key: "base"
+        },
+        {
+          name: "Landing Page",
+          key: "landing-page"
+        }
+      ]
+    };
+  },
+
   computed: {
     ...mapState("editableDialog", ["visible", "editMode", "data"]),
 
@@ -60,6 +86,15 @@ export default {
       },
       set(value) {
         this.setData({ ...this.data, title: value });
+      }
+    },
+
+    template: {
+      get() {
+        return this.data.template;
+      },
+      set(value) {
+        this.setData({ ...this.data, template: value });
       }
     },
 

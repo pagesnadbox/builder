@@ -18,14 +18,17 @@ const router = new Router({
       path: '/',
       component: () => import('@/views/Projects.vue'),
       meta: {
-        hasDrawer: true,
         hasAppBar: true,
-        appTitle: "Projects"
+        appTitle: "Home"
       }
     },
     {
       path: '/project',
       component: () => import('@/views/Tweak.vue'),
+      meta: {
+        hasAppBar: true,
+        appTitle: "Builder"
+      }
     },
   ],
 })

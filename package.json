@@ -1,6 +1,6 @@
 {
   "name": "pagesandbox-builder",
-  "version": "0.0.21",
+  "version": "0.0.28",
   "private": false,
   "scripts": {
     "serve": "cp -f ./buildfiles/dev/index.html ./public/; vue-cli-service serve --port 8081 --mode development",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "eventemitter3": "^4.0.7",
+    "uuid": "^8.3.2",
     "vue": "^2.6.12",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",

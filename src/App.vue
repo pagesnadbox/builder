@@ -1,8 +1,8 @@
 <template>
   <v-app :class="{ dark: $vuetify.theme.dark }">
-    <v-navigation-drawer v-if="meta.hasDrawer" app v-model="drawer">
+    <v-navigation-drawer app v-model="drawer">
       <v-list dense rounded>
-        <v-list-item v-for="item in links" :key="item.title" link>
+        <v-list-item v-for="item in links" :key="item.title" link :to="item.to">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -14,16 +14,12 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="transparent" outlined flat app v-if="meta.hasAppBar">
+    <v-app-bar outlined flat app absolute v-if="meta.hasAppBar">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-switch
-        label="Dark"
-        v-model="$vuetify.theme.dark"
-        class="mt-5 mr-10"
-      ></v-switch>
+      <v-switch label="Dark" v-model="engineDark" class="mt-5 mr-10"></v-switch>
     </v-app-bar>
 
     <v-main>
@@ -39,7 +35,8 @@
 </template>
 
 <script>
-import { EventBus } from "./utils/eventBus";
+import { mapActions, mapState } from "vuex";
+import { EventBus, events } from "./utils/eventBus";
 
 export default {
   name: "App",
@@ -48,34 +45,57 @@ export default {
     return {
       drawer: true,
       links: [
-        { title: "Home", icon: "mdi-view-dashboard" },
-        { title: "About", icon: "mdi-forum" }
+        { title: "Home", icon: "mdi-view-dashboard", to: "/" },
+        { title: "Builder", icon: "mdi-tools", to: "/project" }
       ]
     };
   },
 
   computed: {
+    ...mapState("engine", ["data"]),
+
     meta() {
       return this.$route.meta;
+    },
+
+    engineDark: {
+      get() {
+        return this.data.app?.dark;
+      },
+      set(value) {
+        this.setProp({
+          id: "app",
+          key: "dark",
+          value
+        });
+      }
     }
   },
 
   watch: {
-    "$vuetify.theme.dark": "onThemeChange"
+    data: {
+      deep: true,
+      handler: "onDataChange"
+    },
+    "data.app.dark": {
+      handler: "onThemeChange",
+      immediate: true
+    }
   },
 
   methods: {
+    ...mapActions("engine", ["setProp"]),
+
     onThemeChange(value) {
-      localStorage.setItem("pagesandbox_theme_dark", value);
+      this.$vuetify.theme.dark = value;
+    },
+
+    onDataChange() {
+      EventBus.$emit(events.DATA_CHANGE);
     }
   },
 
   created() {
-    const isDark = localStorage.getItem("pagesandbox_theme_dark") !== "false";
-    this.$nextTick(() => {
-      this.$vuetify.theme.dark = isDark;
-    });
-
     window.addEventListener("wheel", e => e.stopPropagation());
 
     window.addEventListener("keydown", e => EventBus.$emit("on-keydown", e));

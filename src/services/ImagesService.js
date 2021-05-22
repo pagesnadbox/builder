@@ -15,13 +15,18 @@ class ImagesService {
     get defaultImages() {
         return defaultImages;
     }
- 
+
+    get BASE_URL() {
+        return domain
+    }
+
     transformURL({ assetName }) {
         if (this.defaultImages.indexOf(assetName) > -1) {
             return assetName;
         }
 
-        return `${domain}/images/${assetName}`;
+        return `${this.BASE_URL}/images/${assetName}`;
+
     }
 }
 

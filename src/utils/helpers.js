@@ -1,7 +1,7 @@
 // import { store } from '@/main'
 
 // import moment from 'moment-timezone'
-
+import { v4 as uuidv4 } from 'uuid';  
 const proxy = '' // "https://sleepy-oasis-50684.herokuapp.com/";
 
 const defaultHeaders = () => {
@@ -335,4 +335,29 @@ export const loadCss = (href, targetDom) => {
   targetDom.appendChild(element)
 
   return element;
+}
+
+export const getNextSlotIndex = ({ slots = {}, componentName }) => {
+  const filtredByType = slots
+    .filter(s => s.componentName === componentName)
+    .sort()
+    .reverse();
+
+  let index = 0;
+
+  if (filtredByType.length) {
+    index = filtredByType[0].index + 1;
+  }
+
+  return index
+}
+
+export const createSlot = ({ componentName, parentId }) => {
+  const payload = {
+    parentId,
+    componentName: componentName,
+    slots: []
+  };
+
+  return payload
 }

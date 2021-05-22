@@ -14,12 +14,19 @@
 </head>
 
 <body>
-  <script src="/template/js/chunk-vendors.js"></script>
-  <script src="/template/js/app.js"></script>
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
   </noscript>
+  <script>
+    window.com = window.com || {};
+    window.com.builder = {
+      cfg: {
+        engineOrigin: "http://localhost:3000",
+        engineUrl: "http://localhost:3000/template"
+      }
+    }
+  </script>
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>

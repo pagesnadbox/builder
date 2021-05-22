@@ -10,131 +10,120 @@
 
       <v-divider class="my-6" />
       <div>
-        <h3 align="center" title="Theme Colors" space="0" />
+        <v-expansion-panels flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header class="pa-0 px-2">
+              Settings
+            </v-expansion-panel-header>
+            <v-expansion-panel-content class="px-0">
+              <h3 align="center" title="Theme Colors" space="0" />
 
-        <tweak-color v-model="currentThemePrimary" />
+              <tweak-color v-model="currentThemePrimary" :showPrimary="false" />
 
-        <v-divider class="my-6" />
+              <v-divider class="my-6" />
 
-        <v-switch
-          v-model="allowEditModel"
-          class="mr-4"
-          label="Edit Mode (Hold 'E' for quick edit)"
-        ></v-switch>
+              <v-switch
+                v-model="allowEditModel"
+                class="mr-4"
+                label="Edit Mode (Hold 'E' for quick edit)"
+              ></v-switch>
 
-        <v-btn
-          class="mr-4"
-          color="primary"
-          :outlined="engineDark"
-          @click="engineDark = false"
-        >
-          <v-icon left>
-            mdi-white-balance-sunny
-          </v-icon>
-          Light
-        </v-btn>
+              <v-btn
+                class="mr-4"
+                color="primary"
+                :outlined="engineDark"
+                @click="engineDark = false"
+              >
+                <v-icon left>
+                  mdi-white-balance-sunny
+                </v-icon>
+                Light
+              </v-btn>
 
-        <v-btn
-          color="primary"
-          :outlined="!engineDark"
-          @click="engineDark = true"
-        >
-          <v-icon left>
-            mdi-weather-night
-          </v-icon>
-          Dark
-        </v-btn>
+              <v-btn
+                color="primary"
+                :outlined="!engineDark"
+                @click="engineDark = true"
+              >
+                <v-icon left>
+                  mdi-weather-night
+                </v-icon>
+                Dark
+              </v-btn>
+
+              <br />
+              <br />
+
+              <v-menu v-if="history.length" offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    outlined
+                    block
+                    tile
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon left>
+                      mdi-dots-vertical
+                    </v-icon>
+                    {{ history.length }} Selected history
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in history"
+                    :key="index"
+                    @click="setComponent(item)"
+                  >
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+              <br />
+
+              <v-menu v-if="moreComponents.length" offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    outlined
+                    block
+                    tile
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon left>
+                      mdi-dots-vertical
+                    </v-icon>
+                    {{ moreComponents.length }} Components Selected
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in moreComponents"
+                    :key="index"
+                    @click="setComponent(item)"
+                  >
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+              <br />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
 
         <v-divider class="my-6" />
       </div>
 
-      <v-menu v-if="history.length" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ history.length }} Selected history
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in history"
-            :key="index"
-            @click="setComponent(item)"
-          >
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <br />
-
-      <v-menu v-if="moreComponents.length" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ moreComponents.length }} Components Selected
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in moreComponents"
-            :key="index"
-            @click="setComponent(item)"
-          >
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <br />
-
-      <v-menu v-if="aggregations" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            outlined
-            block
-            tile
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>
-              mdi-dots-vertical
-            </v-icon>
-            {{ Object.keys(aggregations).length }} Aggregated Components
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in Object.values(aggregations)"
-            :key="index"
-            @click="setComponent({ ...item, name: item.componentName })"
-          >
-            <v-list-item-title>{{ item.componentName }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <tweak-add-component
+        :items="Object.values(componentConfigs)"
+        @save-click="onSaveClick"
+      ></tweak-add-component>
 
       <v-divider class="my-6" />
     </div>
@@ -144,23 +133,31 @@
       :class="{ 'overflow-y-auto': scrollable }"
       class="fill-height px-2"
     >
-      <h3 align="center" :title="config.displayName" space="0" />
+      <h3 class="text-subtitle-1 text-center">{{ config.displayName }}</h3>
 
-      <tweak-items
-        v-if="items.length"
-        :listId="list.id"
-        :region="region || undefined"
-        :items="items"
-        @item-click="onItemClick"
-        @property-change="onValueChange"
-        @add-click="onAddClick"
-        @remove-click="onRemoveClick"
-      />
+      <br />
 
       <v-container class="pa-0">
-        <v-row no-gutters>
+        <v-row>
+          <v-expansion-panels flat>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="pa-0 px-2">
+                Spaces
+              </v-expansion-panel-header>
+              <v-expansion-panel-content class="px-0">
+                <tweak-prop
+                  v-for="(prop, i) in alignProps"
+                  :key="i"
+                  v-bind="prop"
+                  :options="prop.options"
+                  @property-change="onValueChange"
+                />
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
           <tweak-prop
-            v-for="(prop, i) in primitiveProps"
+            v-for="(prop, i) in props"
             :key="i"
             v-bind="prop"
             :options="prop.options"
@@ -173,9 +170,10 @@
 </template>
 
 <script>
-import config from "../../config";
+import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
-import { EventBus, events } from "../../utils/eventBus";
+import { EventBus } from "../../utils/eventBus";
+import { createSlot } from "../../utils/helpers";
 
 export default {
   name: "HomeSettings",
@@ -195,14 +193,14 @@ export default {
 
   data() {
     return {
+      componentConfigs,
       selectedComponentsBefore: [],
       colors: [this.$vuetify.theme.currentTheme.primary, "#9368e9", "#F4511E"]
     };
   },
 
   created() {
-    EventBus.$on("on-keydown", this.onKeyDown.bind(this));
-    EventBus.$on("on-keyup", this.onKeyUp.bind(this));
+    EventBus.$on("on-keydown", this.onKeyUp.bind(this));
   },
 
   computed: {
@@ -218,8 +216,6 @@ export default {
       return this.$store.state.settings.id || "app";
     },
 
-    ...mapState("engine", ["vuetify"]),
-
     allowEditModel: {
       get() {
         return this.allowEdit;
@@ -229,40 +225,15 @@ export default {
       }
     },
 
-    isList() {
-      return this.config.type === "list";
-    },
-
-    list() {
-      return this.getData("list");
-    },
-
-    aggregations() {
-      const data = this.getData();
-      let aggregations = data.aggregations;
-
-      if (Array.isArray(aggregations)) {
-        aggregations = aggregations.map(a => data[a]);
-      }
-
-      return aggregations;
-    },
-
-    items() {
-      return this.list?.items || [];
-    },
-
-    region() {
-      // third level nesting (index -> for array like data)
-      return this.id.split("-")[0] || "app";
-    },
-
     componentData() {
       return this.getData();
     },
 
     config() {
-      return config[this.componentName] || config.BaseApp;
+      return (
+        this.componentConfigs[this.componentName] ||
+        this.componentConfigs.BaseApp
+      );
     },
 
     props() {
@@ -275,17 +246,22 @@ export default {
       });
     },
 
-    primitiveProps() {
-      return this.props.filter(prop => prop.type !== "array");
+    alignProps() {
+      const props = this.config.alignProps || [];
+      const componentData = this.componentData;
+
+      return props.map(config => {
+        config.value = componentData[config.propName];
+        return config;
+      });
     },
 
     engineDark: {
       get() {
-        return this.$store.state.engine.config.app.data.dark;
+        return this.$store.state.engine.data.app.dark;
       },
       set(value) {
         this.dispatch("setProp", {
-          region: "app",
           id: "app",
           key: "dark",
           value
@@ -295,11 +271,10 @@ export default {
 
     currentThemePrimary: {
       get() {
-        return this.$store.state.engine.config.app.data.primary;
+        return this.$store.state.engine.data.app.primary;
       },
       set(value) {
         this.dispatch("setProp", {
-          region: "app",
           id: "app",
           key: "primary",
           value
@@ -310,70 +285,46 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setComponent", "setAllowEdit"]),
-    
-    ...mapActions("engine", ["setEngineDark", "setEngineColor"]),
 
-    getData(prop) {
-      let data = this.$store.state.engine.config;
-      let id = this.id || "app-list";
+    ...mapActions("engine", ["setEngineDark", "setEngineColor", "addSlot"]),
 
-      const paths = id.split("-");
+    async onSaveClick(data) {
+      const payload = createSlot({
+        componentName: data.component,
+        parentId: this.id
+      });
 
-      paths.splice(1, 0, "data");
-
-      for (let path of paths) {
-        data = data[path];
-        if (prop === path) break;
-        else if (data === undefined) break;
-      }
-
-      return data || {};
+      const slot = await this.dispatch("addSlot", payload);
+      this.setComponent({ id: slot.id, name: slot.componentName });
     },
 
-    onItemClick(index) {
-      let id = `${this.items[index].id}-${index}`;
-      const name = this.items[index].componentName;
+    getData() {
+      let data = this.$store.state.engine.data;
 
-      this.setComponent({ id, name });
-    },
-
-    onAddClick() {
-      this.dispatch("addItem");
-    },
-
-    onRemoveClick(index) {
-      this.dispatch("removeItem", index);
+      return data[this.id];
     },
 
     onValueChange({ key, value, apendix = "", id } = {}) {
       // changing the value of entry
-
       this.dispatch("setProp", {
-        id: `${id || this.id}${apendix}`,
+        id: this.id,
         key,
         value
       });
     },
 
-    dispatch(actionName, { region = this.region, ...payload } = {}) {
-      // this.$store.dispatch(`${this.region}/${actionName}`, payload);
-      this.$action(`${region}/${actionName}`, payload);
+    dispatch(actionName, payload) {
+      return this.$store.dispatch(`engine/${actionName}`, payload);
     },
 
     onAppSettinsClick() {
       // reset all so application (BaseApp) is set for editing
-      this.setComponent({ id: "", name: "" });
-    },
-
-    onKeyDown(e) {
-      if (!this.allowEdit && e.keyCode === 69) {
-        this.setAllowEdit(true);
-      }
+      this.setComponent({ id: "app", name: "BaseApp" });
     },
 
     onKeyUp(e) {
-      if (this.allowEdit && e.keyCode === 69) {
-        this.setAllowEdit(false);
+      if (e.keyCode === 69 && e.ctrlKey && e.altKey) {
+        this.setAllowEdit(!this.allowEdit);
       }
     }
   }
@@ -383,5 +334,8 @@ export default {
 <style>
 .prevent-user-select {
   user-select: none;
+}
+.v-expansion-panel-content > .v-expansion-panel-content__wrap {
+  padding: 0 !important;
 }
 </style>

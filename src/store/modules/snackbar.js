@@ -1,4 +1,4 @@
-import { set } from '@/utils/vuex'
+import { set } from '@/utils/vuex-builder'
 
 const stateFn = () => ({
     top: false,

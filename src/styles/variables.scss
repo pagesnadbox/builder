@@ -1,5 +1,9 @@
-$body-font-family: 'PT Sans', sans-serif;
+$body-font-family: 'Work Sans', sans-serif;
 $heading-font-family: 'Work Sans', sans-serif;
+
+$grid-breakpoints: (
+  'xl': 2520px
+);
 
 $headings: (
   'h4': (

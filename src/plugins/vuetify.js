@@ -6,6 +6,11 @@ import Vuetify from 'vuetify/lib/framework'
 Vue.use(Vuetify)
 
 export default new Vuetify({
+  breakpoint: {
+    thresholds: {
+      lg: 2520,
+    },
+  },
   theme: {
     dark: false,
     themes: {

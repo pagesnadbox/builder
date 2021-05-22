@@ -1,4 +1,4 @@
-import { set } from '@/utils/vuex'
+import { set } from '@/utils/vuex-builder'
 
 const stateFn = () => ({
     visible: false,
@@ -6,6 +6,7 @@ const stateFn = () => ({
     data: {
         title: "",
         description: "",
+        template: "landing-page",
         id: ""
     }
 })

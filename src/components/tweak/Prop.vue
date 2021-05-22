@@ -39,6 +39,7 @@
       :label="displayName"
       :value="effectiveValue"
       outlined
+      clearable
       @input="onValueChange"
     >
       <template v-slot:append-outer>
@@ -47,11 +48,13 @@
     </v-text-field>
   </v-col>
 
-  <v-col cols="12" v-else-if="type === 'enum'">
+  <v-col :cols="tweakSize" v-else-if="type === 'enum'">
     <v-select
+      offset-y
       :label="displayName"
       outlined
       :items="enums"
+      clearable
       :value="effectiveValue"
       @change="onValueChange"
     />
@@ -69,8 +72,27 @@
     </v-text-field>
   </v-col>
 
+  <v-col cols="12" v-else-if="type === 'panel'">
+    <v-expansion-panels flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header class="pa-0 px-2">
+          {{ displayName }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="px-0">
+          <tweak-prop
+            v-for="(prop, i) in props"
+            v-bind="prop"
+            :key="i"
+            @property-change="$emit('property-change', $event)"
+          ></tweak-prop>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </v-col>
+
   <v-col cols="12" v-else>
     <v-text-field
+      clearable
       :label="displayName"
       :value="effectiveValue"
       outlined
@@ -102,7 +124,17 @@ export default {
       default: ""
     },
 
+    tweakSize: {
+      type: String,
+      default: "12"
+    },
+
     enums: {
+      type: Array,
+      default: () => []
+    },
+
+    props: {
       type: Array,
       default: () => []
     },
@@ -184,8 +216,8 @@ export default {
   },
 
   methods: {
-    ...mapActions("settings", ["setShowGallery"]),
-    
+    ...mapActions("settings", ["setShowGallery", "setImage"]),
+
     onGalleryClick() {
       EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));
 
@@ -202,6 +234,7 @@ export default {
       };
 
       this.$action("settings/setImage", data);
+      this.setImage(data);
 
       this.onValueChange(data.name);
     },
@@ -226,5 +259,8 @@ export default {
   margin: 2px;
   margin-left: 5px;
   height: 100%;
+}
+>>> .v-expansion-panel-content__wrap {
+  padding: 0;
 }
 </style>
