@@ -19,7 +19,8 @@ const stateFn = () => ({
     moreComponents: [],
     moreComponentsDraft: [],
     history: [],
-    fullscreen: false
+    fullscreen: false,
+    engineUrl: window.com.builder.cfg.engineUrl
 })
 
 export default (options) => {

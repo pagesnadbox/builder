@@ -69,7 +69,7 @@
               <iframe
                 :style="styles"
                 @load="onWindowLoaded"
-                src="http://192.168.1.4:8080/"
+                :src="engineUrl"
                 width="100%"
                 height="100%"
                 id="engine"
@@ -138,7 +138,7 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["compact", "open", "fullscreen"]),
+    ...mapState("settings", ["compact", "open", "fullscreen", "engineUrl"]),
 
     width: {
       get() {
@@ -254,7 +254,7 @@ export default {
 
   methods: {
     onWindowLoaded() {
-      console.error("hererere");
+      console.error("herereredata-v-568b3622");
       this.resizeObserver.observe(this.$refs.engineSlot);
       EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
         slot: this.$refs.engineSlot

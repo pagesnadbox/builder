@@ -14,12 +14,19 @@
 </head>
 
 <body>
-  <script src="http://localhost:8080/js/chunk-vendors.js"></script>
-  <script src="http://localhost:8080/js/app.js"></script>
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
   </noscript>
+  <script>
+    window.com = window.com || {};
+    window.com.builder = {
+      cfg: {
+        engineOrigin: "http://192.168.1.4:8080",
+        engineUrl: "http://192.168.1.4:8080"
+      }
+    }
+  </script>
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
