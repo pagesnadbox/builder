@@ -2,7 +2,7 @@
   <v-app :class="{ dark: $vuetify.theme.dark }">
     <v-navigation-drawer app v-model="drawer">
       <v-list dense rounded>
-        <v-list-item v-for="item in links" :key="item.title" link>
+        <v-list-item v-for="item in links" :key="item.title" link :to="item.to">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -19,6 +19,7 @@
 
       <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-switch label="Dark" v-model="engineDark" class="mt-5 mr-10"></v-switch>
     </v-app-bar>
 
     <v-main>
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { EventBus, events } from "./utils/eventBus";
 
 export default {
@@ -44,16 +45,30 @@ export default {
     return {
       drawer: true,
       links: [
-        { title: "Home", icon: "mdi-view-dashboard" },
-        { title: "About", icon: "mdi-forum" }
+        { title: "Home", icon: "mdi-view-dashboard", to: "/" },
+        { title: "Builder", icon: "mdi-tools", to: "/project" }
       ]
     };
   },
 
   computed: {
     ...mapState("engine", ["data"]),
+
     meta() {
       return this.$route.meta;
+    },
+
+    engineDark: {
+      get() {
+        return this.data.app?.dark;
+      },
+      set(value) {
+        this.setProp({
+          id: "app",
+          key: "dark",
+          value
+        });
+      }
     }
   },
 
@@ -69,9 +84,12 @@ export default {
   },
 
   methods: {
+    ...mapActions("engine", ["setProp"]),
+
     onThemeChange(value) {
       this.$vuetify.theme.dark = value;
     },
+
     onDataChange() {
       EventBus.$emit(events.DATA_CHANGE);
     }

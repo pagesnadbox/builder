@@ -12,7 +12,7 @@
           class="fill-height"
         >
           <v-sheet
-            style="border-right: 1px solid rgba(151, 151, 151, 0.308)"
+            style="border-right: 1px solid #8080806b"
             height="100%"
             class="fill-height pa-2 overflow-hidden"
           >
@@ -28,7 +28,7 @@
           class="fill-height"
         >
           <v-sheet class="overflow-y-auto" height="100%">
-            <div style="height:50px">
+            <div style="height:50px" v-if="!fullscreen">
               <v-container>
                 <v-row justify="center" align="center" class="fill-height">
                   <v-col cols="6" sm="2">
@@ -65,7 +65,7 @@
               </v-container>
             </div>
 
-            <div class="iframe-wrapper-outer pa-5">
+            <div class="iframe-wrapper-outer" :class="{ 'pa-5': !fullscreen }">
               <iframe
                 :style="styles"
                 @load="onWindowLoaded"
@@ -131,7 +131,6 @@ export default {
 
   watch: {
     selectedDevice(device) {
-      console.error(device)
       const [width, height] = device.size.split("x");
       this.width = width;
       this.height = height;
@@ -139,7 +138,7 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["compact", "open"]),
+    ...mapState("settings", ["compact", "open", "fullscreen"]),
 
     width: {
       get() {
@@ -163,8 +162,24 @@ export default {
 
     styles() {
       return {
+        width: "100%",
+        height: "100%",
+        ...(!this.fullscreen ? this.resizeStyles : {})
+      };
+    },
+
+    frameWrapperstyles() {
+      return {};
+    },
+
+    resizeStyles() {
+      return {
+        resize: "both",
+        "max-width": "100%",
+        "max-height": "95%",
         width: this.width ? `${this.width}px` : "100%",
-        height: this.height ? `${this.height}px` : "100%"
+        height: this.height ? `${this.height}px` : "100%",
+        border: "1px solid #8080806b"
       };
     },
 
@@ -186,7 +201,7 @@ export default {
     },
 
     engineLg() {
-      return this.hasRightContainer ? "10" : "12";
+      return this.hasRightContainer ? "8" : "12";
     },
 
     engineXl() {
@@ -206,7 +221,7 @@ export default {
     },
 
     settingsLg() {
-      return "2";
+      return "4";
     },
 
     settingsXl() {
@@ -234,13 +249,12 @@ export default {
 
       this.width = contentRect.width;
       this.height = contentRect.height;
-
-      console.log("Size changed", contentRect);
     });
   },
 
   methods: {
     onWindowLoaded() {
+      console.error("hererere");
       this.resizeObserver.observe(this.$refs.engineSlot);
       EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
         slot: this.$refs.engineSlot
@@ -254,15 +268,8 @@ export default {
 <style scoped>
 .iframe-wrapper-outer {
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100% - 65px);
   display: flex;
   justify-content: center;
-}
-iframe {
-  resize: both;
-  border: 1px solid rgba(151, 151, 151, 0.308);
-  max-width: 100%;
-  max-height: 95%;
-  padding: 20px;
 }
 </style>

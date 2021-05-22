@@ -18,7 +18,8 @@ const stateFn = () => ({
     items: [],
     moreComponents: [],
     moreComponentsDraft: [],
-    history: []
+    history: [],
+    fullscreen: false
 })
 
 export default (options) => {
@@ -29,6 +30,8 @@ export default (options) => {
         state,
 
         mutations: {
+            SET_FULLSCREEN: set('fullscreen'),
+
             SET_SHOW_HIGHLIGHTER: set('showHighlighter'),
             
             SET_CAN_REDO: set('canRedo'),
@@ -83,6 +86,10 @@ export default (options) => {
             },
         },
         actions: {
+            setFullscreen({ commit }, payload) {
+                commit('SET_FULLSCREEN', payload)
+            },
+            
             setShowHighlighter({ commit }, payload) {
                 Vue.$action("settings/setShowHighlighter", payload);
 

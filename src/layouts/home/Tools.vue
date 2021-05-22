@@ -14,6 +14,9 @@
     <v-icon :disabled="!canRedo" class="mb-3" large @click="onRedoClick">
       mdi-redo-variant
     </v-icon>
+    <v-icon class="mb-3" large @click="onFullscreenClick">
+      {{ fullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'}}
+    </v-icon>
     <!-- <v-icon class="mb-3" large @click="onResetClick">
       mdi-lock-reset
     </v-icon> -->
@@ -31,7 +34,7 @@ export default {
   name: "HomeTools",
 
   computed: {
-    ...mapState("settings", ["canRedo", "canUndo", "images"])
+    ...mapState("settings", ["canRedo", "canUndo", "images", "fullscreen"])
   },
 
   created() {
@@ -39,7 +42,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("settings", ["toggleCompact"]),
+    ...mapActions("settings", ["toggleCompact", "setFullscreen"]),
 
     // history
 
@@ -53,6 +56,10 @@ export default {
 
     onResetClick() {
       EventBus.$emit(events.HISTORY_RESET);
+    },
+
+    onFullscreenClick() {
+      this.setFullscreen(!this.fullscreen);
     },
 
     undo() {
@@ -76,7 +83,6 @@ export default {
     onToggleCompact() {
       this.toggleCompact();
     }
-    
   }
 };
 </script>

@@ -86,7 +86,7 @@ export default {
     styles() {
       console.error(this.open);
       return {
-        width: `calc(100% + ${20 * this.depth}px)`
+        width: `calc(100% + ${200 + 20 * this.depth}px)`
       };
     }
   },

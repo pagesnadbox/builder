@@ -1,6 +1,10 @@
 $body-font-family: 'Work Sans', sans-serif;
 $heading-font-family: 'Work Sans', sans-serif;
 
+$grid-breakpoints: (
+  'xl': 2520px
+);
+
 $headings: (
   'h4': (
     'letter-spacing': 0.1875rem,
