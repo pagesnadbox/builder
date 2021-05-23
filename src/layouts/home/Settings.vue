@@ -1,19 +1,15 @@
 <template>
   <div>
-    <v-card
+    <v-sheet
+      :dark="$vuetify.breakpoint.mobile"
+      color="transparent"
       id="settings"
-      class="py-2 px-4"
-      color="#0000004D"
-      dark
-      flat
-      style="position: fixed; top: 104px; right: -35px; z-index: 10"
-      width="100"
-      @click="menu = !menu"
+      class="text-center"
     >
-      <v-icon large>
+      <v-icon class="my-3" large @click="menu = !menu">
         mdi-cog
       </v-icon>
-    </v-card>
+    </v-sheet>
 
     <component :is="settingsComponent" v-model="menu">
       <v-card-text ref="scrollableContainer">

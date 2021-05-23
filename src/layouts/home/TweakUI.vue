@@ -1,10 +1,6 @@
 <template>
   <v-app class="ui-application">
-    <home-settings />
-
     <home-gallery />
-
-    <home-tools />
   </v-app>
 </template>
 
@@ -13,8 +9,6 @@ export default {
   name: "TweakUI",
 
   components: {
-    HomeSettings: () => import("@/layouts/home/Settings"),
-    HomeTools: () => import("@/layouts/home/Tools"),
     HomeGallery: () => import("@/components/tweak/Gallery")
   },
 

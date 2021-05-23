@@ -6,13 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 const stateFn = (options) => {
     return {
         data: {},
-        counter: 0,
-        vuetify: {
-            theme: {
-                dark: true,
-                primary: ""
-            }
-        }
     }
 }
 
@@ -135,17 +128,6 @@ export default (options) => {
         mutations: {
             SET_CONFIG: (state, payload) => {
                 state.data = payload.value
-                state.counter++
-            },
-
-            INCREASE_COUNTER: (state) => {
-                state.counter++
-            },
-
-            SET_THEME_DARK: set("dark", state.vuetify.theme),
-
-            SET_THEME_COLOR: (state, payload) => {
-                state.vuetify.theme[payload.key] = payload.value
             },
 
             SET_PROP: setProp,
@@ -162,49 +144,42 @@ export default (options) => {
         },
 
         actions: {
-            setConfig({ commit }, payload) {
+            setConfig({ commit, dispatch }, payload) {
                 commit('SET_CONFIG', payload)
-            },
-
-            setEngineDark({ commit }, payload) {
-                commit('SET_THEME_DARK', payload)
-            },
-
-            setEngineColor({ commit }, payload) {
-                commit('SET_THEME_COLOR', payload)
+                dispatch("settings/increaseCounter", null, { root: true })
             },
 
             setProp({ commit }, payload) {
                 commit('SET_PROP', payload)
             },
 
-            addSlot({ commit }, payload) {
+            addSlot({ commit, dispatch }, payload) {
                 const slotData = { ...payload, id: uuidv4() };
 
                 commit('ADD_SLOT', slotData)
-                commit('INCREASE_COUNTER')
+                dispatch("settings/increaseCounter", null, { root: true })
 
                 return slotData;
             },
 
-            removeSlot({ commit }, payload) {
+            removeSlot({ commit, dispatch }, payload) {
                 commit('REMOVE_SLOT', payload)
-                commit('INCREASE_COUNTER')
+                dispatch("settings/increaseCounter", null, { root: true })
             },
 
-            moveSlot({ commit }, payload) {
+            moveSlot({ commit, dispatch }, payload) {
                 commit('MOVE_SLOT', payload)
-                commit('INCREASE_COUNTER')
+                dispatch("settings/increaseCounter", null, { root: true })
             },
 
-            changePosition({ commit }, payload) {
+            changePosition({ commit, dispatch }, payload) {
                 commit('CHANGE_POSITION', payload)
-                commit('INCREASE_COUNTER')
+                dispatch("settings/increaseCounter", null, { root: true })
             },
 
-            copySlot({ commit }, payload) {
+            copySlot({ commit, dispatch }, payload) {
                 commit('COPY_SLOT', payload)
-                commit('INCREASE_COUNTER')
+                dispatch("settings/increaseCounter", null, { root: true })
             },
         },
 

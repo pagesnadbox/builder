@@ -137,7 +137,7 @@
 
       <br />
 
-      <v-container class="pa-0">
+      <v-container>
         <v-row>
           <v-expansion-panels flat>
             <v-expansion-panel>

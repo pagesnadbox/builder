@@ -4,6 +4,7 @@ import { EventBus, events } from '../../utils/eventBus'
 
 const stateFn = () => ({
     id: '',
+    counter: 0,
     allowEdit: false,
     open: false,
     showHighlighter: false,
@@ -31,38 +32,42 @@ export default (options) => {
         state,
 
         mutations: {
+            INCREASE_COUNTER: (state) => {
+                state.counter++
+            },
+
             SET_FULLSCREEN: set('fullscreen'),
 
             SET_SHOW_HIGHLIGHTER: set('showHighlighter'),
-            
+
             SET_CAN_REDO: set('canRedo'),
-            
+
             SET_CAN_UNDO: set('canUndo'),
-            
+
             SET_ALLOW_EDIT: set('allowEdit'),
-            
+
             SET_CTR_DOWN: set('ctrlDown'),
-            
+
             SET_GALLERY_SHOW: set('showGallery'),
-            
+
             SET_ID: set('id'),
-            
+
             SET_ITEMS: set('items'),
-            
+
             SET_OPEN: set('open'),
-            
+
             SET_COMPACT: set('compact'),
-            
+
             SET_BOTTOM: set('bottom'),
-            
+
             SET_COMPONENT_NAME: set('componentName'),
-            
+
             SET_COMPONENTS: set('moreComponents'),
 
             ADD_COMPONENT: (state, payload) => {
                 state.moreComponentsDraft.push(payload)
             },
-            
+
             SET_IMAGE: (state, payload) => {
                 Vue.set(state.images, payload.name, payload.value)
             },
@@ -88,9 +93,10 @@ export default (options) => {
         },
         actions: {
             setFullscreen({ commit }, payload) {
+                localStorage.setItem("pagesandbox_builder_fullscreen", payload)
                 commit('SET_FULLSCREEN', payload)
             },
-            
+
             setShowHighlighter({ commit }, payload) {
                 Vue.$action("settings/setShowHighlighter", payload);
 
@@ -99,6 +105,10 @@ export default (options) => {
 
             setCanRedo({ commit }, payload) {
                 commit('SET_CAN_REDO', payload)
+            },
+
+            increaseCounter({ commit }) {
+                commit('INCREASE_COUNTER')
             },
 
             setCanUndo({ commit }, payload) {
@@ -185,7 +195,7 @@ export default (options) => {
                 commit('SET_GALLERY_SHOW', payload)
             },
         },
-        
+
         getters: {
 
         },

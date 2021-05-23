@@ -84,6 +84,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("settings", ["setProp", "setFullscreen"]),
     ...mapActions("engine", ["setProp"]),
 
     onThemeChange(value) {
@@ -96,6 +97,17 @@ export default {
   },
 
   created() {
+    let fullscreen = localStorage.getItem("pagesandbox_builder_fullscreen");
+
+    console.error(fullscreen);
+    if (fullscreen) {
+      fullscreen = fullscreen === "true";
+    } else {
+      fullscreen = this.$vuetify.breakpoint.mobile;
+    }
+
+    this.setFullscreen(fullscreen);
+
     window.addEventListener("wheel", e => e.stopPropagation());
 
     window.addEventListener("keydown", e => EventBus.$emit("on-keydown", e));

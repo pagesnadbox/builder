@@ -90,9 +90,7 @@ export default {
       this.loading = false;
     },
 
-    onTemplateClick(project) {
-      EventBus.$emit(events.PROJECT_SELECTED, project);
-
+    onTemplateClick() {
       this.$router.push({ path: `/project` });
     }
   }

@@ -20,6 +20,10 @@ export default class API extends EventEmitter {
     return events;
   }
 
+  get store() {
+    return store;
+  }
+
   get undoRedoManager() {
     return {
       setCanRedo: (value) => store.dispatch('settings/setCanRedo', value),
@@ -75,12 +79,11 @@ export default class API extends EventEmitter {
     store.replaceState({
       ...store.state,
       engine: {
-        ...store.state.engine,
-        data: {
-          ...state.config.data
-        }
+        ...state.engine,
       }
     })
+
+    store.dispatch("settings/increaseCounter")
   }
 
   setSnackbar(message) {

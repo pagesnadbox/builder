@@ -79,8 +79,8 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["id"]),
-    ...mapState("engine", ["data", "counter"]),
+    ...mapState("settings", ["id", "counter"]),
+    ...mapState("engine", ["data"]),
     ...mapGetters("engine", ["getComponent"]),
 
     styles() {
@@ -200,6 +200,7 @@ export default {
     },
 
     onDataChange() {
+      console.error("here");
       this.entries = [this.traverse(this.data.app)];
     },
 

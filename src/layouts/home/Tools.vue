@@ -1,12 +1,9 @@
 <template>
-  <v-card
+  <v-sheet
+    :dark="$vuetify.breakpoint.mobile"
+    color="transparent"
     id="settings"
-    class="py-2 px-4"
-    color="#0000004D"
-    dark
-    flat
-    style="position: fixed; top: 160px; right: -35px; z-index: 10"
-    width="100"
+    class="text-center"
   >
     <v-icon :disabled="!canUndo" class="mb-3" large @click="onUndoClick">
       mdi-undo-variant
@@ -15,7 +12,7 @@
       mdi-redo-variant
     </v-icon>
     <v-icon class="mb-3" large @click="onFullscreenClick">
-      {{ fullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'}}
+      {{ fullscreen ? "mdi-fullscreen-exit" : "mdi-fullscreen" }}
     </v-icon>
     <!-- <v-icon class="mb-3" large @click="onResetClick">
       mdi-lock-reset
@@ -23,7 +20,7 @@
     <v-icon class="mb-3" large @click="onToggleCompact">
       mdi-rotate-right-variant
     </v-icon>
-  </v-card>
+  </v-sheet>
 </template>
 
 <script>

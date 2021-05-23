@@ -22,6 +22,7 @@ export default class Bridge {
             this.cfg = cfg
             this.imageService = ImagesService.getInstance();
             this.createApp();
+            this.createHistory();
         });
 
         return this;
@@ -43,7 +44,7 @@ export default class Bridge {
 
     createHistory() {
         this.history = new History({
-            interests: ['config']
+            interests: ['engine']
         });
 
         this.attachHistoryEvents();
@@ -52,9 +53,6 @@ export default class Bridge {
     }
 
     async createEngine(data) {
-        if (this.engine) return;
-        // this.createHistory();
-
         this.engine = new EngineAdapter();
         this.engine.target = data.slot.contentWindow
 
@@ -74,6 +72,8 @@ export default class Bridge {
     }
 
     attachEngineEvent() {
+        this.engine.off();
+
         Object.keys(EngineAdapter.events).forEach(key => {
             const event = EngineAdapter.events[key]
             this.engine.on(event, (data) => this.onEngineEvent(event, data));
@@ -105,7 +105,6 @@ export default class Bridge {
         console.log(`App Event: ${event}`, data);
 
         const mediator = {
-            [Builder.events.PROJECT_SELECTED]: () => this.onProjectSelected(),
             [Builder.events.ACTION]: (data) => this.onAppAction(data),
             [Builder.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
             [Builder.events.HISTORY_RESET]: () => this.history.reset(),
@@ -137,15 +136,16 @@ export default class Bridge {
     onReplaceState(data) {
         // sync configs of interested parties
         this.builder.replaceConfig(data);
-        this.engine.replaceConfig(data);
+        // this.engine.replaceConfig(data);
         this.replaceConfig(data)
 
         // save config
         this.debouncedSaveConfigFn();
     }
 
-    onEngineSlotRendered(data) {
-        this.createEngine(data);
+    async onEngineSlotRendered(data) {
+        await this.createEngine(data);
+        this.onProjectSelected();
     }
 
     onProjectSelected() {
@@ -162,11 +162,13 @@ export default class Bridge {
     }
 
     replaceConfig(data) {
-        this.cfg = data.config.data;
+        this.cfg = data.engine.data;
     }
 
     saveConfig() {
-        this.engine.setConfig(this.cfg)
+        if (this.engine) {
+            this.engine.setConfig(this.cfg)
+        }
 
         ConfigService.saveConfig({
             config: this.cfg,
@@ -176,13 +178,13 @@ export default class Bridge {
     async fetchConfig() {
         this.cfg = await this.config();
 
-        // this.history.initialized && this.history.unsubscribe();
+        this.history.initialized && this.history.unsubscribe();
 
         this.builder.setConfig(this.cfg);
         this.engine.setConfig(this.cfg);
 
-        // this.history.setApp("engine", this.engine.store);
-        // this.history.subscribe();
+        this.history.setApp("engine", this.builder.store);
+        this.history.subscribe();
     }
 
     async fetchProject() {
