@@ -10,8 +10,13 @@ import EventEmitter from 'eventemitter3';
 import { EventBus, events } from '@/utils/eventBus';
 import './plugins'
 
+import VueTour from 'vue-tour'
+
+require('vue-tour/dist/vue-tour.css')
+
 let store = Store()
 
+Vue.use(VueTour)
 Vue.config.productionTip = false
 
 export default class API extends EventEmitter {

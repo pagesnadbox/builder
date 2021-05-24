@@ -10,6 +10,9 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
+      <v-btn to="/project" depressed color="success">
+        Builder
+      </v-btn>
       <v-btn @click.stop="onEditClick" depressed color="primary">
         Edit
       </v-btn>

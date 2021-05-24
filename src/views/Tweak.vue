@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container fluid style="height: 100vh" class="pa-0 ma-0 d-flex">
+    <v-container fluid style="height: calc(100vh - 64px);" class="pa-0 ma-0 d-flex">
       <v-sheet :style="rightToolbarStyles">
-        <home-settings />
+        <home-settings id="settings-gear" />
         <v-divider v-if="!$vuetify.breakpoint.mobile" class="mb-3"></v-divider>
         <home-tools />
       </v-sheet>
@@ -198,8 +198,8 @@ export default {
       return {
         width: "100%",
         height: "100%",
-        'min-width': '100px',
-        'min-height': '100px',
+        "min-width": "100px",
+        "min-height": "100px",
         ...(!this.fullscreen ? this.resizeStyles : {})
       };
     },
@@ -289,6 +289,10 @@ export default {
   },
 
   methods: {
+    onTourSkip() {
+      localStorage.setItem("pagesandbox_tweak_tour_skipped", true);
+    },
+
     onWindowLoaded() {
       console.error("herereredata-v-568b3622");
       this.resizeObserver.observe(this.$refs.engineSlot);

@@ -311,9 +311,9 @@ export default {
         componentName: "BaseLink",
         displayName: 'Link',
         props: [
-
             openInNewTab,
             href,
+            color
         ],
     }),
 

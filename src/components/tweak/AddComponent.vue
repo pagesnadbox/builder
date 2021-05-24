@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-expansion-panels flat>
       <v-expansion-panel>
-        <v-expansion-panel-header class="pa-0 px-2">
+        <v-expansion-panel-header class="pa-0">
           Add Components
         </v-expansion-panel-header>
         <v-expansion-panel-content class="px-0">

@@ -3,6 +3,7 @@
     <v-row class="justify-start">
       <v-col class="flex-grow-0" v-if="!project">
         <v-card
+          id="createNewCard"
           outlined
           @click="onCrateClick"
           width="400"
@@ -19,6 +20,7 @@
       </v-col>
       <v-col v-else class="flex-grow-0">
         <base-project-card
+          id="project"
           width="400"
           min-height="356"
           class="fill-height"
@@ -32,22 +34,41 @@
         ></base-project-card>
       </v-col>
     </v-row>
+    <v-tour name="project" :steps="steps" :callbacks="tourCallbacks"></v-tour>
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { EventBus, events } from '../utils/eventBus';
 
 export default {
   data() {
     return {
-      loading: false
+      loading: false,
+      steps: [
+        {
+          target: "#createNewCard", // We're using document.querySelector() under the hood
+          header: {
+            title: "Get Started"
+          },
+          content: `Create or edit project from templates.`
+        }
+      ],
+      tourCallbacks: {
+        onSkip: this.onTourSkip.bind(this),
+      }
     };
   },
 
   created() {
     this.fetchProject();
+  },
+
+  mounted() {
+    const skipped = localStorage.getItem("pagesandbox_tour_skipped") === "true";
+    if (!skipped) {
+      this.$tours["project"].start();
+    }
   },
 
   computed: {
@@ -60,6 +81,10 @@ export default {
     ...mapActions("editableDialog", ["setEditMode", "setVisible", "setData"]),
 
     ...mapActions("modals", ["setModalData"]),
+
+    onTourSkip() {
+      localStorage.setItem("pagesandbox_project_tour_skipped", true);
+    },
 
     onCrateClick() {
       this.setData(null);

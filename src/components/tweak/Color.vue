@@ -29,11 +29,11 @@
 
       <v-divider vertical class="mx-2"></v-divider>
 
-      <v-item v-if="showPrimary" :value="data.app.primary">
+      <v-item v-if="showPrimary" :value="'primary'">
         <base-avatar
-          @click.stop="onValueChange(data.app.primary)"
+          @click.stop="onValueChange('primary')"
           :color="data.app.primary"
-          :outlined="data.app.primary === value"
+          :outlined="'primary' === value"
           class="ma-2"
           size="36"
           style="cursor: pointer"

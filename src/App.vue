@@ -36,7 +36,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { EventBus, events } from "./utils/eventBus";
+import { EventBus, events, eventsInternal } from "./utils/eventBus";
 
 export default {
   name: "App",
@@ -44,6 +44,11 @@ export default {
   data() {
     return {
       drawer: true,
+      toursOrder: {
+        settings: "tools",
+        tools: null,
+        properties: null
+      },
       links: [
         { title: "Home", icon: "mdi-view-dashboard", to: "/" },
         { title: "Builder", icon: "mdi-tools", to: "/project" }
@@ -93,6 +98,22 @@ export default {
 
     onDataChange() {
       EventBus.$emit(events.DATA_CHANGE);
+    },
+
+    onTourFinished(data) {
+      const skipped = localStorage.getItem("pagesandbox_tour_skipped") === "true";
+
+      if (data === "properties") {
+        this.onTourSkip();
+      }
+
+      if (!skipped && this.toursOrder[data]) {
+        this.$tours[this.toursOrder[data]].start();
+      }
+    },
+
+    onTourSkip() {
+      localStorage.setItem("pagesandbox_tour_skipped", true);
     }
   },
 
@@ -105,6 +126,14 @@ export default {
     } else {
       fullscreen = this.$vuetify.breakpoint.mobile;
     }
+
+    EventBus.$on(eventsInternal.TOUR_FINISHED, data =>
+      this.onTourFinished(data)
+    );
+
+    EventBus.$on(eventsInternal.TOUR_SKIPPED, data =>
+      this.onTourFinished(data)
+    );
 
     this.setFullscreen(fullscreen);
 

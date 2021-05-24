@@ -6,9 +6,11 @@
       id="settings"
       class="text-center"
     >
-      <v-icon class="my-3" large @click="menu = !menu">
-        mdi-cog
-      </v-icon>
+      <div class="my-3">
+        <ToolIcon tooltip="Toggle builder panel" large @click="menu = !menu">
+          mdi-cog
+        </ToolIcon>
+      </div>
     </v-sheet>
 
     <component :is="settingsComponent" v-model="menu">
@@ -16,6 +18,13 @@
         <SettingsTabs />
       </v-card-text>
     </component>
+
+    <v-tour
+      name="settings"
+      :options="tourOptions"
+      :steps="steps"
+      :callbacks="tourCallbacks"
+    ></v-tour>
   </div>
 </template>
 
@@ -25,6 +34,8 @@ import { mapState, mapActions } from "vuex";
 import SettingsTabs from "./SettingsTabs";
 import SettingsModal from "@/components/tweak/SettingsModal";
 import SettingsBottomSheet from "@/components/tweak/SettingsBottomSheet";
+import { EventBus, eventsInternal } from "../../utils/eventBus";
+import ToolIcon from "./ToolIcon";
 
 export default {
   name: "HomeSettings",
@@ -32,13 +43,45 @@ export default {
   components: {
     SettingsTabs,
     SettingsModal,
-    SettingsBottomSheet
+    SettingsBottomSheet,
+    ToolIcon
+  },
+
+  data() {
+    return {
+      steps: [
+        {
+          target: "#settings-gear", // We're using document.querySelector() under the hood
+          header: {
+            title: "Get Started"
+          },
+          content: `Toggle the builder tweak panel.`
+        }
+      ],
+      tourOptions: {
+        labels: {
+          buttonStop: "Next"
+        }
+      },
+      tourCallbacks: {
+        onFinish: () =>
+          EventBus.$emit(eventsInternal.TOUR_FINISHED, "settings"),
+        onSkip: () => EventBus.$emit(eventsInternal.TOUR_SKIPPED)
+      }
+    };
   },
 
   watch: {
     id() {
       !this.isDesktop &&
         this.$refs.scrollableContainer.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  },
+
+  mounted() {
+    const skipped = localStorage.getItem("pagesandbox_tour_skipped") === "true";
+    if (!skipped) {
+      this.$tours["settings"].start();
     }
   },
 

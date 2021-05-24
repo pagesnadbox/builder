@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; flex-flow: column;" class="fill-height">
-    <div class="px-2" style="flex: 0 1 auto;">
+    <div style="flex: 0 1 auto;">
       <v-btn color="primary" block dark @click="onAppSettinsClick">
         <v-icon left>
           mdi-tools
@@ -10,23 +10,28 @@
 
       <v-divider class="my-6" />
       <div>
-        <v-expansion-panels flat>
+        <v-expansion-panels flat v-model="panel">
           <v-expansion-panel>
-            <v-expansion-panel-header class="pa-0 px-2">
+            <v-expansion-panel-header class="pa-0">
               Settings
             </v-expansion-panel-header>
             <v-expansion-panel-content class="px-0">
               <h3 align="center" title="Theme Colors" space="0" />
 
-              <tweak-color v-model="currentThemePrimary" :showPrimary="false" />
+              <tweak-color
+                id="colors"
+                v-model="currentThemePrimary"
+                :showPrimary="false"
+              />
 
               <v-divider class="my-6" />
-
+<!-- 
               <v-switch
+                id="edtiSwitch"
                 v-model="allowEditModel"
                 class="mr-4"
-                label="Edit Mode (Hold 'E' for quick edit)"
-              ></v-switch>
+                label="Toggle edit Mode"
+              ></v-switch> -->
 
               <v-btn
                 class="mr-4"
@@ -120,10 +125,12 @@
         <v-divider class="my-6" />
       </div>
 
-      <tweak-add-component
-        :items="Object.values(componentConfigs)"
-        @save-click="onSaveClick"
-      ></tweak-add-component>
+      <div id="addComponentPanel">
+        <tweak-add-component
+          :items="Object.values(componentConfigs)"
+          @save-click="onSaveClick"
+        ></tweak-add-component>
+      </div>
 
       <v-divider class="my-6" />
     </div>
@@ -137,14 +144,14 @@
 
       <br />
 
-      <v-container>
+      <v-container class="px-0">
         <v-row>
-          <v-expansion-panels flat>
+          <v-expansion-panels flat v-model="panel1">
             <v-expansion-panel>
               <v-expansion-panel-header class="pa-0 px-2">
                 Spaces
               </v-expansion-panel-header>
-              <v-expansion-panel-content class="px-0">
+              <v-expansion-panel-content id="spacesPanel" class="px-0">
                 <tweak-prop
                   v-for="(prop, i) in alignProps"
                   :key="i"
@@ -166,13 +173,18 @@
         </v-row>
       </v-container>
     </div>
+    <v-tour
+      name="properties"
+      :steps="steps"
+      :callbacks="tourCallbacks"
+    ></v-tour>
   </div>
 </template>
 
 <script>
 import componentConfigs from "../../config";
 import { mapState, mapActions } from "vuex";
-import { EventBus } from "../../utils/eventBus";
+import { EventBus, eventsInternal } from "../../utils/eventBus";
 import { createSlot } from "../../utils/helpers";
 
 export default {
@@ -193,14 +205,46 @@ export default {
 
   data() {
     return {
+      panel:
+        localStorage.getItem("pagesandbox_tour_skipped") === "true" ? null : 0,
+      panel1:
+        localStorage.getItem("pagesandbox_tour_skipped") === "true" ? null : 0,
       componentConfigs,
       selectedComponentsBefore: [],
-      colors: [this.$vuetify.theme.currentTheme.primary, "#9368e9", "#F4511E"]
+      colors: [this.$vuetify.theme.currentTheme.primary, "#9368e9", "#F4511E"],
+      steps: [
+        {
+          target: "#colors", // We're using document.querySelector() under the hood
+          content: `Change the primary color of the application.`
+        },
+
+        {
+          target: "#addComponentPanel", // We're using document.querySelector() under the hood
+          content: `Toggle this panel to add new child components to the selected one.`
+        },
+        {
+          target: "#spacesPanel", // We're using document.querySelector() under the hood
+          content: `Change the space around the selected components.`
+        }
+      ],
+      tourCallbacks: {
+        onFinish: () =>
+          EventBus.$emit(eventsInternal.TOUR_FINISHED, "properties"),
+        onSkip: () => EventBus.$emit(eventsInternal.TOUR_SKIPPED)
+      }
     };
   },
 
   created() {
     EventBus.$on("on-keydown", this.onKeyUp.bind(this));
+  },
+
+  mounted() {
+    const skipped = localStorage.getItem("pagesandbox_tour_skipped") === "true";
+
+    if (!skipped) {
+      this.$tours["properties"].start();
+    }
   },
 
   computed: {
@@ -216,14 +260,7 @@ export default {
       return this.$store.state.settings.id || "app";
     },
 
-    allowEditModel: {
-      get() {
-        return this.allowEdit;
-      },
-      set(value) {
-        this.setAllowEdit(value);
-      }
-    },
+
 
     componentData() {
       return this.getData();

@@ -14,5 +14,7 @@ export const events = {
 }
 
 export const eventsInternal = {
-    ON_IMAGE_CLICK: "ON_IMAGE_CLICK"
+    ON_IMAGE_CLICK: "ON_IMAGE_CLICK",
+    TOUR_FINISHED: "TOUR_FINISHED",
+    TOUR_SKIPPED: "TOUR_SKIPPED",
 }
