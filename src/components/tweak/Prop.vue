@@ -90,6 +90,37 @@
     </v-expansion-panels>
   </v-col>
 
+  <v-col cols="12" v-else-if="type === 'gradient'">
+    <v-expansion-panels flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header class="pa-0 px-2">
+          {{ displayName }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="px-0">
+          <p>Direction</p>
+
+          <v-select
+            outlined
+            :value="gradientValues.dir"
+            :items="gradientDirs"
+            @change="onGradientDirChange"
+          ></v-select>
+
+          <p>Colors</p>
+
+          <div v-for="(color, index) in gradientValues.colors" :key="index">
+            <tweak-color
+              clearable
+              :value="color"
+              @input="onGradientColorChange($event, index)"
+            />
+            <br />
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </v-col>
+
   <v-col cols="12" v-else>
     <v-text-field
       clearable
@@ -162,10 +193,20 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      gradientDirs: ["to bottom", "to top", "to left", "to right"],
+      colors: [],
+      direction: "to bottom"
+    };
   },
 
   computed: {
+    gradientValues() {
+      const [dir, from, to] = this.effectiveValue.split(", ");
+
+      return { dir, colors: [from, to] };
+    },
+
     effectiveValue() {
       return this.value || this.defaultValue;
     },
@@ -217,6 +258,19 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setShowGallery", "setImage"]),
+
+    onGradientColorChange(value, index) {
+      const data = this.gradientValues
+      this.colors[index] = value;
+
+      this.onValueChange([data.dir, ...this.colors].join(", "));
+    },
+
+    onGradientDirChange(value) {
+      const data = this.gradientValues
+
+      this.onValueChange([value, ...data.colors].join(", "));
+    },
 
     onGalleryClick() {
       EventBus.$on(eventsInternal.ON_IMAGE_CLICK, this.onImageClick.bind(this));

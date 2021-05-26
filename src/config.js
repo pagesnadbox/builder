@@ -263,7 +263,7 @@ export default {
         ],
     }),
 
-    BaseVuetifyImg: new BaseVuetifyImage(),
+    BaseVuetifyImage: new BaseVuetifyImage(),
 
     BaseImg: baseImg,
 
