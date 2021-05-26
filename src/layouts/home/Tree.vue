@@ -24,18 +24,18 @@
           </template>
 
           <v-list>
-            <v-list-item @click="onItemClick('remove', item)">
+            <v-list-item @click="onItemClick('remove', item.data)">
               <v-list-item-title>Remove</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="onItemClick('hide', item)">
+            <v-list-item @click="onItemClick('hide', item.data)">
               <v-list-item-title>{{
                 item.hidden ? "Show" : "Hide"
               }}</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="onItemClick('add', item)">
+            <v-list-item @click="onItemClick('add', item.data)">
               <v-list-item-title>Add</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="onItemClick('copy', item)">
+            <v-list-item @click="onItemClick('copy', item.data)">
               <v-list-item-title>Copy</v-list-item-title>
             </v-list-item>
             <v-list-item @click="copyToClipBoard()">
@@ -56,12 +56,26 @@
         ></tree-item-node>
       </template>
     </v-treeview>
+
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card class="pa-5">
+        <tweak-add-component
+          :panelOpen="true"
+          :items="Object.values(componentConfigs)"
+          @save-click="onSaveClick"
+          @close-click="dialog = false"
+        ></tweak-add-component>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import componentConfigs from "../../config";
+
 import { mapActions, mapGetters, mapState } from "vuex";
 import TreeItemNode from "./TreeItemNode";
+import { createSlot } from "../../utils/helpers";
 
 export default {
   components: {
@@ -70,6 +84,8 @@ export default {
 
   data() {
     return {
+      componentConfigs,
+      dialog: false,
       entries: [],
       hold: false,
       open: [],
@@ -103,6 +119,18 @@ export default {
   },
 
   methods: {
+    async onSaveClick(data) {
+      const payload = createSlot({
+        componentName: data.component,
+        parentId: this.addId
+      });
+
+      const slot = await this.dispatch("addSlot", payload);
+      this.setComponent({ id: slot.id, name: slot.componentName });
+
+      this.dialog = false
+    },
+
     ...mapActions("settings", ["setComponent"]),
 
     onSelectedIdChange(id) {
@@ -137,7 +165,7 @@ export default {
     },
 
     dispatch(actionName, payload) {
-      this.$store.dispatch(`engine/${actionName}`, payload);
+      return this.$store.dispatch(`engine/${actionName}`, payload);
     },
 
     onDrop(event, item) {
@@ -181,7 +209,10 @@ export default {
       actions[action](item);
     },
 
-    onAdd(item) {},
+    onAdd(item) {
+      this.dialog = true;
+      this.addId = item.id;
+    },
 
     onCopy(item) {
       this.dispatch("copySlot", item);

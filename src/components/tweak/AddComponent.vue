@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <v-expansion-panels flat>
+    <v-expansion-panels v-model="panel" flat>
       <v-expansion-panel>
         <v-expansion-panel-header class="pa-0">
           Add Components
@@ -21,7 +21,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn text @click="menu = false">
+              <v-btn text @click="$emit('close-click')">
                 Cancel
               </v-btn>
               <v-btn color="primary" text @click="onSaveClick">
@@ -41,14 +41,24 @@ export default {
     items: {
       type: Array,
       default: () => []
+    },
+
+    panelOpen: {
+      type: Boolean,
+      default: false
     }
   },
 
   data() {
     return {
+      panel: 0,
       menu: false,
       selected: null
     };
+  },
+
+  created() {
+    this.panel = this.panelOpen ? 0 : null;
   },
 
   methods: {

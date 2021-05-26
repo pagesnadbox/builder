@@ -61,6 +61,14 @@ export default {
           key: "base"
         },
         {
+          name: "Tree column layout",
+          key: "tree-column-layout"
+        },
+        {
+          name: "Extended App Bar",
+          key: "extended-app-bar"
+        },
+        {
           name: "Landing Page",
           key: "landing-page"
         }

@@ -28,6 +28,10 @@ const {
     iconSrc,
     text,
     title,
+    tag,
+    absolute,
+    elevation,
+    shrinkOnScroll,
     outlined,
     horizontal,
     hiddenImage,
@@ -53,6 +57,7 @@ const {
     lightSrc,
     publicPath,
     cols,
+    rounded
 } = props;
 
 const getCols = (...params) => cols.getCols(...params)
@@ -78,6 +83,7 @@ class BaseHeading extends MixinHeading {
     get customProps() {
         return [
             ...super.customProps,
+            tag,
             title,
             align,
             color,
@@ -174,6 +180,9 @@ const baseSection = new BaseComponent({
     displayName: 'Section',
     props: [
         dark,
+        absolute,
+        elevation,
+        rounded,
         height,
         maxWidth,
         color,
@@ -247,6 +256,7 @@ export default {
         displayName: 'Application Top Bar',
         props: [
             dark,
+            shrinkOnScroll,
             hideOnScroll,
             height,
             color,
@@ -321,10 +331,11 @@ export default {
         componentName: "BaseAvatar",
         displayName: 'Avatar',
         props: [
+            iconDark,
             icon,
             color,
             outlined,
-            size,
+            iconSize,
         ],
     }),
 
