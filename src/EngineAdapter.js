@@ -1,6 +1,6 @@
 import EventEmitter from "eventemitter3";
 
-const engineOrigin = window.com.builder.cfg.engineOrigin;
+const engineOrigin = window.com.builder.cfg.engineOrigin.replace("{host}", window.location.hostname);
 
 export default class EngineAdapter extends EventEmitter {
     static get events() {
