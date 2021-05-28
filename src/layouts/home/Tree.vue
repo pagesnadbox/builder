@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import componentConfigs from "../../config";
+import componentConfigs from "../../config/index";
 
 import { mapActions, mapGetters, mapState } from "vuex";
 import TreeItemNode from "./TreeItemNode";

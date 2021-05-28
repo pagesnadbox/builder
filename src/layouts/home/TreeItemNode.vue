@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import componentConfigs from "../../config";
+import componentConfigs from "../../config/index";
 import { EventBus, events } from "../../utils/eventBus";
 
 export default {

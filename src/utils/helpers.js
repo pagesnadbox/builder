@@ -1,7 +1,7 @@
 // import { store } from '@/main'
 
 // import moment from 'moment-timezone'
-import { v4 as uuidv4 } from 'uuid';  
+import componentConfigs from "@/config/index";
 const proxy = '' // "https://sleepy-oasis-50684.herokuapp.com/";
 
 const defaultHeaders = () => {
@@ -356,6 +356,14 @@ export const createSlot = ({ componentName, parentId }) => {
   const payload = {
     parentId,
     componentName: componentName,
+    // set props with default values
+    ...componentConfigs[componentName].props.reduce((result, prop) => {
+      if (prop.defaultValue !== undefined) {
+        result[prop.propName] = prop.defaultValue
+      }
+
+      return result;
+    }, {}),
     slots: []
   };
 

@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import componentConfigs from "../../config";
+import componentConfigs from "../../config/index";
 import { mapState, mapActions } from "vuex";
 import { EventBus, eventsInternal } from "../../utils/eventBus";
 import { createSlot } from "../../utils/helpers";
