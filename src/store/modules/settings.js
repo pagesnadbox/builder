@@ -21,7 +21,10 @@ const stateFn = () => ({
     moreComponentsDraft: [],
     history: [],
     fullscreen: false,
-    engineUrl: window.com.builder.cfg.engineUrl.replace("{host}", window.location.hostname)
+    engineUrl: window.com.builder.cfg.engineUrl
+        .replace("{host}", window.location.hostname)
+        .replace("{protocol}", window.location.protocol)
+        .replace("{port}", window.location.port ? `:${window.location.port}` : "")
 })
 
 export default (options) => {

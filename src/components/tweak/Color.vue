@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { throttle } from "@/utils/helpers";
 import { mapState } from "vuex";
 export default {
   props: {
@@ -137,8 +138,12 @@ export default {
     }
   },
 
+  created() {
+    this.onValueChange = throttle(this.onValueChangeBind.bind(this), 200)
+  },
+
   methods: {
-    onValueChange(value, addToRecent) {
+    onValueChangeBind(value, addToRecent) {
       if (addToRecent && this.recentColors[0] !== value) {
         this.recentColors.unshift(value);
       }

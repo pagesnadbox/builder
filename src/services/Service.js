@@ -24,9 +24,15 @@ export default class Service {
                 options.body = body;
             }
 
-            const response = await fetch(url, options);
+            const promise = await fetch(url, options);
+            const response = await promise.json();
 
-            return response.json();
+            if (response.success === false) {
+                onError && onError(response)
+            }
+
+            return response;
+
         } catch (error) {
             onError && onError({ message: error })
         }

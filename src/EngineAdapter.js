@@ -1,6 +1,11 @@
 import EventEmitter from "eventemitter3";
 
-const engineOrigin = window.com.builder.cfg.engineOrigin.replace("{host}", window.location.hostname);
+let engineOrigin = window.com.builder.cfg.engineOrigin;
+
+engineOrigin = engineOrigin
+    .replace("{host}", window.location.hostname)
+    .replace("{protocol}", window.location.protocol)
+    .replace("{port}", window.location.port ? `${window.location.port}` : "")
 
 export default class EngineAdapter extends EventEmitter {
     static get events() {
@@ -27,7 +32,7 @@ export default class EngineAdapter extends EventEmitter {
     }
 
     onMessage(event) {
-        if (event.origin !== engineOrigin) {
+        if (!event.origin.startsWith(engineOrigin)) {
             return;
         }
 
