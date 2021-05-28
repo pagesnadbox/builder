@@ -57,8 +57,8 @@
       </template>
     </v-treeview>
 
-    <v-dialog v-model="dialog" max-width="500">
-      <v-card class="pa-5">
+    <v-dialog v-model="dialog" height="500" max-width="500">
+      <v-card class="pa-5" >
         <tweak-add-component
           :panelOpen="true"
           :items="Object.values(componentConfigs)"
@@ -128,7 +128,7 @@ export default {
       const slot = await this.dispatch("addSlot", payload);
       this.setComponent({ id: slot.id, name: slot.componentName });
 
-      this.dialog = false
+      this.dialog = false;
     },
 
     ...mapActions("settings", ["setComponent"]),

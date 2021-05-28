@@ -66,6 +66,7 @@ const md = getCols("md");
 class MixinHeading extends BaseComponent {
     constructor() {
         super({
+            displayIcon: "mdi-format-header-pound",
             props: [
                 align,
             ]
@@ -122,6 +123,7 @@ class BaseSubtitle extends BaseHeading {
 class BaseBody extends MixinHeading {
     constructor() {
         super();
+        this.displayIcon = "mdi-format-text"
         this.displayName = 'Body'
         this.componentName = 'BaseBody'
     }
@@ -144,6 +146,7 @@ class BaseBody extends MixinHeading {
 class BaseImage extends BaseComponent {
     constructor() {
         super();
+        this.displayIcon = "mdi-image-outline"
         this.displayName = 'Image'
         this.componentName = 'BaseImg'
     }
@@ -161,6 +164,7 @@ class BaseImage extends BaseComponent {
 class BaseVuetifyImage extends BaseImage {
     constructor() {
         super();
+        this.displayIcon = "mdi-image-plus"
         this.displayName = 'Advanced Image'
         this.componentName = 'BaseVuetifyImage'
     }
@@ -176,6 +180,7 @@ class BaseVuetifyImage extends BaseImage {
 const baseHeading = new BaseHeading()
 
 const baseSection = new BaseComponent({
+    displayIcon: "mdi-camera-metering-partial",
     componentName: 'BaseSection',
     displayName: 'Section',
     props: [
@@ -191,15 +196,9 @@ const baseSection = new BaseComponent({
 
 const baseImg = new BaseImage()
 
-const avatarCardImage = new BaseComponent({
-    ...baseImg,
-    props: [
-        ...baseImg.props.map(p => p.propName === "hidden" ? hiddenImage : p)
-    ]
-})
-
 export default {
     BaseApp: new BaseComponent({
+        displayIcon: "mdi-application",
         componentName: "BaseApp",
         displayName: 'Application',
         props: [
@@ -208,18 +207,21 @@ export default {
     }),
 
     BaseDrawer: new BaseComponent({
+        displayIcon: "mdi-dock-left",
         componentName: "BaseDrawer",
         displayName: 'Drawer',
         props: [],
     }),
 
     BaseDrawerButton: new BaseComponent({
+        displayIcon: "mdi-microsoft-xbox-controller-menu",
         componentName: "BaseDrawerButton",
-        displayName: 'Drawer Toggle Button',
+        displayName: 'Drawer Button',
         props: [],
     }),
 
     BaseContainer: new BaseComponent({
+        displayIcon: "mdi-rectangle-outline",
         componentName: "BaseContainer",
         displayName: 'Container',
         props: [
@@ -229,6 +231,7 @@ export default {
     }),
 
     BaseRow: new BaseComponent({
+        displayIcon: "mdi-table-row",
         componentName: "BaseRow",
         displayName: 'Row',
         props: [
@@ -240,6 +243,7 @@ export default {
     }),
 
     BaseCol: new BaseComponent({
+        displayIcon: "mdi-table-column",
         componentName: "BaseCol",
         displayName: 'Column',
         props: [
@@ -252,6 +256,7 @@ export default {
     }),
 
     BaseAppBar: new BaseComponent({
+        displayIcon: "mdi-dock-top",
         componentName: "BaseAppBar",
         displayName: 'Application Top Bar',
         props: [
@@ -267,35 +272,37 @@ export default {
 
     BaseImg: baseImg,
 
-    BaseActions: new BaseComponent({
-        componentName: "BaseActions",
-        displayName: 'Call-To-Action',
-        props: [
-            horizontal,
-            {
-                displayName: 'Link Call-to-Action',
-                propName: 'linkAction',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Email Call-to-Action',
-                propName: 'emailFormActions',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Main Call-to-Action',
-                propName: 'mainAction',
-                type: 'boolean',
-            },
-            {
-                displayName: 'Secondary Call-to-Action',
-                propName: 'secondaryAction',
-                type: 'boolean',
-            },
-        ]
-    }),
+    // BaseActions: new BaseComponent({
+    //     displayIcon: "mdi-rectangle-outline",
+    //     componentName: "BaseActions",
+    //     displayName: 'Call-To-Action',
+    //     props: [
+    //         horizontal,
+    //         {
+    //             displayName: 'Link Call-to-Action',
+    //             propName: 'linkAction',
+    //             type: 'boolean',
+    //         },
+    //         {
+    //             displayName: 'Email Call-to-Action',
+    //             propName: 'emailFormActions',
+    //             type: 'boolean',
+    //         },
+    //         {
+    //             displayName: 'Main Call-to-Action',
+    //             propName: 'mainAction',
+    //             type: 'boolean',
+    //         },
+    //         {
+    //             displayName: 'Secondary Call-to-Action',
+    //             propName: 'secondaryAction',
+    //             type: 'boolean',
+    //         },
+    //     ]
+    // }),
 
     BaseBtn: new BaseComponent({
+        displayIcon: "mdi-gesture-tap-button",
         componentName: "BaseBtn",
         displayName: 'Button',
         props: [
@@ -317,6 +324,7 @@ export default {
     }),
 
     BaseLink: new BaseComponent({
+        displayIcon: "mdi-link",
         componentName: "BaseLink",
         displayName: 'Link',
         props: [
@@ -327,6 +335,7 @@ export default {
     }),
 
     BaseAvatar: new BaseComponent({
+        displayIcon: "mdi-account-circle-outline",
         componentName: "BaseAvatar",
         displayName: 'Avatar',
         props: [
@@ -339,6 +348,7 @@ export default {
     }),
 
     BaseAvatarCard: new BaseComponent({
+        displayIcon: "mdi-card-account-details-outline",
         componentName: "BaseAvatarCard",
         displayName: 'Avatar Card',
         props: [
@@ -361,6 +371,7 @@ export default {
     BaseTitle: new BaseTitle(),
 
     BaseText: new BaseComponent({
+        displayIcon: "mdi-format-text",
         componentName: "BaseText",
         displayName: "Text",
         props: [
@@ -372,9 +383,9 @@ export default {
     BaseSubtitle: new BaseSubtitle(),
 
     BaseBody: new BaseBody(),
-    componentName: "BaseBody",
 
     BaseDivider: new BaseComponent({
+        displayIcon: "mdi-vector-line",
         componentName: "BaseDivider",
         displayName: 'Divider',
         props: [
@@ -384,6 +395,7 @@ export default {
     }),
 
     BaseIcon: new BaseComponent({
+        displayIcon: "mdi-emoticon-happy-outline",
         componentName: "BaseIcon",
         displayName: 'Icon',
         props: [
@@ -396,6 +408,7 @@ export default {
     }),
 
     BaseInfoCard: new BaseComponent({
+        displayIcon: "mdi-book-information-variant",
         componentName: "BaseInfoCard",
         displayName: 'Info Card',
         props: [
@@ -411,6 +424,7 @@ export default {
     BaseSection: baseSection,
 
     BaseSectionHeading: new BaseComponent({
+        displayIcon: "mdi-format-header-increase",
         componentName: "BaseSectionHeading",
         displayName: 'Section Heading',
         props: [
@@ -430,6 +444,7 @@ export default {
     }),
 
     BaseInput: new BaseComponent({
+        displayIcon: "mdi-form-textbox",
         componentName: "BaseInput",
         displayName: 'Input',
         props: [
@@ -495,6 +510,7 @@ export default {
     }),
 
     BaseEmailForm: new BaseComponent({
+        displayIcon: "mdi-form-dropdown",
         componentName: "BaseEmailForm",
         displayName: 'Email Form',
         props: [
@@ -512,16 +528,19 @@ export default {
     }),
 
     BaseSpacer: new BaseComponent({
+        displayIcon: "mdi-keyboard-space",
         componentName: "BaseSpacer",
         displayName: 'Spacer',
     }),
 
     BaseTabs: new BaseComponent({
+        displayIcon: "mdi-table-border",
         componentName: "BaseTabs",
         displayName: 'Tabs',
     }),
 
     BaseTab: new BaseComponent({
+        displayIcon: "mdi-tab-unselected",
         componentName: "BaseTab",
         displayName: 'Tab',
         props: [

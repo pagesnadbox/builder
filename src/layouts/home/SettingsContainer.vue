@@ -25,7 +25,7 @@
               />
 
               <v-divider class="my-6" />
-<!-- 
+              <!-- 
               <v-switch
                 id="edtiSwitch"
                 v-model="allowEditModel"
@@ -127,6 +127,7 @@
 
       <div id="addComponentPanel">
         <tweak-add-component
+          :compact="compact"
           :items="Object.values(componentConfigs)"
           @save-click="onSaveClick"
         ></tweak-add-component>
@@ -197,6 +198,8 @@ export default {
     }
   },
 
+  inject: ["compact"],
+
   provide() {
     return {
       config: { editable: false }
@@ -259,8 +262,6 @@ export default {
     id() {
       return this.$store.state.settings.id || "app";
     },
-
-
 
     componentData() {
       return this.getData();

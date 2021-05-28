@@ -8,14 +8,30 @@
         <v-expansion-panel-content class="px-0">
           <v-card flat>
             <v-card-text>
-              <v-select
-                label="Pick component"
-                v-model="selected"
-                item-text="displayName"
-                item-value="componentName"
-                :return-object="false"
-                :items="items"
-              ></v-select>
+              <v-text-field
+                label="Filter components"
+                v-model="filter"
+              ></v-text-field>
+
+              <v-sheet class="overflow-auto" height="500">
+                <v-container class="pa-3">
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="6"
+                      :xl="compact ? 6 : 4"
+                      v-for="(item, index) in filteredItems"
+                      :key="index"
+                    >
+                      <ComponentIcon
+                        @click="onItemClick(item)"
+                        :icon="item.displayIcon"
+                        :name="item.displayName"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-sheet>
             </v-card-text>
 
             <v-card-actions>
@@ -36,11 +52,21 @@
 </template>
 
 <script>
+import ComponentIcon from "../base/ComponentIcon";
 export default {
+  components: {
+    ComponentIcon
+  },
+
   props: {
     items: {
       type: Array,
       default: () => []
+    },
+
+    compact: {
+      type: Boolean,
+      default: false
     },
 
     panelOpen: {
@@ -53,8 +79,16 @@ export default {
     return {
       panel: 0,
       menu: false,
-      selected: null
+      filter: ""
     };
+  },
+
+  computed: {
+    filteredItems() {
+      return this.items.filter(
+        i => i.displayName.toLowerCase().indexOf(this.filter.toLowerCase()) > -1
+      );
+    }
   },
 
   created() {
@@ -62,6 +96,9 @@ export default {
   },
 
   methods: {
+    onItemClick(item) {
+      this.selected = item.componentName;
+    },
     onSaveClick() {
       this.menu = false;
       this.$emit("save-click", { component: this.selected });

@@ -60,6 +60,12 @@ const position = {
 };
 
 export default {
+  provide() {
+    return {
+      compact: true
+    };
+  },
+
   mixins: [SettingsMixin],
 
   data() {
@@ -95,7 +101,7 @@ export default {
 
   methods: {
     ...mapActions("settings", ["setCompact"]),
-    
+
     setStaticData() {
       this.staticData && this.staticData();
 
