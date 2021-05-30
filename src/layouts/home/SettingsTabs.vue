@@ -11,7 +11,7 @@
       <v-tab-item :key="0">
         <v-card flat>
           <v-card-text>
-            <Tree @item-selected="tab = 1" />
+            <Tree @item-clicked="tab = 1" />
           </v-card-text>
         </v-card>
       </v-tab-item>

@@ -2,6 +2,7 @@
   <div
     class="item"
     draggable="true"
+    v-on="$listeners"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
     @drop="onDrop"

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-container fluid style="height: calc(100vh - 64px);" class="pa-0 ma-0 d-flex">
+    <v-container
+      fluid
+      style="height: calc(100vh - 64px);"
+      class="pa-0 ma-0 d-flex"
+    >
       <v-sheet :style="rightToolbarStyles">
         <home-settings id="settings-gear" />
         <v-divider v-if="!$vuetify.breakpoint.mobile" class="mb-3"></v-divider>
@@ -307,7 +311,7 @@ export default {
 <style scoped>
 .iframe-wrapper-outer {
   width: 100%;
-  height: calc(100% - 65px);
+  height: 100%;
   display: flex;
   justify-content: center;
 }

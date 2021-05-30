@@ -96,29 +96,6 @@ class BaseHeading extends MixinHeading {
     }
 }
 
-class BaseTitle extends BaseHeading {
-    constructor() {
-        super();
-        this.displayName = 'Title'
-        this.componentName = 'BaseTitle'
-    }
-}
-
-class BaseSubtitle extends BaseHeading {
-    constructor() {
-        super();
-        this.displayName = 'Sub Title'
-        this.componentName = 'BaseSubtitle'
-    }
-
-    get customProps() {
-        return [
-            ...super.customProps,
-            title,
-            text,
-        ]
-    }
-}
 
 class BaseBody extends MixinHeading {
     constructor() {
@@ -165,7 +142,7 @@ class BaseVuetifyImage extends BaseImage {
     constructor() {
         super();
         this.displayIcon = "mdi-image-plus"
-        this.displayName = 'Advanced Image'
+        this.displayName = 'Image'
         this.componentName = 'BaseVuetifyImage'
     }
 
@@ -193,8 +170,6 @@ const baseSection = new BaseComponent({
         color,
     ],
 })
-
-const baseImg = new BaseImage()
 
 export default {
     BaseApp: new BaseComponent({
@@ -270,36 +245,6 @@ export default {
 
     BaseVuetifyImage: new BaseVuetifyImage(),
 
-    BaseImg: baseImg,
-
-    // BaseActions: new BaseComponent({
-    //     displayIcon: "mdi-rectangle-outline",
-    //     componentName: "BaseActions",
-    //     displayName: 'Call-To-Action',
-    //     props: [
-    //         horizontal,
-    //         {
-    //             displayName: 'Link Call-to-Action',
-    //             propName: 'linkAction',
-    //             type: 'boolean',
-    //         },
-    //         {
-    //             displayName: 'Email Call-to-Action',
-    //             propName: 'emailFormActions',
-    //             type: 'boolean',
-    //         },
-    //         {
-    //             displayName: 'Main Call-to-Action',
-    //             propName: 'mainAction',
-    //             type: 'boolean',
-    //         },
-    //         {
-    //             displayName: 'Secondary Call-to-Action',
-    //             propName: 'secondaryAction',
-    //             type: 'boolean',
-    //         },
-    //     ]
-    // }),
 
     BaseBtn: new BaseComponent({
         displayIcon: "mdi-gesture-tap-button",
@@ -367,20 +312,6 @@ export default {
     }),
 
     BaseHeading: baseHeading,
-
-    BaseTitle: new BaseTitle(),
-
-    BaseText: new BaseComponent({
-        displayIcon: "mdi-format-text",
-        componentName: "BaseText",
-        displayName: "Text",
-        props: [
-            text,
-            color
-        ]
-    }),
-
-    BaseSubtitle: new BaseSubtitle(),
 
     BaseBody: new BaseBody(),
 

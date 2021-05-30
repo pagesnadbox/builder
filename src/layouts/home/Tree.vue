@@ -5,7 +5,7 @@
       shaped
       hoverable
       activatable
-      :open.sync="open"
+      :open.sync="openNodes"
       :active.sync="active"
       :items="entries"
       @update:active="onItemSelected"
@@ -47,6 +47,7 @@
 
       <template v-slot:label="{ item }">
         <tree-item-node
+          @click="$emit('item-clicked')"
           @hold-start="hold = true"
           @hold-end="hold = false"
           @drop="onDrop($event, item.data)"
@@ -58,7 +59,7 @@
     </v-treeview>
 
     <v-dialog v-model="dialog" height="500" max-width="500">
-      <v-card class="pa-5" >
+      <v-card class="pa-5">
         <tweak-add-component
           :panelOpen="true"
           :items="Object.values(componentConfigs)"
@@ -88,21 +89,38 @@ export default {
       dialog: false,
       entries: [],
       hold: false,
-      open: [],
       active: [],
-      depth: 0
     };
   },
 
   computed: {
     ...mapState("settings", ["id", "counter"]),
+    ...mapState("tree", ["open", "depth"]),
     ...mapState("engine", ["data"]),
     ...mapGetters("engine", ["getComponent"]),
 
+    openNodes: {
+      get() {
+        return this.open;
+      },
+      set(value) {
+        console.error(value)
+        this.setOpen(value);
+      }
+    },
+
+    nodesDepth: {
+      get() {
+        return this.depth;
+      },
+      set(value) {
+        this.setDepth(value);
+      }
+    },
+
     styles() {
-      console.error(this.open);
       return {
-        width: `calc(100% + ${200 + 20 * this.depth}px)`
+        width: `calc(100% + ${200 + 20 * this.nodesDepth}px)`
       };
     }
   },
@@ -113,12 +131,15 @@ export default {
       handler: "onDataChange"
     },
     id: {
-      immediate: false,
+      immediate: true,
       handler: "onSelectedIdChange"
     }
   },
 
   methods: {
+    ...mapActions("tree", ["setOpen", "setDepth"]),
+    ...mapActions("settings", ["setComponent"]),
+
     async onSaveClick(data) {
       const payload = createSlot({
         componentName: data.component,
@@ -130,8 +151,6 @@ export default {
 
       this.dialog = false;
     },
-
-    ...mapActions("settings", ["setComponent"]),
 
     onSelectedIdChange(id) {
       let open = [id];
@@ -145,8 +164,8 @@ export default {
         component = this.getComponent(component.parentId);
       }
 
-      this.depth = depth;
-      this.open = open;
+      this.nodesDepth = depth;
+      this.openNodes = open;
     },
 
     moveTo(item, to, copy) {
