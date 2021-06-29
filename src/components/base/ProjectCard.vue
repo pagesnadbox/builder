@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="$attrs" v-on="$listeners" class="mx-auto" max-width="400">
-    <v-img class="white--text align-end" height="200px" :src="image"> </v-img>
+    <v-img class="white--text align-end" height="200px" src="/assets/office_bg.jpg"> </v-img>
 
     <v-card-title>{{ title }}</v-card-title>
 
@@ -10,12 +10,8 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn to="/project" depressed color="success">
-        Builder
-      </v-btn>
-      <v-btn @click.stop="onEditClick" depressed color="primary">
-        Edit
-      </v-btn>
+      <v-btn to="/project" depressed color="success"> Builder </v-btn>
+      <v-btn @click.stop="onEditClick" depressed color="primary"> Edit </v-btn>
       <v-btn @click.stop="onRemoveClick" depressed color="red" dark>
         Remove
       </v-btn>
@@ -28,18 +24,18 @@ export default {
   props: {
     image: {
       type: String,
-      default: ""
+      default: "",
     },
 
     title: {
       type: String,
-      default: ""
+      default: "",
     },
 
     description: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
 
   methods: {
@@ -49,8 +45,8 @@ export default {
 
     onRemoveClick() {
       this.$emit("remove-click");
-    }
-  }
+    },
+  },
 };
 </script>
 

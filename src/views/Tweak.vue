@@ -2,7 +2,7 @@
   <div>
     <v-container
       fluid
-      style="height: calc(100vh - 64px);"
+      style="height: calc(100vh - 64px)"
       class="pa-0 ma-0 d-flex"
     >
       <v-sheet :style="rightToolbarStyles">
@@ -10,7 +10,7 @@
         <v-divider v-if="!$vuetify.breakpoint.mobile" class="mb-3"></v-divider>
         <home-tools />
       </v-sheet>
-      <div class="fill-height" style="width:100%">
+      <div class="fill-height" style="width: 100%">
         <v-row class="fill-height pa-0 ma-0" no-gutters>
           <v-col
             :cols="settingsCols"
@@ -42,7 +42,7 @@
               class="overflow-y-auto"
               height="100%"
             >
-              <div style="height:50px" v-if="!fullscreen">
+              <div style="height: 50px" v-if="!fullscreen">
                 <v-container>
                   <v-row justify="center" align="center" class="fill-height">
                     <v-col cols="6" sm="2">
@@ -128,7 +128,7 @@ const devices = [
   { name: "Samsung Galaxy S9", size: "360x740" },
   { name: "Nexus 9", size: "768x1024" },
   { name: "Nexus 7 (2013)", size: "600x960" },
-  { name: "Pixel C", size: "900x1280" }
+  { name: "Pixel C", size: "900x1280" },
 ];
 
 export default {
@@ -137,7 +137,7 @@ export default {
       devices: devices,
       localWidth: 0,
       localHeight: 0,
-      selectedDevice: null
+      selectedDevice: null,
     };
   },
 
@@ -146,7 +146,7 @@ export default {
     Tree,
     TweakUI,
     HomeTools: () => import("@/layouts/home/Tools"),
-    HomeSettings: () => import("@/layouts/home/Settings")
+    HomeSettings: () => import("@/layouts/home/Settings"),
   },
 
   watch: {
@@ -154,7 +154,7 @@ export default {
       const [width, height] = device.size.split("x");
       this.width = width;
       this.height = height;
-    }
+    },
   },
 
   computed: {
@@ -165,16 +165,16 @@ export default {
         "background-color": "#000000c4",
         position: "absolute",
         zIndex: 2,
-        top: "100px"
+        top: "100px",
       };
 
       const desktopStyles = {
-        "border-right": "1px solid #8080802e"
+        "border-right": "1px solid #8080802e",
       };
 
       return {
         width: "70px",
-        ...(this.$vuetify.breakpoint.mobile ? mobileStyles : desktopStyles)
+        ...(this.$vuetify.breakpoint.mobile ? mobileStyles : desktopStyles),
       };
     },
 
@@ -185,7 +185,7 @@ export default {
       set(value) {
         this.preventNextResizeObserve = true;
         this.localWidth = value;
-      }
+      },
     },
 
     height: {
@@ -195,7 +195,7 @@ export default {
       set(value) {
         this.preventNextResizeObserve = true;
         this.localHeight = value;
-      }
+      },
     },
 
     styles() {
@@ -204,7 +204,7 @@ export default {
         height: "100%",
         "min-width": "100px",
         "min-height": "100px",
-        ...(!this.fullscreen ? this.resizeStyles : {})
+        ...(!this.fullscreen ? this.resizeStyles : {}),
       };
     },
 
@@ -219,7 +219,7 @@ export default {
         "max-height": "95%",
         width: this.width ? `${this.width}px` : "100%",
         height: this.height ? `${this.height}px` : "100%",
-        border: "1px solid #8080802e"
+        border: "1px solid #8080802e",
       };
     },
 
@@ -274,12 +274,12 @@ export default {
 
     isDesktop() {
       return this.$vuetify.breakpoint.mdAndUp;
-    }
+    },
   },
 
   created() {
     this.preventNextResizeObserve = true;
-    this.resizeObserver = new ResizeObserver(entries => {
+    this.resizeObserver = new ResizeObserver((entries) => {
       const contentRect = entries[0].contentRect;
 
       if (this.preventNextResizeObserve) {
@@ -301,10 +301,10 @@ export default {
       console.error("herereredata-v-568b3622");
       this.resizeObserver.observe(this.$refs.engineSlot);
       EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
-        slot: this.$refs.engineSlot
+        slot: this.$refs.engineSlot,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

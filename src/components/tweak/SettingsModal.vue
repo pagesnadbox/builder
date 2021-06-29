@@ -33,7 +33,7 @@
           style="right: 50px; position: absolute"
           @click="setCompact(false)"
         >
-          mdi-dock-right
+          mdi-dock-left
         </v-icon>
         <v-icon
           class="mt-1"

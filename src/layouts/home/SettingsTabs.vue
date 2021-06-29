@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fill-height overflow-auto">
     <v-tabs class="px-4 pb-1" fixed-tabs v-model="tab">
       <v-tabs-slider color="yellow"></v-tabs-slider>
 

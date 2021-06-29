@@ -11,6 +11,7 @@ export default class EngineAdapter extends EventEmitter {
     static get events() {
         return {
             SETTINGS_ACTION: "SETTINGS_ACTION",
+            HTML_RENDERED: "HTML_RENDERED",
         }
     }
 

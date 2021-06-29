@@ -132,7 +132,7 @@ export default {
     );
 
     EventBus.$on(eventsInternal.TOUR_SKIPPED, data =>
-      this.onTourFinished(data)
+      this.onTourSkip(data)
     );
 
     this.setFullscreen(fullscreen);

@@ -5,6 +5,8 @@ import History from "./History";
 import EngineAdapter from "./EngineAdapter";
 import ConfigService from "./services/ConfigService"
 import ImagesService from "./services/ImagesService";
+import { toJpeg } from 'html-to-image';
+
 
 export default class Bridge {
 
@@ -126,11 +128,23 @@ export default class Bridge {
         const mediator = {
             // settings change performed from engine, inform builder
             [EngineAdapter.events.SETTINGS_ACTION]: (data) => this.builder.setSetting(data),
+            [EngineAdapter.events.HTML_RENDERED]: (data) => this.onEngineHtmlRendered(data),
         }
 
         if (mediator[event]) {
             mediator[event](data);
         }
+    }
+
+    onEngineHtmlRendered(data) {
+        console.error(data)
+        toJpeg(data.html, { quality: 0.95 })
+        .then(function (dataUrl) {
+            var link = document.createElement('a');
+            link.download = 'my-image-name.jpeg';
+            link.href = dataUrl;
+            link.click();
+        });
     }
 
     onReplaceState(data) {
@@ -144,6 +158,7 @@ export default class Bridge {
     }
 
     async onEngineSlotRendered(data) {
+        this.slot = data.slot
         await this.createEngine(data);
         this.onProjectSelected();
     }
