@@ -46,7 +46,7 @@ export default class Bridge {
 
     createHistory() {
         this.history = new History({
-            interests: ['engine']
+            interests: ['builderEngine']
         });
 
         this.attachHistoryEvents();
@@ -177,7 +177,7 @@ export default class Bridge {
     }
 
     replaceConfig(data) {
-        this.cfg = data.engine.data;
+        this.cfg = data.builderEngine.data;
     }
 
     saveConfig() {

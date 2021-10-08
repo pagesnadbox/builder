@@ -298,7 +298,6 @@ export default {
     },
 
     onWindowLoaded() {
-      console.error("herereredata-v-568b3622");
       this.resizeObserver.observe(this.$refs.engineSlot);
       EventBus.$emit(events.ENGINE_SLOT_RENDERED, {
         slot: this.$refs.engineSlot,

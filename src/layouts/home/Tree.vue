@@ -38,7 +38,7 @@
             <v-list-item @click="onItemClick('copy', item.data)">
               <v-list-item-title>Copy</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="copyToClipBoard()">
+            <v-list-item @click="copyToClipBoard(item.data)">
               <v-list-item-title>Copy id to clipboard</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -48,10 +48,10 @@
       <template v-slot:label="{ item }">
         <tree-item-node
           @click="$emit('item-clicked')"
-          @hold-start="hold = true"
-          @hold-end="hold = false"
-          @drop="onDrop($event, item.data)"
-          @drag="onDrag($event, item.data)"
+          @hold-start="hold = item"
+          @hold-end="hold = item"
+          @item-drop="onDrop($event, item.data)"
+          @item-drag="onDrag($event, item.data)"
           :item="item.data"
           :hasChildren="item.children.length > 0"
         ></tree-item-node>
@@ -80,7 +80,7 @@ import { createSlot } from "../../utils/helpers";
 
 export default {
   components: {
-    TreeItemNode
+    TreeItemNode,
   },
 
   data() {
@@ -96,17 +96,16 @@ export default {
   computed: {
     ...mapState("settings", ["id", "counter"]),
     ...mapState("tree", ["open", "depth"]),
-    ...mapState("engine", ["data"]),
-    ...mapGetters("engine", ["getComponent"]),
+    ...mapState("builderEngine", ["data"]),
+    ...mapGetters("builderEngine", ["getComponent"]),
 
     openNodes: {
       get() {
         return this.open;
       },
       set(value) {
-        console.error(value)
         this.setOpen(value);
-      }
+      },
     },
 
     nodesDepth: {
@@ -115,35 +114,52 @@ export default {
       },
       set(value) {
         this.setDepth(value);
-      }
+      },
     },
 
     styles() {
       return {
-        width: `calc(100% + ${200 + 20 * this.nodesDepth}px)`
+        width: `calc(100% + ${200 + 20 * this.nodesDepth}px)`,
       };
-    }
+    },
   },
 
   watch: {
     counter: {
       immediate: true,
-      handler: "onDataChange"
+      handler: "onDataChange",
     },
     id: {
       immediate: true,
-      handler: "onSelectedIdChange"
-    }
+      handler: "onSelectedIdChange",
+    },
   },
 
   methods: {
     ...mapActions("tree", ["setOpen", "setDepth"]),
     ...mapActions("settings", ["setComponent"]),
 
+    copyToClipBoard(item) {
+      var data = [
+        new ClipboardItem({
+          "text/plain": new Blob([item.id], { type: "text/plain" }),
+        }),
+      ];
+
+      window.navigator.clipboard.write(data).then(
+        function () {
+          console.log("Copied to clipboard successfully!");
+        },
+        function (e) {
+          console.error("Unable to write to clipboard. :-(", e);
+        }
+      );
+    },
+
     async onSaveClick(data) {
       const payload = createSlot({
         componentName: data.component,
-        parentId: this.addId
+        parentId: this.addId,
       });
 
       const slot = await this.dispatch("addSlot", payload);
@@ -172,22 +188,23 @@ export default {
       this.dispatch("moveSlot", {
         item,
         to,
-        copy
+        copy,
       });
     },
 
     changePosition(item) {
       this.dispatch("changePosition", {
         item: this.draggedNode,
-        to: item.id
+        to: item.id,
       });
     },
 
     dispatch(actionName, payload) {
-      return this.$store.dispatch(`engine/${actionName}`, payload);
+      return this.$store.dispatch(`builderEngine/${actionName}`, payload);
     },
 
     onDrop(event, item) {
+      console.error("here");
       if (this.draggedNode === item) return;
 
       const siblings = this.draggedNode.parentId === item.parentId;
@@ -212,7 +229,7 @@ export default {
         const item = this.getComponent(event[0]);
         this.setComponent({
           id: item.id,
-          name: item.componentName
+          name: item.componentName,
         });
       }
     },
@@ -222,7 +239,7 @@ export default {
         add: this.onAdd,
         copy: this.onCopy,
         remove: this.onRemove,
-        hide: this.onHide
+        hide: this.onHide,
       };
 
       actions[action](item);
@@ -245,19 +262,18 @@ export default {
       this.dispatch("setProp", {
         id: item.id,
         key: "hidden",
-        value: !item.hidden
+        value: !item.hidden,
       });
     },
 
     onDataChange() {
-      console.error("here");
       this.entries = [this.traverse(this.data.app)];
     },
 
     traverse(node) {
       const children = [];
       if (node.slots) {
-        node.slots.forEach(child => {
+        node.slots.forEach((child) => {
           children.push(this.traverse(this.getComponent(child)));
         });
       }
@@ -265,9 +281,9 @@ export default {
       return {
         id: node.id,
         children,
-        data: node
+        data: node,
       };
-    }
-  }
+    },
+  },
 };
 </script>

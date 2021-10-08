@@ -1,6 +1,7 @@
 <template>
   <div
     class="item"
+    :class="{ hold: hold }"
     draggable="true"
     v-on="$listeners"
     @mouseenter="onMouseEnter"
@@ -28,25 +29,32 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     hasChildren: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+  },
+
+  data() {
+    return {
+      hold: false,
+    };
   },
 
   computed: {
     config() {
       return componentConfigs[this.item.componentName];
-    }
+    },
   },
 
   methods: {
     onDragEnter(event) {
       this.holdId = setTimeout(() => {
         this.$emit("hold-start");
-      }, 2000);
+        this.hold = true;
+      }, 1000);
 
       event.preventDefault();
     },
@@ -54,36 +62,20 @@ export default {
     onDragLeave() {
       clearTimeout(this.holdId);
       this.$emit("hold-end");
+      this.hold = false;
     },
 
     onDrop(event) {
       event.preventDefault();
-      this.$emit("drop", event);
+      this.$emit("item-drop", event);
     },
 
     onDrag(event) {
-      this.$emit("drag", event);
+      this.$emit("item-drag", event);
     },
 
     allowDrop(event) {
       event.preventDefault();
-    },
-
-    copyToClipBoard() {
-      var data = [
-        new ClipboardItem({
-          "text/plain": new Blob([this.item.id], { type: "text/plain" })
-        })
-      ];
-
-      window.navigator.clipboard.write(data).then(
-        function() {
-          console.log("Copied to clipboard successfully!");
-        },
-        function(e) {
-          console.error("Unable to write to clipboard. :-(", e);
-        }
-      );
     },
 
     onMouseEnter() {
@@ -91,9 +83,11 @@ export default {
     },
 
     onMouseLeave() {
+      clearTimeout(this.holdId);
+      this.hold = false;
       EventBus.$emit(events.TREE_NODE_MOUSE_LEAVE, this.item.id);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -112,6 +106,6 @@ export default {
   border: 1px dashed;
 }
 .hold {
-  transform: scale(1.2);
+  border: 1px solid greenyellow;
 }
 </style>

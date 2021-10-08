@@ -127,7 +127,6 @@
 
       <div id="addComponentPanel">
         <tweak-add-component
-          :compact="compact"
           :items="Object.values(componentConfigs)"
           @save-click="onSaveClick"
         ></tweak-add-component>
@@ -296,7 +295,7 @@ export default {
 
     engineDark: {
       get() {
-        return this.$store.state.engine.data.app.dark;
+        return this.$store.state.builderEngine.data.app.dark;
       },
       set(value) {
         this.dispatch("setProp", {
@@ -309,7 +308,7 @@ export default {
 
     currentThemePrimary: {
       get() {
-        return this.$store.state.engine.data.app.primary;
+        return this.$store.state.builderEngine.data.app.primary;
       },
       set(value) {
         this.dispatch("setProp", {
@@ -324,7 +323,7 @@ export default {
   methods: {
     ...mapActions("settings", ["setComponent", "setAllowEdit"]),
 
-    ...mapActions("engine", ["setEngineDark", "setEngineColor", "addSlot"]),
+    ...mapActions("builderEngine", ["setEngineDark", "setEngineColor", "addSlot"]),
 
     async onSaveClick(data) {
       const payload = createSlot({
@@ -337,7 +336,7 @@ export default {
     },
 
     getData() {
-      let data = this.$store.state.engine.data;
+      let data = this.$store.state.builderEngine.data;
 
       return data[this.id];
     },
@@ -352,7 +351,7 @@ export default {
     },
 
     dispatch(actionName, payload) {
-      return this.$store.dispatch(`engine/${actionName}`, payload);
+      return this.$store.dispatch(`builderEngine/${actionName}`, payload);
     },
 
     onAppSettinsClick() {

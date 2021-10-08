@@ -127,7 +127,7 @@ export default {
   },
 
   computed: {
-    ...mapState("engine", ["data"]),
+    ...mapState("builderEngine", ["data"]),
 
     colors() {
       return [

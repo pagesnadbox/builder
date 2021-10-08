@@ -77,14 +77,14 @@ export default class API extends EventEmitter {
   }
 
   setConfig(config = {}) {
-    store.dispatch(`engine/setConfig`, { value: config.data || config });
+    store.dispatch(`builderEngine/setConfig`, { value: config.data || config });
   }
 
   replaceConfig(state) {
     store.replaceState({
       ...store.state,
-      engine: {
-        ...state.engine,
+      builderEngine: {
+        ...state.builderEngine,
       }
     })
 

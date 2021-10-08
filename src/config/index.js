@@ -1,5 +1,7 @@
 import props from "./base/props"
 import BaseComponent from "./base/BaseComponent";
+import border from "./base/props/border";
+import borderRadius from "./base/props/border-radius";
 
 const divider = {
     displayName: '',
@@ -55,6 +57,7 @@ const {
     tile,
     textOnly,
     lightSrc,
+    imagePosition,
     publicPath,
     cols,
     rounded
@@ -149,7 +152,9 @@ class BaseVuetifyImage extends BaseImage {
     get customProps() {
         return [
             ...super.customProps,
-            gradient
+            gradient,
+            border,
+            borderRadius
         ]
     }
 }
@@ -178,22 +183,54 @@ export default {
         displayName: 'Application',
         props: [
             publicPath,
+            title,
         ],
     }),
 
-    BaseDrawer: new BaseComponent({
-        displayIcon: "mdi-dock-left",
-        componentName: "BaseDrawer",
-        displayName: 'Drawer',
-        props: [],
+    BaseHero: new BaseComponent({
+        displayIcon: "mdi-application",
+        componentName: "BaseHero",
+        displayName: 'Hero',
+        props: [
+            dark,
+            title,
+            subtitle,
+            height,
+            mobileHeight,
+            lightSrc,
+            imagePosition,
+            gradient,
+            color
+        ],
     }),
 
-    BaseDrawerButton: new BaseComponent({
-        displayIcon: "mdi-microsoft-xbox-controller-menu",
-        componentName: "BaseDrawerButton",
-        displayName: 'Drawer Button',
-        props: [],
+    BaseSectionWithHeading: new BaseComponent({
+        displayIcon: "mdi-application",
+        componentName: "BaseSectionWithHeading",
+        displayName: 'Section with Heading',
+        props: [
+            dark,
+            icon,
+            title,
+            text,
+            height,
+            color,
+        ],
     }),
+
+    // BaseDrawer: new BaseComponent({
+    //     displayIcon: "mdi-dock-left",
+    //     componentName: "BaseDrawer",
+    //     displayName: 'Drawer',
+    //     props: [],
+    // }),
+
+    // BaseDrawerButton: new BaseComponent({
+    //     displayIcon: "mdi-microsoft-xbox-controller-menu",
+    //     componentName: "BaseDrawerButton",
+    //     displayName: 'Drawer Button',
+    //     props: [],
+    // }),
 
     BaseContainer: new BaseComponent({
         displayIcon: "mdi-rectangle-outline",

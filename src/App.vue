@@ -47,17 +47,17 @@ export default {
       toursOrder: {
         settings: "tools",
         tools: null,
-        properties: null
+        properties: null,
       },
       links: [
         { title: "Home", icon: "mdi-view-dashboard", to: "/" },
-        { title: "Builder", icon: "mdi-tools", to: "/project" }
-      ]
+        { title: "Builder", icon: "mdi-tools", to: "/project" },
+      ],
     };
   },
 
   computed: {
-    ...mapState("engine", ["data"]),
+    ...mapState("builderEngine", ["data"]),
 
     meta() {
       return this.$route.meta;
@@ -71,26 +71,26 @@ export default {
         this.setProp({
           id: "app",
           key: "dark",
-          value
+          value,
         });
-      }
-    }
+      },
+    },
   },
 
   watch: {
     data: {
       deep: true,
-      handler: "onDataChange"
+      handler: "onDataChange",
     },
     "data.app.dark": {
       handler: "onThemeChange",
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
     ...mapActions("settings", ["setProp", "setFullscreen"]),
-    ...mapActions("engine", ["setProp"]),
+    ...mapActions("builderEngine", ["setProp"]),
 
     onThemeChange(value) {
       this.$vuetify.theme.dark = value;
@@ -101,7 +101,8 @@ export default {
     },
 
     onTourFinished(data) {
-      const skipped = localStorage.getItem("pagesandbox_tour_skipped") === "true";
+      const skipped =
+        localStorage.getItem("pagesandbox_tour_skipped") === "true";
 
       if (data === "properties") {
         this.onTourSkip();
@@ -114,44 +115,41 @@ export default {
 
     onTourSkip() {
       localStorage.setItem("pagesandbox_tour_skipped", true);
-    }
+    },
   },
 
   created() {
     let fullscreen = localStorage.getItem("pagesandbox_builder_fullscreen");
 
-    console.error(fullscreen);
     if (fullscreen) {
       fullscreen = fullscreen === "true";
     } else {
       fullscreen = this.$vuetify.breakpoint.mobile;
     }
 
-    EventBus.$on(eventsInternal.TOUR_FINISHED, data =>
+    EventBus.$on(eventsInternal.TOUR_FINISHED, (data) =>
       this.onTourFinished(data)
     );
 
-    EventBus.$on(eventsInternal.TOUR_SKIPPED, data =>
-      this.onTourSkip(data)
-    );
+    EventBus.$on(eventsInternal.TOUR_SKIPPED, (data) => this.onTourSkip(data));
 
     this.setFullscreen(fullscreen);
 
-    window.addEventListener("wheel", e => e.stopPropagation());
+    window.addEventListener("wheel", (e) => e.stopPropagation());
 
-    window.addEventListener("keydown", e => EventBus.$emit("on-keydown", e));
-    window.addEventListener("keyup", e => EventBus.$emit("on-keyup", e));
+    window.addEventListener("keydown", (e) => EventBus.$emit("on-keydown", e));
+    window.addEventListener("keyup", (e) => EventBus.$emit("on-keyup", e));
 
-    window.addEventListener("mousemove", e =>
+    window.addEventListener("mousemove", (e) =>
       EventBus.$emit("on-mousemove", e)
     );
-    window.addEventListener("mouseup", e => EventBus.$emit("on-mouseup", e));
+    window.addEventListener("mouseup", (e) => EventBus.$emit("on-mouseup", e));
 
-    window.addEventListener("touchmove", e =>
+    window.addEventListener("touchmove", (e) =>
       EventBus.$emit("on-mousemove", e)
     );
-    window.addEventListener("touchend", e => EventBus.$emit("on-mouseup", e));
-  }
+    window.addEventListener("touchend", (e) => EventBus.$emit("on-mouseup", e));
+  },
 };
 </script>
 
@@ -160,15 +158,6 @@ export default {
   width: 100vw
   transform: scale(0.325)
   transform-origin: top left
-</style>
-
-<style>
-.hightlight {
-  outline: 4px dotted rgb(19, 196, 219) !important;
-  outline-offset: -0.075rem !important;
-  /* transform: scale(1.03); */
-  transition: transform 1.5s !important;
-}
 </style>
 
 <style lang="sass">
@@ -186,7 +175,6 @@ export default {
 .dark *
   --thumbBG: #3f4143
 
-
 *::-webkit-scrollbar, *::-webkit-scrollbar
   width: 4px
 
@@ -194,10 +182,8 @@ export default {
   scrollbar-width: thin
   scrollbar-color: var(--thumbBG) var(--scrollbarBG)
 
-
 *::-webkit-scrollbar-track, *::-webkit-scrollbar-track
   background: var(--scrollbarBG)
-
 
 *::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb
   background-color: var(--thumbBG)
