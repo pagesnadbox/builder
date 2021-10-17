@@ -11,9 +11,7 @@
     <v-switch v-model="switchValue" :label="displayName" class="mb-3" />
   </v-col>
 
-  <v-col cols="6" v-else-if="type === 'space' && propName.startsWith('margin')">
-    <p>Margin</p>
-
+  <v-col cols="6" lg="3" v-else-if="type === 'space' && propName.startsWith('margin')">
     <v-text-field
       type="number"
       clearable
@@ -25,11 +23,9 @@
   </v-col>
 
   <v-col
-    cols="6"
+    cols="6" lg="3"
     v-else-if="type === 'space' && propName.startsWith('padding')"
   >
-    <p>Padding</p>
-
     <v-text-field
       type="number"
       clearable

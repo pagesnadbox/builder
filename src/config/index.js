@@ -89,7 +89,6 @@ class BaseHeading extends MixinHeading {
             ...super.customProps,
             tag,
             title,  
-            align,
             color,
             // dense,
             size,
@@ -162,7 +161,7 @@ const baseSection = new BaseComponent({
     displayName: 'Section',
     props: [
         dark,
-        absolute,
+        // absolute,
         elevation,
         rounded,
         height,

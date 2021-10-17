@@ -61,7 +61,6 @@ export default {
     meta() {
       return this.$route.meta;
     },
-
   },
 
   watch: {
@@ -73,10 +72,16 @@ export default {
       handler: "onThemeChange",
       immediate: true,
     },
+    $route(to, from) {
+      if (to.name === "builder") {
+        this.drawer = false;
+        this.setAllowEdit(true);
+      }
+    },
   },
 
   methods: {
-    ...mapActions("settings", ["setProp", "setFullscreen"]),
+    ...mapActions("settings", ["setProp", "setFullscreen", "setAllowEdit"]),
     ...mapActions("builderEngine", ["setProp"]),
 
     onThemeChange(value) {

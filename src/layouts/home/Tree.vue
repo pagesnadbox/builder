@@ -1,5 +1,16 @@
 <template>
   <div class="overflow-auto">
+    <v-switch
+      v-model="dndEnabled"
+      class="ml-3"
+      label="Enable Drag and Drop"
+    ></v-switch>
+
+    <div v-if="dndEnabled" class="px-4">
+      <v-alert type="warning"
+        >Drag and drop feature is still in early BETA.</v-alert
+      >
+    </div>
     <v-treeview
       :style="styles"
       shaped
@@ -47,6 +58,7 @@
 
       <template v-slot:label="{ item }">
         <tree-item-node
+          :dndEnabled="dndEnabled"
           @click="$emit('item-clicked')"
           @hold-start="hold = item"
           @hold-end="hold = item"
@@ -89,6 +101,7 @@ export default {
       dialog: false,
       entries: [],
       hold: false,
+      dndEnabled: false,
       active: [],
     };
   },

@@ -14,9 +14,9 @@ export default {
   props: {
     tooltip: {
       type: String,
-      default: ""
-    }
-  }
+      default: "",
+    },
+  },
 };
 </script>
 

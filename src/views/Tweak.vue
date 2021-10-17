@@ -277,6 +277,10 @@ export default {
     },
   },
 
+  destroyed() {
+    EventBus.$emit(events.ENGINE_SLOT_DESTROYED);
+  },
+
   created() {
     this.preventNextResizeObserve = true;
     this.resizeObserver = new ResizeObserver((entries) => {

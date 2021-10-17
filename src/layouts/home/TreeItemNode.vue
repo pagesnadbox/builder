@@ -2,7 +2,7 @@
   <div
     class="item"
     :class="{ hold: hold }"
-    draggable="true"
+    :draggable="dndEnabled"
     v-on="$listeners"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
@@ -32,6 +32,10 @@ export default {
       default: () => ({}),
     },
     hasChildren: {
+      type: Boolean,
+      default: false,
+    },
+    dndEnabled: {
       type: Boolean,
       default: false,
     },

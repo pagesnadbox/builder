@@ -1,4 +1,14 @@
 import properties from "./props";
+
+const divider = {
+    displayName: '',
+    type: 'divider',
+}
+
+const label = (label) => ({
+    displayName: label,
+    type: 'label',
+})
 export default class BaseComponent {
     get props() {
         return [
@@ -9,11 +19,13 @@ export default class BaseComponent {
 
     get alignProps() {
         return [
+            label("Margin"),
             properties.customSpace.getSpace("marginTop", "Top"),
             properties.customSpace.getSpace("marginRight", "Right"),
             properties.customSpace.getSpace("marginBottom", "Bottom"),
             properties.customSpace.getSpace("marginLeft", "Left"),
-
+            divider,
+            label("Padding"),
             properties.customSpace.getSpace("paddingTop", "Top"),
             properties.customSpace.getSpace("paddingRight", "Right"),
             properties.customSpace.getSpace("paddingBottom", "Bottom"),

@@ -12,6 +12,7 @@ export default class Bridge {
 
     constructor() {
         this.styles = []
+        this.pendingActions = []
         this.debouncedSaveConfigFn = debounce(this.saveConfig.bind(this), 300)
     }
 
@@ -63,6 +64,12 @@ export default class Bridge {
             config: this.cfg,
         });
 
+        console.error("init")
+        if (this.pendingActions.length) {
+            this.pendingActions.forEach(action => this.onAppAction(action))
+            this.pendingActions = []
+        }
+
         this.attachEngineEvent();
     }
 
@@ -109,6 +116,7 @@ export default class Bridge {
         const mediator = {
             [Builder.events.ACTION]: (data) => this.onAppAction(data),
             [Builder.events.ENGINE_SLOT_RENDERED]: (data) => this.onEngineSlotRendered(data),
+            [Builder.events.ENGINE_SLOT_DESTROYED]: (data) => this.onEngineSlotDestroyed(data),
             [Builder.events.HISTORY_RESET]: () => this.history.reset(),
             [Builder.events.HISTORY_UNDO]: () => this.history.undo(),
             [Builder.events.HISTORY_REDO]: () => this.history.redo(),
@@ -163,13 +171,22 @@ export default class Bridge {
         this.onProjectSelected();
     }
 
+    async onEngineSlotDestroyed() {
+        this.engine = null
+    }
+
     onProjectSelected() {
         this.fetchProject();
         this.fetchConfig();
     }
 
     onAppAction(data) {
-        this.engine.action(data);
+        if (!this.engine) {
+            console.error(data);
+            this.pendingActions.push(data)
+        } else {
+            this.engine.action(data);
+        }
     }
 
     onError(error) {

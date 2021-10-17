@@ -8,7 +8,5 @@ export default new EnumProp({
         "bold",
         "medium",
         "regular",
-        "light",
-        "thin",
     ],
 })
