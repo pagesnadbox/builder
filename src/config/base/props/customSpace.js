@@ -5,11 +5,12 @@ class CustomSpace extends StringProp {
         super(params, options)
     }
 
-    getSpace(type) {
+    getSpace(type, label) {
         return {
             ...this,
-            displayName: `${type} CSS`,
-            propName: type.toLowerCase(),
+            type: "space",
+            displayName: label,
+            propName: type,
         }
     }
 }

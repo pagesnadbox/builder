@@ -19,7 +19,6 @@
 
       <v-toolbar-title>{{ meta.appTitle }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-switch label="Dark" v-model="engineDark" class="mt-5 mr-10"></v-switch>
     </v-app-bar>
 
     <v-main>
@@ -63,18 +62,6 @@ export default {
       return this.$route.meta;
     },
 
-    engineDark: {
-      get() {
-        return this.data.app?.dark;
-      },
-      set(value) {
-        this.setProp({
-          id: "app",
-          key: "dark",
-          value,
-        });
-      },
-    },
   },
 
   watch: {

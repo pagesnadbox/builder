@@ -86,7 +86,7 @@ export default {
   created() {
     this.setStaticData();
 
-    EventBus.$on("on-mouseup", this.onMouseUp.bind(this));
+    EventBus.$on("on-mouseup", this.onMouseUpBind);
     EventBus.$on("on-mousemove", this.onMouseMoveBind);
   },
 

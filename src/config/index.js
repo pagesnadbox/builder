@@ -88,7 +88,7 @@ class BaseHeading extends MixinHeading {
         return [
             ...super.customProps,
             tag,
-            title,
+            title,  
             align,
             color,
             // dense,
@@ -104,7 +104,7 @@ class BaseBody extends MixinHeading {
     constructor() {
         super();
         this.displayIcon = "mdi-format-text"
-        this.displayName = 'Body'
+        this.displayName = 'Text'
         this.componentName = 'BaseBody'
     }
 
@@ -113,11 +113,6 @@ class BaseBody extends MixinHeading {
             ...super.customProps,
             color,
             text,
-            {
-                displayName: 'HTML',
-                propName: 'html',
-                type: 'string',
-            },
             maxWidth,
         ]
     }
@@ -273,8 +268,8 @@ export default {
         displayName: 'Application Top Bar',
         props: [
             dark,
-            shrinkOnScroll,
-            hideOnScroll,
+            // shrinkOnScroll,
+            // hideOnScroll,
             height,
             color,
         ],
@@ -316,18 +311,18 @@ export default {
         ],
     }),
 
-    BaseAvatar: new BaseComponent({
-        displayIcon: "mdi-account-circle-outline",
-        componentName: "BaseAvatar",
-        displayName: 'Avatar',
-        props: [
-            iconDark,
-            icon,
-            color,
-            outlined,
-            iconSize,
-        ],
-    }),
+    // BaseAvatar: new BaseComponent({
+    //     displayIcon: "mdi-account-circle-outline",
+    //     componentName: "BaseAvatar",
+    //     displayName: 'Avatar',
+    //     props: [
+    //         iconDark,
+    //         icon,
+    //         color,
+    //         outlined,
+    //         iconSize,
+    //     ],
+    // }),
 
     BaseAvatarCard: new BaseComponent({
         displayIcon: "mdi-card-account-details-outline",
@@ -371,7 +366,7 @@ export default {
             href,
             icon,
             color,
-            size,
+            iconSize,
         ],
     }),
 
@@ -380,6 +375,7 @@ export default {
         componentName: "BaseInfoCard",
         displayName: 'Info Card',
         props: [
+            dark,
             align,
             icon,
             subtitle,
@@ -391,109 +387,109 @@ export default {
 
     BaseSection: baseSection,
 
-    BaseSectionHeading: new BaseComponent({
-        displayIcon: "mdi-format-header-increase",
-        componentName: "BaseSectionHeading",
-        displayName: 'Section Heading',
-        props: [
-            align,
-            outlined,
-            dark,
-            subtitle,
-            title,
-            text,
-            { ...color, displayName: "Background Color" },
-            divider,
-            label("Icon"),
-            icon,
-            iconSize,
-            { ...iconColor, displayName: "Icon Color" },
-        ],
-    }),
+    // BaseSectionHeading: new BaseComponent({
+    //     displayIcon: "mdi-format-header-increase",
+    //     componentName: "BaseSectionHeading",
+    //     displayName: 'Section Heading',
+    //     props: [
+    //         align,
+    //         outlined,
+    //         dark,
+    //         subtitle,
+    //         title,
+    //         text,
+    //         { ...color, displayName: "Background Color" },
+    //         divider,
+    //         label("Icon"),
+    //         icon,
+    //         iconSize,
+    //         { ...iconColor, displayName: "Icon Color" },
+    //     ],
+    // }),
 
-    BaseInput: new BaseComponent({
-        displayIcon: "mdi-form-textbox",
-        componentName: "BaseInput",
-        displayName: 'Input',
-        props: [
-            dark,
-            dense,
-            {
-                displayName: "Filled",
-                propName: "Filled",
-                type: 'boolean'
-            },
-            {
-                displayName: "Solo",
-                propName: "solo",
-                type: 'boolean'
-            },
-            {
-                displayName: "Solo inverted",
-                propName: "soloInverted",
-                type: 'boolean'
-            },
-            {
-                displayName: "Outlined",
-                propName: "outlined",
-                type: 'boolean'
-            },
-            {
-                displayName: "Filled",
-                propName: "filled",
-                type: 'boolean'
-            },
-            {
-                displayName: "Clearable",
-                propName: "clearable",
-                type: 'boolean'
-            },
-            {
-                displayName: "Shaped",
-                propName: "shaped",
-                type: 'boolean'
-            },
-            {
-                displayName: "Placeholder",
-                propName: "placeholder",
-                type: 'string'
-            },
-            {
-                displayName: "Label",
-                propName: "label",
-                type: 'string'
-            },
-            {
-                displayName: "Name",
-                propName: "name",
-                type: 'string'
-            },
-            minWidth,
-            {
-                displayName: "Color",
-                propName: "color",
-                type: 'color'
-            },
-        ]
-    }),
+    // BaseInput: new BaseComponent({
+    //     displayIcon: "mdi-form-textbox",
+    //     componentName: "BaseInput",
+    //     displayName: 'Input',
+    //     props: [
+    //         dark,
+    //         dense,
+    //         {
+    //             displayName: "Filled",
+    //             propName: "Filled",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Solo",
+    //             propName: "solo",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Solo inverted",
+    //             propName: "soloInverted",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Outlined",
+    //             propName: "outlined",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Filled",
+    //             propName: "filled",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Clearable",
+    //             propName: "clearable",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Shaped",
+    //             propName: "shaped",
+    //             type: 'boolean'
+    //         },
+    //         {
+    //             displayName: "Placeholder",
+    //             propName: "placeholder",
+    //             type: 'string'
+    //         },
+    //         {
+    //             displayName: "Label",
+    //             propName: "label",
+    //             type: 'string'
+    //         },
+    //         {
+    //             displayName: "Name",
+    //             propName: "name",
+    //             type: 'string'
+    //         },
+    //         minWidth,
+    //         {
+    //             displayName: "Color",
+    //             propName: "color",
+    //             type: 'color'
+    //         },
+    //     ]
+    // }),
 
-    BaseEmailForm: new BaseComponent({
-        displayIcon: "mdi-form-dropdown",
-        componentName: "BaseEmailForm",
-        displayName: 'Email Form',
-        props: [
-            {
-                displayName: "Method",
-                propName: "method",
-                type: 'string'
-            },
-            {
-                displayName: "Action",
-                propName: "action",
-                type: 'string'
-            }
-        ]
-    }),
+    // BaseEmailForm: new BaseComponent({
+    //     displayIcon: "mdi-form-dropdown",
+    //     componentName: "BaseEmailForm",
+    //     displayName: 'Email Form',
+    //     props: [
+    //         {
+    //             displayName: "Method",
+    //             propName: "method",
+    //             type: 'string'
+    //         },
+    //         {
+    //             displayName: "Action",
+    //             propName: "action",
+    //             type: 'string'
+    //         }
+    //     ]
+    // }),
 
     BaseSpacer: new BaseComponent({
         displayIcon: "mdi-keyboard-space",

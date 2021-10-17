@@ -112,8 +112,8 @@ export default class Bridge {
             [Builder.events.HISTORY_RESET]: () => this.history.reset(),
             [Builder.events.HISTORY_UNDO]: () => this.history.undo(),
             [Builder.events.HISTORY_REDO]: () => this.history.redo(),
-            [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highlight(id),
-            [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highlight(null),
+            [Builder.events.TREE_NODE_MOUSE_ENTER]: (id) => this.engine.highlight({ id, force: true }),
+            [Builder.events.TREE_NODE_MOUSE_LEAVE]: () => this.engine.highlight({ id: null, force: false }),
             [Builder.events.DATA_CHANGE]: (data) => this.saveConfig(data),
         }
 
@@ -139,12 +139,12 @@ export default class Bridge {
     onEngineHtmlRendered(data) {
         console.error(data)
         toJpeg(data.html, { quality: 0.95 })
-        .then(function (dataUrl) {
-            var link = document.createElement('a');
-            link.download = 'my-image-name.jpeg';
-            link.href = dataUrl;
-            link.click();
-        });
+            .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = 'my-image-name.jpeg';
+                link.href = dataUrl;
+                link.click();
+            });
     }
 
     onReplaceState(data) {

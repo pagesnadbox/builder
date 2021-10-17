@@ -9,8 +9,15 @@ export default class BaseComponent {
 
     get alignProps() {
         return [
-            properties.customSpace.getSpace("Margin"),
-            properties.customSpace.getSpace("Padding"),
+            properties.customSpace.getSpace("marginTop", "Top"),
+            properties.customSpace.getSpace("marginRight", "Right"),
+            properties.customSpace.getSpace("marginBottom", "Bottom"),
+            properties.customSpace.getSpace("marginLeft", "Left"),
+
+            properties.customSpace.getSpace("paddingTop", "Top"),
+            properties.customSpace.getSpace("paddingRight", "Right"),
+            properties.customSpace.getSpace("paddingBottom", "Bottom"),
+            properties.customSpace.getSpace("paddingLeft", "Left"),
         ]
     }
 

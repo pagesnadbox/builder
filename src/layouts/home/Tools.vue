@@ -6,6 +6,18 @@
     class="text-center"
   >
     <div class="mb-3">
+      <div class="mb-3">
+        <ToolIcon
+          tooltip="Toggle edit mode"
+          id="editToggle"
+          class="mb-3"
+          :color="allowEdit ? 'primary' : null"
+          large
+          @click="setAllowEdit(!allowEdit)"
+        >
+          mdi-pencil-outline
+        </ToolIcon>
+      </div>
       <ToolIcon
         tooltip="Undo"
         :disabled="!canUndo"
@@ -50,18 +62,6 @@
         mdi-rotate-right-variant
       </ToolIcon>
     </div>
-    <div class="mb-3">
-      <ToolIcon
-        tooltip="Toggle edit mode"
-        id="editToggle"
-        class="mb-3"
-        :color="allowEdit ? 'primary' : null"
-        large
-        @click="setAllowEdit(!allowEdit)"
-      >
-        mdi-pencil-outline
-      </ToolIcon>
-    </div>
 
     <v-tour name="tools" :steps="steps" :callbacks="tourCallbacks"></v-tour>
   </v-sheet>
@@ -76,7 +76,7 @@ export default {
   name: "HomeTools",
 
   components: {
-    ToolIcon
+    ToolIcon,
   },
 
   data() {
@@ -84,26 +84,26 @@ export default {
       steps: [
         {
           target: "#fullscreenBtn", // We're using document.querySelector() under the hood
-          content: `Toggle fullscreen on/off and review your page on different devices.`
+          content: `Toggle fullscreen on/off and review your page on different devices.`,
         },
         {
           target: "#undockPanelBtn", // We're using document.querySelector() under the hood
-          content: `Undock the builder panel into a separte window.`
+          content: `Undock the builder panel into a separte window.`,
         },
         {
           target: "#editToggle", // We're using document.querySelector() under the hood
-          content: `Toggle to start editing the page. Hover over any component and click to select it.`
-        }
+          content: `Toggle to start editing the page. Hover over any component and click to select it.`,
+        },
       ],
       tourOptions: {
         labels: {
-          buttonStop: "Next"
-        }
+          buttonStop: "Next",
+        },
       },
       tourCallbacks: {
         onFinish: () => EventBus.$emit(eventsInternal.TOUR_FINISHED, "tools"),
-        onSkip: () => EventBus.$emit(eventsInternal.TOUR_SKIPPED)
-      }
+        onSkip: () => EventBus.$emit(eventsInternal.TOUR_SKIPPED),
+      },
     };
   },
 
@@ -113,8 +113,8 @@ export default {
       "canUndo",
       "images",
       "fullscreen",
-      "allowEdit"
-    ])
+      "allowEdit",
+    ]),
   },
 
   created() {
@@ -125,7 +125,7 @@ export default {
     ...mapActions("settings", [
       "toggleCompact",
       "setFullscreen",
-      "setAllowEdit"
+      "setAllowEdit",
     ]),
 
     // history
@@ -166,7 +166,7 @@ export default {
 
     onToggleCompact() {
       this.toggleCompact();
-    }
-  }
+    },
+  },
 };
 </script>

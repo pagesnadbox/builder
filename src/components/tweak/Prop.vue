@@ -11,6 +11,35 @@
     <v-switch v-model="switchValue" :label="displayName" class="mb-3" />
   </v-col>
 
+  <v-col cols="6" v-else-if="type === 'space' && propName.startsWith('margin')">
+    <p>Margin</p>
+
+    <v-text-field
+      type="number"
+      clearable
+      :label="displayName"
+      :value="effectiveValue"
+      outlined
+      @input="onValueChange"
+    />
+  </v-col>
+
+  <v-col
+    cols="6"
+    v-else-if="type === 'space' && propName.startsWith('padding')"
+  >
+    <p>Padding</p>
+
+    <v-text-field
+      type="number"
+      clearable
+      :label="displayName"
+      :value="effectiveValue"
+      outlined
+      @input="onValueChange"
+    />
+  </v-col>
+
   <v-col cols="12" v-else-if="type === 'label'">
     <p>{{ displayName }}</p>
   </v-col>
@@ -142,37 +171,37 @@ export default {
   props: {
     displayName: {
       type: String,
-      default: ""
+      default: "",
     },
 
     propName: {
       type: String,
-      default: ""
+      default: "",
     },
 
     type: {
       type: String,
-      default: ""
+      default: "",
     },
 
     tweakSize: {
       type: String,
-      default: "12"
+      default: "12",
     },
 
     enums: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
 
     props: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
 
     options: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
 
     defaultValue: null,
@@ -188,15 +217,15 @@ export default {
         } else {
           return "";
         }
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
       gradientDirs: ["to bottom", "to top", "to left", "to right"],
       colors: [],
-      direction: "to bottom"
+      direction: "to bottom",
     };
   },
 
@@ -234,7 +263,7 @@ export default {
         }
 
         this.$emit("property-change", { key: this.propName, value });
-      }
+      },
     },
 
     switchValue: {
@@ -243,31 +272,31 @@ export default {
       },
       set(value) {
         this.$emit("property-change", { key: this.propName, value });
-      }
+      },
     },
 
     groupValue: {
       get() {
-        return this.enums.findIndex(e => e.value === this.effectiveValue);
+        return this.enums.findIndex((e) => e.value === this.effectiveValue);
       },
       set(value) {
         this.onValueChange(value);
-      }
-    }
+      },
+    },
   },
 
   methods: {
     ...mapActions("settings", ["setShowGallery", "setImage"]),
 
     onGradientColorChange(value, index) {
-      const data = this.gradientValues
+      const data = this.gradientValues;
       this.colors[index] = value;
 
       this.onValueChange([data.dir, ...this.colors].join(", "));
     },
 
     onGradientDirChange(value) {
-      const data = this.gradientValues
+      const data = this.gradientValues;
 
       this.onValueChange([value, ...data.colors].join(", "));
     },
@@ -283,8 +312,8 @@ export default {
         name: payload.fileName,
         value: {
           url: payload.fileName,
-          file: payload.file
-        }
+          file: payload.file,
+        },
       };
 
       this.$action("settings/setImage", data);
@@ -301,10 +330,11 @@ export default {
           value = this.enums[payload].value;
         }
 
+        console.error({ key: this.propName, value });
         this.$emit("property-change", { key: this.propName, value });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
