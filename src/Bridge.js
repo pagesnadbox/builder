@@ -55,16 +55,16 @@ export default class Bridge {
         return this.history;
     }
 
-    async createEngine(data) {
+    createEngine(data) {
         this.engine = new EngineAdapter();
         this.engine.target = data.slot.contentWindow
 
-        await this.engine.init({
+        this.engine.init({
             baseUrl: this.imageService.BASE_URL,
             config: this.cfg,
         });
 
-        console.error("init")
+        console.error("init");
         if (this.pendingActions.length) {
             this.pendingActions.forEach(action => this.onAppAction(action))
             this.pendingActions = []
@@ -165,9 +165,9 @@ export default class Bridge {
         this.debouncedSaveConfigFn();
     }
 
-    async onEngineSlotRendered(data) {
+    onEngineSlotRendered(data) {
         this.slot = data.slot
-        await this.createEngine(data);
+        this.createEngine(data);
         this.onProjectSelected();
     }
 
