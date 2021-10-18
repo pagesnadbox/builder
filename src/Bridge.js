@@ -56,21 +56,24 @@ export default class Bridge {
     }
 
     createEngine(data) {
-        this.engine = new EngineAdapter();
-        this.engine.target = data.slot.contentWindow
+        if (!this.engine) {
+            this.engine = new EngineAdapter();
+            this.attachEngineEvent();
+            console.error("init")
+        }
 
+        this.engine.target = data.slot.contentWindow
         this.engine.init({
             baseUrl: this.imageService.BASE_URL,
             config: this.cfg,
         });
+        this.engineOff = false;
 
-        console.error("init");
         if (this.pendingActions.length) {
             this.pendingActions.forEach(action => this.onAppAction(action))
             this.pendingActions = []
         }
 
-        this.attachEngineEvent();
     }
 
     attachHistoryEvents() {
@@ -172,7 +175,7 @@ export default class Bridge {
     }
 
     async onEngineSlotDestroyed() {
-        this.engine = null
+        this.engineOff = true
     }
 
     onProjectSelected() {
@@ -181,8 +184,7 @@ export default class Bridge {
     }
 
     onAppAction(data) {
-        if (!this.engine) {
-            console.error(data);
+        if (!this.engine || this.engineOff) {
             this.pendingActions.push(data)
         } else {
             this.engine.action(data);
