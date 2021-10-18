@@ -56,22 +56,14 @@ export default {
   data() {
     return {
       templates: [
-        // {
-        //   name: "Base",
-        //   key: "base"
-        // },
-        // {
-        //   name: "Tree column layout",
-        //   key: "tree-column-layout"
-        // },
-        // {
-        //   name: "Extended App Bar",
-        //   key: "extended-app-bar"
-        // },
-        // {
-        //   name: "Landing Page",
-        //   key: "landing-page"
-        // },
+        {
+          name: "Base",
+          key: "base"
+        },
+        {
+          name: "Simple Page",
+          key: "simple-page"
+        },
         {
           name: "Zero Theme - Landing Page",
           key: "zero-theme-landing-page"
