@@ -1,12 +1,13 @@
 {
   "name": "pagesandbox-builder",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "private": false,
   "scripts": {
     "serve": "cp -f ./buildfiles/dev/index.html ./public/; vue-cli-service serve --port 8081 --mode development",
     "dev": "yarn serve",
     "build": "cp -f ./buildfiles/prod/index.html ./public/; vue-cli-service build --mode production",
     "build-dev": "vue-cli-service build --mode staging",
+    "build-watch": "cp -f ./buildfiles/prod/index.html ./public/; vue-cli-service build --mode production --watch",
     "lint": "vue-cli-service lint",
     "postversion": "node scripts/postversion.js"
   },

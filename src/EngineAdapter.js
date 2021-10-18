@@ -5,7 +5,7 @@ let engineOrigin = window.com.builder.cfg.engineOrigin;
 engineOrigin = engineOrigin
     .replace("{host}", window.location.hostname)
     .replace("{protocol}", window.location.protocol)
-    .replace("{port}", window.location.port ? `${window.location.port}` : "")
+    .replace("{port}", window.location.port ? `:${window.location.port}` : "")
 
 export default class EngineAdapter extends EventEmitter {
     static get events() {
