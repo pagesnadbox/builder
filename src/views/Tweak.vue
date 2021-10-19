@@ -241,7 +241,7 @@ export default {
     },
 
     engineLg() {
-      return this.hasRightContainer ? "8" : "12";
+      return this.hasRightContainer ? "9" : "12";
     },
 
     engineXl() {
@@ -261,7 +261,7 @@ export default {
     },
 
     settingsLg() {
-      return "4";
+      return "3";
     },
 
     settingsXl() {
