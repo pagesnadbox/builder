@@ -46,6 +46,7 @@ const {
     minWidth,
     weight,
     dense,
+    fab,
     dark,
     iconDark,
     hideOnScroll,
@@ -88,7 +89,7 @@ class BaseHeading extends MixinHeading {
         return [
             ...super.customProps,
             tag,
-            title,  
+            title,
             color,
             // dense,
             size,
@@ -291,6 +292,7 @@ export default {
             block,
             blockOnMobile,
             depressed,
+            fab,
             tile,
             outlined,
             color,
@@ -310,18 +312,19 @@ export default {
         ],
     }),
 
-    // BaseAvatar: new BaseComponent({
-    //     displayIcon: "mdi-account-circle-outline",
-    //     componentName: "BaseAvatar",
-    //     displayName: 'Avatar',
-    //     props: [
-    //         iconDark,
-    //         icon,
-    //         color,
-    //         outlined,
-    //         iconSize,
-    //     ],
-    // }),
+    BaseAvatar: new BaseComponent({
+        displayIcon: "mdi-account-circle-outline",
+        componentName: "BaseAvatar",
+        displayName: 'Avatar',
+        props: [
+            iconDark,
+            icon,
+            lightSrc,
+            color,
+            outlined,
+            iconSize,
+        ],
+    }),
 
     BaseAvatarCard: new BaseComponent({
         displayIcon: "mdi-card-account-details-outline",

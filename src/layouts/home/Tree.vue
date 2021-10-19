@@ -61,7 +61,7 @@
           :dndEnabled="dndEnabled"
           @click="$emit('item-clicked')"
           @hold-start="hold = item"
-          @hold-end="hold = item"
+          @hold-end="hold = {}"
           @item-drop="onDrop($event, item.data)"
           @item-drag="onDrag($event, item.data)"
           :item="item.data"
@@ -100,8 +100,8 @@ export default {
       componentConfigs,
       dialog: false,
       entries: [],
-      hold: false,
-      dndEnabled: false,
+      hold: {},
+      dndEnabled: true,
       active: [],
     };
   },
@@ -217,12 +217,13 @@ export default {
     },
 
     onDrop(event, item) {
-      console.error("here");
       if (this.draggedNode === item) return;
 
       const siblings = this.draggedNode.parentId === item.parentId;
 
-      if (!siblings || this.hold) {
+      console.error(this.hold.id, item.id);
+      
+      if (!siblings || this.hold.id === item.id) {
         this.moveTo(this.draggedNode, item.id);
       } else if (siblings) {
         this.changePosition(item);
